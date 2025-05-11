@@ -1,12 +1,12 @@
 import { View, Text, SafeAreaView } from "react-native";
 import React from "react";
 
-const Home = () => {
+const Gallery = () => {
   return (
     <SafeAreaView className="flex-1">
-      <Text>Home Page</Text>
+      <Text>Gallery Page</Text>
     </SafeAreaView>
   );
 };
 
-export default Home;
+export default Gallery;
