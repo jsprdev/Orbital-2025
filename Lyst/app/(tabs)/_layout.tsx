@@ -2,7 +2,7 @@ import { Text } from "react-native";
 import { Tabs } from "expo-router";
 import { MaterialIcons, AntDesign } from "@expo/vector-icons";
 
-const _layout = () => {
+const TabLayout = () => {
   return (
     <Tabs
       screenOptions={{
@@ -90,4 +90,4 @@ const _layout = () => {
   );
 };
 
-export default _layout;
+export default TabLayout;
