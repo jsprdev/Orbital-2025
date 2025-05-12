@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
   KeyboardAvoidingView,
-  Platform,
   Alert,
 } from "react-native";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
@@ -33,6 +32,7 @@ export default function Index() {
       await signInWithEmailAndPassword(auth, email, password);
       router.replace("/(tabs)/home");
     } catch (error: any) {
+      let errorMessage = '';
       if (error.code === "auth/invalid-credential") {
         errorMessage = "Invalid email or password";
       }
@@ -46,6 +46,11 @@ export default function Index() {
   const signUp = () => {
     router.push("/(auth)/createAccount");
   };
+
+  // Skip the login page
+  const toHome = () => {
+    router.push("/(tabs)/home");
+  }
 
   return (
     <KeyboardAvoidingView className="flex-1 bg-white">
@@ -93,6 +98,16 @@ export default function Index() {
               Create New Account
             </Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={toHome}
+            className="bg-pink-500 py-3 rounded-lg items-center"
+          >
+            <Text className="text-white text-lg font-semibold">
+              Skip to Home
+            </Text>
+          </TouchableOpacity>
+          
         </View>
       </SafeAreaView>
     </KeyboardAvoidingView>
