@@ -1,6 +1,7 @@
-import { Text } from "react-native";
+import { Image, Text } from "react-native";
 import { Tabs } from "expo-router";
-import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
+import { COLORS } from "@/constants/colors";
 
 const TabLayout = () => {
   return (
@@ -21,71 +22,59 @@ const TabLayout = () => {
         headerShown: false,
       }}
     >
-      {/* Home Page */}
+
       <Tabs.Screen
-        name="home"
+        name="saved"
         options={{
-          title: "Home",
+          title: "saved",
           tabBarIcon: ({ focused }) => (
-            <MaterialIcons
-              name="home"
-              size={24}
-              color={focused ? "#EC4899" : "#9CA3AF"}
+            <Image
+              source={require('../../assets/icons/heart.png')}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? COLORS.primary : COLORS.unfocused,
+                resizeMode: 'contain'
+              }}
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
-              style={{ fontSize: 12, color: focused ? "#EC4899" : "#9CA3AF" }}
+              style={{ fontSize: 12, color: focused ? COLORS.primary : COLORS.unfocused }}
             >
-              Home
+              Your Lyst
             </Text>
           ),
         }}
       />
 
-      {/* Notes Page */}
       <Tabs.Screen
-        name="notes"
+        name="Profile"
         options={{
-          title: "Notes",
+          title: "Profile",
           tabBarIcon: ({ focused }) => (
-            <MaterialIcons
-              name="notes"
-              size={24}
-              color={focused ? "#EC4899" : "#9CA3AF"}
+            <Image
+              source={require('../../assets/icons/profile.png')}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? COLORS.primary : COLORS.unfocused
+              }}
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
-              style={{ fontSize: 12, color: focused ? "#EC4899" : "#9CA3AF" }}
+              style={{ fontSize: 12, color: focused ? COLORS.primary : COLORS.unfocused }}
             >
-              Notes
+              Profile
             </Text>
           ),
         }}
       />
 
-      {/* Gallery Page */}
-      <Tabs.Screen
-        name="gallery"
-        options={{
-          title: "Gallery",
-          tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="picture"
-              size={24}
-              color={focused ? "#EC4899" : "#9CA3AF"}
-            />
-          ),
-          tabBarLabel: ({ focused }) => (
-            <Text
-              style={{ fontSize: 12, color: focused ? "#EC4899" : "#9CA3AF" }}
-            >
-              Gallery
-            </Text>
-          ),
-        }}
-      />
+      
+
+
     </Tabs>
   );
 };
