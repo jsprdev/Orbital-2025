@@ -1,12 +1,33 @@
-import { Stack, useRouter } from "expo-router";
-import '../global.css';
+import { View, Text } from 'react-native'
+import React from 'react'
+import { Tabs } from 'expo-router'
 
-export default function RootLayout() {
-  const router = useRouter();
-
+const _layout = () => {
   return (
-    <Stack>
-      <Stack.Screen name='home' options={{ headerShown: false }} />
-    </Stack>
-  );
+    <Tabs> 
+      <Tabs.Screen
+        name="saved"
+        options={{
+          title: 'Saved',
+          headerShown: false
+        }} 
+      />
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: 'Home',
+          headerShown: false
+        }} 
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          headerShown: false
+        }} 
+      />
+    </Tabs>
+  )
 }
+
+export default _layout
