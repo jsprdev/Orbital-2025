@@ -1,12 +1,9 @@
-import { Stack, useRouter } from "expo-router";
-import '../global.css';
+import { Stack } from "expo-router";
 
-export default function RootLayout() {
-  const router = useRouter();
-
+export default function AuthLayout() {
   return (
     <Stack>
-      <Stack.Screen name='createAccount' options={{ headerShown: false }} />
+      <Stack.Screen name="createAccount" options={{ headerShown: false }} />
     </Stack>
   );
 }
