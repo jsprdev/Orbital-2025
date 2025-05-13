@@ -26,7 +26,7 @@ export default function MakeAccount() {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      router.replace('/(tabs)'); // Redirect to main app after signup
+      router.replace('/(tabs)/Profile'); // Redirect to main app after signup
     } catch (error: any) {
       Alert.alert("Sign Up Failed", error.message);
       console.error(error);
@@ -41,7 +41,7 @@ export default function MakeAccount() {
 
         <View className="items-center pt-12 pb-8">
           <Text className="text-4xl font-bold text-pink-500">Create Account</Text>
-          <Text className="text-gray-600 mt-2">Join us today!</Text>
+          <Text className="text-gray-600 mt-2">Just a few more clicks away.</Text>
         </View>
 
 

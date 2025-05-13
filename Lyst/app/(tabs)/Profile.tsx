@@ -1,6 +1,7 @@
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { router } from 'expo-router';
+import { FIREBASE_AUTH } from '../../FirebaseConfig';
 
 const goBack = () => {
   router.push('../')
@@ -10,6 +11,15 @@ const goBack = () => {
 const Profile = () => {
   const [showOptions, setShowOptions] = useState(false);
 
+  const handleLogout = async () => {
+    try {
+      await FIREBASE_AUTH.signOut();
+      router.replace('/');
+    } catch (error) {
+      Alert.alert('error', 'failed to log out');
+      console.error('Logout error:', error);
+    }
+  };
   
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -28,12 +38,12 @@ const Profile = () => {
         
         {showOptions && (
           <View className="bg-white border p-4 mt-1 rounded-lg">
-            <Text>Lirilli Larilla</Text>
+            <Text>Tralelero Tralala</Text>
           </View>
         )}
 
         <TouchableOpacity
-                onPress={goBack}
+                onPress={handleLogout}
                 className="bg-pink-500 py-3 rounded-lg items-center"
               >
                 <Text className="text-white text-lg font-semibold">

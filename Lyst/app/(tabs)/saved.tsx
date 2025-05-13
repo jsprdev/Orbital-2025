@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, SafeAreaView, Alert } from 'react-native';
-import Header from '../ToDoList/Header';
-import AddTodo from '../ToDoList/AddTodo';
-import TodoList from '../ToDoList/TodoList';
-import TodoFilters from '../ToDoList/TodoFilters';
+import Header from '../List/Header';
+import AddTodo from '../List/AddItem';
+import TodoList from '../List/ToVisit';
+import TodoFilters from '../List/FilterBar';
 import { Todo, Category } from '../types';
 import { collection, addDoc, deleteDoc, updateDoc, doc, onSnapshot, query, where } from 'firebase/firestore';
 import { FIREBASE_DB, FIREBASE_AUTH } from '../../FirebaseConfig';

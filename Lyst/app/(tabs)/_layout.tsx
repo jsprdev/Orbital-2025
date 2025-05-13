@@ -1,6 +1,5 @@
 import { Image, Text } from "react-native";
 import { Tabs } from "expo-router";
-import { MaterialIcons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/colors";
 
 const TabLayout = () => {
