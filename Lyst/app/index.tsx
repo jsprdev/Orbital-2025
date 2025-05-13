@@ -22,7 +22,7 @@ export default function Index() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.replace('/(tabs)/home'); // TODO: CHANGE THIS 
+      router.replace('/(tabs)/Profile'); // TODO: CHANGE THIS 
 
     } catch (error: any) {
       if (error.code === 'auth/invalid-credential') {
