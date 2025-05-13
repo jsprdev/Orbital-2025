@@ -1,8 +1,16 @@
 import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
+import { router } from 'expo-router';
+
+const goBack = () => {
+  router.push('../')
+};
+
 
 const Profile = () => {
   const [showOptions, setShowOptions] = useState(false);
+
+  
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="p-4">
@@ -23,6 +31,15 @@ const Profile = () => {
             <Text>Lirilli Larilla</Text>
           </View>
         )}
+
+        <TouchableOpacity
+                onPress={goBack}
+                className="bg-pink-500 py-3 rounded-lg items-center"
+              >
+                <Text className="text-white text-lg font-semibold">
+                  Logout
+                </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   )

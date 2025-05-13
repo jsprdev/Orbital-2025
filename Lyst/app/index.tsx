@@ -30,7 +30,7 @@ export default function Index() {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.replace('/(tabs)/Profile'); // TODO: CHANGE THIS 
+      router.replace('/(tabs)/Profile'); 
 
     } catch (error: any) {
       let errorMessage = '';
@@ -50,7 +50,7 @@ export default function Index() {
 
   // Skip the login page
   const toHome = () => {
-    router.push("/(tabs)/home");
+    router.push("/(tabs)/Profile");
   }
 
   return (
