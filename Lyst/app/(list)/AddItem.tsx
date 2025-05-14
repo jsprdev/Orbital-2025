@@ -6,29 +6,45 @@ import {
   Text,
   Modal,
   ScrollView,
+  Alert,
 } from 'react-native';
 import { Category } from '../types';
+import { FIREBASE_AUTH } from '@/FirebaseConfig';
+import { Todo } from '../types';
 
 interface AddTodoProps {
-  onAdd: (text: string, category: string | undefined, priority: 'low' | 'medium' | 'high') => void;
+  onAdd: (todo: Omit<Todo, 'id'>) => void;
   categories: Category[];
 }
 
 export default function AddTodo({ onAdd, categories }: AddTodoProps) {
+  
   const [text, setText] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedPriority, setSelectedPriority] = useState<'low' | 'medium' | 'high'>('medium');
 
   const handleAdd = () => {
+    const currentUser = FIREBASE_AUTH.currentUser;
+
+    if (!currentUser) {
+      Alert.alert('Error', 'You must be logged in to add items');
+      return;
+    }
+
     if (text.trim().length > 0) {
-      onAdd(
-        text,
-        selectedCategory,
-        selectedPriority
-      );
+
+      const temp: Omit<Todo, 'id'> = {
+        text: text.trim(),
+        category: selectedCategory,
+        priority: selectedPriority,
+        userId: currentUser.uid,
+        createdAt: new Date().toISOString()
+      };
+      
+      onAdd(temp);
       setText('');
-      setSelectedCategory(undefined);
+      setSelectedCategory(null);
       setSelectedPriority('medium');
     }
   };
@@ -40,7 +56,7 @@ export default function AddTodo({ onAdd, categories }: AddTodoProps) {
       <View className="flex-row p-2.5">
         <TextInput
           className="flex-1 h-10 px-2.5 text-base border border-gray-200 rounded-lg mr-2"
-          placeholder="Add a new todo..."
+          placeholder="What's next on your Lyst?"
           value={text}
           onChangeText={setText}
         />

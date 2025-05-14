@@ -33,12 +33,6 @@ export default function ToVisit({ todos, onDelete, categories }: ToVisitProps) {
     return category?.color;
   };
 
-  const formatDate = (dateString: string | undefined) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
-  };
-
   return (
     <ScrollView className="flex-1 px-2.5">
       {todos.map(todo => (
@@ -65,11 +59,6 @@ export default function ToVisit({ todos, onDelete, categories }: ToVisitProps) {
                 </View>
               </View>
             </View>
-            {todo.dueDate && (
-              <Text className="text-xs text-gray-500 mt-1">
-                Due: {formatDate(todo.dueDate)}
-              </Text>
-            )}
           </TouchableOpacity>
           <TouchableOpacity
             className="bg-red-500 px-2.5 py-1.5 rounded ml-2.5"

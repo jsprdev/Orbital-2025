@@ -77,7 +77,7 @@ export default function MakeAccount() {
           <TouchableOpacity 
             onPress={handleSignUp}
             disabled={loading}
-            className="bg-blue-500 py-3 rounded-lg mb-3 items-center"
+            className="bg-primary py-3 rounded-lg mb-3 items-center"
           >
             {loading ? (
               <ActivityIndicator color="white" />
@@ -90,8 +90,8 @@ export default function MakeAccount() {
             onPress={() => router.back()}
             className="items-center"
           >
-            <Text className="text-blue-500">
-              Already have an account? <Text className="font-semibold">Log In</Text>
+            <Text className="text-secondary">
+              Already have an account? <Text className="font-semibold text-primary">Log In</Text>
             </Text>
           </TouchableOpacity>
         </View>

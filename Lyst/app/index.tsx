@@ -16,7 +16,7 @@ import { FIREBASE_AUTH } from "../FirebaseConfig";
 export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  
   const router = useRouter();
   const auth = FIREBASE_AUTH;
 
@@ -28,7 +28,7 @@ export default function Index() {
 
     console.log("Attempting login with:", email);
 
-    setLoading(true);
+    
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.replace('/(tabs)/Profile'); 
@@ -39,13 +39,11 @@ export default function Index() {
         errorMessage = "Invalid email or password";
       }
       Alert.alert("Error", errorMessage);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const signUp = () => {
-    router.push("/(auth)/createAccount");
+    router.push("/(auth)/CreateAccount");
   };
 
   // for dev purposes, skip to home page
@@ -70,7 +68,7 @@ export default function Index() {
           className="h-1/2 bg-white rounded-t-3xl -mt-6">
         <SafeAreaView className="flex-1">
           <View className="items-left px-7 pt-12 pb-8">
-            <Text className="text-4xl font-bold text-pink-500">
+            <Text className="text-4xl font-bold text-pink-500 shadow-md">
               Welcome to Lyst
             </Text>
           </View>
@@ -101,17 +99,19 @@ export default function Index() {
               onPress={signIn}
               className="bg-primary py-3 rounded-lg mb-3 items-center"
             >
-              <Text className="text-white text-lg font-semibold">Log In</Text>
+              <Text className="text-white text-lg font-semibold shadow-md">Log In</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={signUp}
-              className="bg-secondary py-3 rounded-lg items-center"
-            >
-              <Text className="text-white text-lg font-semibold">
-                Create New Account
+            <View className="flex-row justify-center items-center mt-4">
+              <Text className="text-gray-600 text-base">
+                Don't have an account?{' '}
               </Text>
-            </TouchableOpacity>
+              <TouchableOpacity onPress={signUp}>
+                <Text className="text-primary font-semibold text-base">
+                  Register now
+                </Text>
+              </TouchableOpacity>
+          </View>
 
             {/* skip to home page FOR TESTING */}
   {/* 
