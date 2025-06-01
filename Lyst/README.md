@@ -21,7 +21,7 @@ Make sure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/lyst-app.git
+   git clone https://github.com/Jeric-Tan/Orbital-2025.git
    cd lyst-app
    ```
 
