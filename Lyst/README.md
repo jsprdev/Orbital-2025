@@ -38,9 +38,7 @@ Make sure you have the following installed:
    ```
 
 4. Scan the QR code with Expo Go on your device or run on an emulator.
-   
 Alternatively, in the output you'll find options to open the app in a
-
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)
 - [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
 - [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
