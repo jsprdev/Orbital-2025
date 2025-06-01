@@ -9,7 +9,7 @@ import {
   View,
   KeyboardAvoidingView,
   Alert,
-  Image,
+  Image
 } from "react-native";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 
@@ -38,12 +38,12 @@ export default function Index() {
       if (error.code === "auth/invalid-credential") {
         errorMessage = "Invalid email or password";
       }
-      Alert.alert("Error", errorMessage);
+      Alert.alert("Account Not Found. Please Sign in.", errorMessage);
     } 
   };
 
   const signUp = () => {
-    router.push("/(auth)/CreateAccount");
+    router.push("/(auth)/createAccount");
   };
 
   // for dev purposes, skip to home page
@@ -63,10 +63,12 @@ export default function Index() {
             height: '100%',
           }}  
         />
-    </View>
+      </View>
+      
       <KeyboardAvoidingView 
-          className="h-1/2 bg-white rounded-t-3xl -mt-6">
-        <SafeAreaView className="flex-1">
+        className="h-1/2 bg-white rounded-t-3xl -mt-6 flex-1"
+        >
+
           <View className="items-left px-7 pt-12 pb-8">
             <Text className="text-4xl font-bold text-pink-500 shadow-md">
               Welcome to Lyst
@@ -111,21 +113,8 @@ export default function Index() {
                   Register now
                 </Text>
               </TouchableOpacity>
+            </View>
           </View>
-
-            {/* skip to home page FOR TESTING */}
-  {/* 
-            <TouchableOpacity
-              onPress={toHome}
-              className="bg-pink-500 py-3 rounded-lg items-center"
-            >
-              <Text className="text-white text-lg font-semibold">
-                Skip to Home
-              </Text>
-            </TouchableOpacity> */}
-            
-          </View>
-        </SafeAreaView>
       </KeyboardAvoidingView>
     </>
   );
