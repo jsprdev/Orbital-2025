@@ -14,7 +14,7 @@ These instructions will get you a copy of the project up and running on your loc
 Make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (v16 or later)
-- An emulator OR the [Expo Go app](https://expo.dev/client) on your iOS/Android device
+- A mobile emulator OR the [Expo Go app](https://expo.dev/client) on your iOS/Android device
 
 ### Installation
 
@@ -38,6 +38,7 @@ Make sure you have the following installed:
    ```
 
 4. Scan the QR code with Expo Go on your device or run on an emulator.
+
 
 
 
