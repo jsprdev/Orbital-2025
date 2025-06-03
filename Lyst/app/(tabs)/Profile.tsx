@@ -38,7 +38,7 @@ const Profile = () => {
         
         {showOptions && (
           <View className="bg-white border p-4 mt-1 rounded-lg">
-            <Text>Tralelero Tralala</Text>
+            <Text>Partner Functionality Coming Soon!</Text>
           </View>
         )}
 
