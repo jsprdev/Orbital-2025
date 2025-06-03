@@ -47,9 +47,9 @@ export default function Index() {
   };
 
   // for dev purposes, skip to home page
-  // const toHome = () => {
-  //   router.push("/(tabs)/Profile");
-  // }
+  const toHome = () => {
+    router.push("/(tabs)/Profile");
+  }
   
 
   return (
@@ -114,7 +114,7 @@ export default function Index() {
           </View>
 
             {/* skip to home page FOR TESTING */}
-  {/* 
+  
             <TouchableOpacity
               onPress={toHome}
               className="bg-pink-500 py-3 rounded-lg items-center"
@@ -122,7 +122,7 @@ export default function Index() {
               <Text className="text-white text-lg font-semibold">
                 Skip to Home
               </Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
             
           </View>
         </SafeAreaView>

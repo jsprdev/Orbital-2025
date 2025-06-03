@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, SafeAreaView, Alert, ActivityIndicator } from 'react-native';
+import { View, SafeAreaView, Alert, ActivityIndicator, Touchable, TouchableOpacity, Text } from 'react-native';
 import Header from '../(list)/Header';
 import AddTodo from '../(list)/AddItem';
 import TodoList from '../(list)/ToVisit';
+import TodoFilters from '../(list)/TodoFilters';
 import { Todo, Category } from '../types';
 import { collection, addDoc, deleteDoc, updateDoc, doc, onSnapshot, query, where } from 'firebase/firestore';
 import { FIREBASE_DB, FIREBASE_AUTH } from '../../FirebaseConfig';
@@ -14,6 +15,7 @@ const Saved = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedPriority, setSelectedPriority] = useState<string | null>(null);
   
@@ -23,6 +25,10 @@ const Saved = () => {
     { id: '3', name: 'Entertainment', color: priColor },
     { id: '4', name: 'Others', color: priColor },
   ];
+
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
+  };
 
   useEffect(() => {
     const userId = FIREBASE_AUTH.currentUser?.uid;
@@ -90,10 +96,23 @@ const Saved = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1">
         <Header />
+        
         <AddTodo 
           onAdd={handleAddTodo}
           categories={categories}
+          onToggleView={toggleFilters}
         />
+
+        {showFilters && (<TodoFilters 
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          selectedCategory={selectedCategory}
+          onCategorySelect={setSelectedCategory}
+          categories={categories}
+          selectedPriority={selectedPriority}
+          onPrioritySelect={setSelectedPriority}
+        />
+        )}
         
         {isLoading ? (
           <View className="flex-1 justify-center items-center">

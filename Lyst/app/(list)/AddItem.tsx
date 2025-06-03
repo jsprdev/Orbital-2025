@@ -11,13 +11,15 @@ import {
 import { Category } from '../types';
 import { FIREBASE_AUTH } from '@/FirebaseConfig';
 import { Todo } from '../types';
+import { on } from 'events';
 
 interface AddTodoProps {
   onAdd: (todo: Omit<Todo, 'id'>) => void;
   categories: Category[];
+  onToggleView?: () => void;
 }
 
-export default function AddTodo({ onAdd, categories }: AddTodoProps) {
+export default function AddTodo({ onAdd, categories, onToggleView }: AddTodoProps) {
   
   const [text, setText] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -60,6 +62,16 @@ export default function AddTodo({ onAdd, categories }: AddTodoProps) {
           value={text}
           onChangeText={setText}
         />
+
+        <TouchableOpacity
+            onPress={ onToggleView }
+            className="bg-gray-100 p-4 rounded-lg"
+          >
+          <Text className="text-base">
+            Filters
+          </Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           className="bg-gray-500 px-4 justify-center items-center rounded-md mr-2"
           onPress={() => setShowModal(true)}
