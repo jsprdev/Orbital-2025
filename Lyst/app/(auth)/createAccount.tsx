@@ -1,49 +1,58 @@
-import { useRouter } from 'expo-router';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import React, { useState } from 'react';
-import { SafeAreaView, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform, Alert, ActivityIndicator } from 'react-native';
-import { FIREBASE_AUTH } from '../../FirebaseConfig';
+// This is the page where users can create a new account.
+import React, { useState } from "react";
+import {
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import { useRouter } from "expo-router";
+import { useAuth } from "../../providers/AuthProvider";
 
-export default function MakeAccount() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+export default function CreateAccount() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const auth = FIREBASE_AUTH;
+  const { signIn, createUser } = useAuth();
+  
 
   const handleSignUp = async () => {
-    if (!email || !password || !confirmPassword) {
-      Alert.alert('Error', 'Please fill in all the fields');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords don't match");
-      return;
-    }
     setLoading(true);
-
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      router.replace('/(tabs)/Profile'); // Redirect to main app after signup
-    } catch (error: any) {
-      Alert.alert("Sign Up Failed", error.message);
-      console.error(error);
+      await createUser(email, password, confirmPassword);
+      router.replace("/(tabs)/Profile");
+    } catch (error) {
+      console.log("Sign Up Error:", error);
+      if (error.code === "auth/invalid-credentials") {
+        Alert.alert("Invalid Email or Password");
+      } else {
+        Alert.alert("Sign In Error", error.message);
+      }
     } finally {
       setLoading(false);
     }
   };
 
+
   return (
     <KeyboardAvoidingView className="flex-1 bg-white">
       <SafeAreaView className="flex-1">
-
         <View className="items-center pt-12 pb-8">
-          <Text className="text-4xl font-bold text-pink-500">Create Account</Text>
-          <Text className="text-gray-600 mt-2">Just a few more clicks away.</Text>
+          <Text className="text-4xl font-bold text-pink-500">
+            Create Account
+          </Text>
+          <Text className="text-gray-600 mt-2">
+            Just a few more clicks away.
+          </Text>
         </View>
-
 
         <View className="px-6">
           <TextInput
@@ -55,7 +64,7 @@ export default function MakeAccount() {
             autoCapitalize="none"
             keyboardType="email-address"
           />
-          
+
           <TextInput
             placeholder="Password (min 6 characters)"
             placeholderTextColor="#9CA3AF"
@@ -64,7 +73,7 @@ export default function MakeAccount() {
             className="h-12 border border-gray-300 rounded-lg px-4 mb-4 text-base"
             secureTextEntry
           />
-          
+
           <TextInput
             placeholder="Confirm Password"
             placeholderTextColor="#9CA3AF"
@@ -73,8 +82,8 @@ export default function MakeAccount() {
             className="h-12 border border-gray-300 rounded-lg px-4 mb-6 text-base"
             secureTextEntry
           />
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             onPress={handleSignUp}
             disabled={loading}
             className="bg-primary py-3 rounded-lg mb-3 items-center"
@@ -82,16 +91,19 @@ export default function MakeAccount() {
             {loading ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text className="text-white text-lg font-semibold">Create Account</Text>
+              <Text className="text-white text-lg font-semibold">
+                Create Account
+              </Text>
             )}
           </TouchableOpacity>
-          
-          <TouchableOpacity 
+
+          <TouchableOpacity
             onPress={() => router.back()}
             className="items-center"
           >
             <Text className="text-secondary">
-              Already have an account? <Text className="font-semibold text-primary">Log In</Text>
+              Already have an account?{" "}
+              <Text className="font-semibold text-primary">Log In</Text>
             </Text>
           </TouchableOpacity>
         </View>

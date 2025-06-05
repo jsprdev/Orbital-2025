@@ -14,7 +14,7 @@ const Saved = () => {
   const priColor = '#ff9898';
   const [todos, setTodos] = useState<Todo[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedPriority, setSelectedPriority] = useState<string | null>(null);

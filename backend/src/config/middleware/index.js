@@ -1,8 +1,9 @@
-const admin = require('../../config/firebase-config');
+const admin = require('.././firebase-config');
 
 class Middleware {
     async handleRequest(req, res, next) {
         const token = req.headers.authorization?.split(' ')[1];
+        console.log('Token:', token);
 
         // Check if token is provided
         if (!token) {

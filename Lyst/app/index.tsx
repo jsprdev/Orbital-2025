@@ -1,3 +1,5 @@
+// This is the first screen users see when they open the app.
+
 import { useRouter } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
@@ -12,51 +14,49 @@ import {
   Image,
 } from "react-native";
 import { FIREBASE_AUTH as auth } from "../FirebaseConfig";
-import ListOfTodo from "./(list)/ListOfTodo";
+import { useAuth } from "../providers/AuthProvider";
+
 
 export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+  const { signIn } = useAuth();
 
-  const signIn = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields");
-      return;
-    }
-
-    if (!email.includes("@")) {
-      Alert.alert("Error", "Please enter a valid email address");
-      return;
-    }
-
+  const handleSignIn = async () => {
+    setLoading(true);
     try {
-      const userCreds = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCreds.user;
-
-      console.log("User signed in:", user.email);
-
-      const idToken = await user.getIdToken();
-      setToken(idToken);
-
+      await signIn(email, password);
       router.replace("/(tabs)/Profile");
     } catch (error) {
-      let errorMessage = "";
-      if (error.code === "auth/invalid-credential") {
-        errorMessage = "Invalid email or password";
+      if (error.code === "auth/invalid-credentials") {
+        Alert.alert("Invalid Email or Password");
+      } else {
+        Alert.alert("Sign In Error", error.message);
       }
-      Alert.alert("Account Not Found. Please Sign in.", errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const signUp = () => {
-    router.push("/(auth)/createAccount");
+  const signUpPage = () => {
+    router.push("/(auth)/CreateAccount");
   };
 
   return (
     <SafeAreaView className="bg-white flex-1">
+      <View className="h-1/2 bg-gray-50 justify-center items-center">
+        <Image
+          source={require("../assets/images/loginPic.png")}
+          resizeMode="cover"
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        />
+      </View>
       <View className="flex-1">
         <KeyboardAvoidingView className="h-1/2 rounded-t-3xl">
           <View className="items-left px-7 pt-12 pb-8">
@@ -88,7 +88,7 @@ export default function Index() {
 
           <View className="px-6 bottom">
             <TouchableOpacity
-              onPress={signIn}
+              onPress={handleSignIn}
               className="bg-primary py-3 rounded-lg mb-3 items-center"
             >
               <Text className="text-white text-lg font-semibold shadow-md">
@@ -100,7 +100,7 @@ export default function Index() {
               <Text className="text-gray-600 text-base">
                 Don't have an account?{" "}
               </Text>
-              <TouchableOpacity onPress={signUp}>
+              <TouchableOpacity onPress={signUpPage}>
                 <Text className="text-primary font-semibold text-base">
                   Register now
                 </Text>
@@ -108,19 +108,6 @@ export default function Index() {
             </View>
           </View>
         </KeyboardAvoidingView>
-
-        <ListOfTodo token={token} />
-
-        <View className="h-1/2 bg-gray-50 justify-center items-center">
-          <Image
-            source={require("../assets/images/loginPic.png")}
-            resizeMode="cover"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
-        </View>
       </View>
     </SafeAreaView>
   );

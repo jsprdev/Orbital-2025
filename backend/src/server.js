@@ -31,11 +31,10 @@ app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
 
-// Export the app for testing purposes
-module.exports = app;
-
-// Export the port for testing purposes
-module.exports.port = port;
-
-// Export the express module for testing purposes
-module.exports.express = express;
+// CI/CD pipeline configuration
+// Exporting the app, port and express for testing purposes
+module.exports = {
+  app,
+  port,
+  express,
+};

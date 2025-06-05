@@ -8,9 +8,8 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { Category } from '../types';
+import { Category, Todo } from '../types';
 import { FIREBASE_AUTH } from '@/FirebaseConfig';
-import { Todo } from '../types';
 import { on } from 'events';
 
 interface AddTodoProps {
