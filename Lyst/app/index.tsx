@@ -1,7 +1,6 @@
 // This is the first screen users see when they open the app.
 
 import { useRouter } from "expo-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import {
   SafeAreaView,
@@ -13,7 +12,6 @@ import {
   Alert,
   Image,
 } from "react-native";
-import { FIREBASE_AUTH as auth } from "../FirebaseConfig";
 import { useAuth } from "../providers/AuthProvider";
 
 
@@ -30,7 +28,7 @@ export default function Index() {
     try {
       await signIn(email, password);
       router.replace("/(tabs)/Profile");
-    } catch (error) {
+    } catch (error:any) {
       if (error.code === "auth/invalid-credentials") {
         Alert.alert("Invalid Email or Password");
       } else {
@@ -42,7 +40,7 @@ export default function Index() {
   };
 
   const signUpPage = () => {
-    router.push("/(auth)/CreateAccount");
+    router.push("./(auth)/CreateAccount");
   };
 
   return (

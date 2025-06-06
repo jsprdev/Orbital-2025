@@ -4,7 +4,7 @@ import Header from '../(list)/Header';
 import AddTodo from '../(list)/AddItem';
 import TodoList from '../(list)/ToVisit';
 import TodoFilters from '../(list)/TodoFilters';
-import { Todo, Category } from '../types';
+import { Todo, Category } from '../../types';
 import { collection, addDoc, deleteDoc, updateDoc, doc, onSnapshot, query, where } from 'firebase/firestore';
 import { FIREBASE_DB, FIREBASE_AUTH } from '../../FirebaseConfig';
 import { firestoreFunctions } from '../(list)/firestoreFunctions';

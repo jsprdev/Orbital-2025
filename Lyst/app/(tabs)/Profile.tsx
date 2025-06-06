@@ -1,18 +1,19 @@
 import { View, Text, SafeAreaView, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { router } from 'expo-router';
-import { FIREBASE_AUTH as auth } from '../../FirebaseConfig';
 import { useAuth } from '../../providers/AuthProvider';
 
 const Profile = () => {
   const [showOptions, setShowOptions] = useState(false);
-
+  const { signOutUser } = useAuth();
+  
   const handleLogout = async () => {
     try {
       await signOutUser();
       router.replace('/');
     } catch (error) {
       Alert.alert('error', 'failed to log out');
+      console.error('Logout error:', error);
     }
   };
 

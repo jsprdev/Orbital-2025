@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React, { useState, useEffect, createContext, useContext } from "react";
 import {
   onAuthStateChanged,
@@ -14,13 +13,15 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   signIn: (email: string, password: string) => Promise<void>;
-  createUser: (email: string, password: string, confirmPassword: string) => Promise<void>;
-  signOut: () => Promise<void>;
+  createUser: (email: string, password: string, confirmPassword: string) => Promise<string>;
+  signOutUser: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }) => {
+import { ReactNode } from "react";
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [lyst, setLyst] = useState<any[]>([]);
@@ -114,6 +115,7 @@ export const AuthProvider = ({ children }) => {
 
   // Function to sign out the user
   const signOutUser = async () => {
+    console.log("Signing out user:", user?.email);
     try {
       await signOut(auth);
       setUser(null);
@@ -125,12 +127,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, signIn, createUser, signOut: signOutUser }}>
+    <AuthContext.Provider value={{ user, token, signIn, createUser, signOutUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 };
