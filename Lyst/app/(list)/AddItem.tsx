@@ -8,7 +8,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { Category, Todo } from '../types';
+import { Category, Todo } from '../../types';
 import { FIREBASE_AUTH } from '@/FirebaseConfig';
 import { on } from 'events';
 

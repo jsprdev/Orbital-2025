@@ -7,11 +7,9 @@ import {
   TouchableOpacity,
   View,
   KeyboardAvoidingView,
-  Platform,
   Alert,
   ActivityIndicator,
 } from "react-native";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import { useRouter } from "expo-router";
 import { useAuth } from "../../providers/AuthProvider";
 
@@ -21,7 +19,7 @@ export default function CreateAccount() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { signIn, createUser } = useAuth();
+  const { createUser } = useAuth();
   
 
   const handleSignUp = async () => {
@@ -29,7 +27,7 @@ export default function CreateAccount() {
     try {
       await createUser(email, password, confirmPassword);
       router.replace("/(tabs)/Profile");
-    } catch (error) {
+    } catch (error:any) {
       console.log("Sign Up Error:", error);
       if (error.code === "auth/invalid-credentials") {
         Alert.alert("Invalid Email or Password");
