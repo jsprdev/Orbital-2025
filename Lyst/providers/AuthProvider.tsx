@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 import { FIREBASE_AUTH as auth } from "../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { fetchLyst } from "../utils/api";
+import { getTasks } from "../utils/api";
 
 interface AuthContextType {
   user: User | null;
@@ -66,7 +66,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(idToken);
 
       // Fetch user's Lyst data
-      const fetchedLyst = await fetchLyst(idToken);
+      console.log('Fetching List of Task')
+      const fetchedLyst = await getTasks(idToken);
       setLyst(fetchedLyst);
       
     } catch (error) {

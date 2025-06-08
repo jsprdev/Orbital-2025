@@ -26,7 +26,9 @@ export default function Index() {
   const handleSignIn = async () => {
     setLoading(true);
     try {
+      console.log('Signing in..');
       await signIn(email, password);
+      console.log('Sign in Successful')
       router.replace("/(tabs)/Profile");
     } catch (error:any) {
       if (error.code === "auth/invalid-credentials") {

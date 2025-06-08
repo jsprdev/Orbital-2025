@@ -11,9 +11,11 @@ import {
   ScrollView,
 } from "react-native";
 import AddIdeaButton from "./AddIdeaButton";
-import { firestoreFunctions } from "../../utils/firestoreAPI"; 
 import { Priority, Todo } from "../../types";
+import { createTask } from "@/utils/api";
+import { useAuth } from "@/providers/AuthProvider"
 const { height } = Dimensions.get("window");
+
 
 const PREMADE_TAGS = ["Food", "Gifts", "Shopping", "Overseas"];
 
@@ -24,10 +26,10 @@ const priorityColor: Record<string, string> = {
 };
 
 
-export default function AddIdea({ onSaveIdea }: { onSaveIdea?: (idea: Todo) => void }) {
+export default function AddIdea({ onSave }: { onSave?: () => void }) {
   const [visible, setVisible] = useState(false);
   const slideAnim = useRef(new Animated.Value(height)).current;
-
+  const { token } = useAuth();
   // Form state
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -95,7 +97,7 @@ export default function AddIdea({ onSaveIdea }: { onSaveIdea?: (idea: Todo) => v
   };
 
   // Save the idea - call onSaveIdea prop if passed
-  const onSave = async () => {
+  const onSavingPage = async () => {
     if (!description.trim()) {
       alert("Please enter a description.");
       return;
@@ -111,14 +113,20 @@ export default function AddIdea({ onSaveIdea }: { onSaveIdea?: (idea: Todo) => v
 
     // backend logic to save the idea
     try {
-      await firestoreFunctions.addTodo({
+      await createTask({
         description: description,
         tags: selectedTags,
         place: location,
         priority: priority,
         createdAt: new Date().toISOString(),
         userId: ''
-      });
+      }, token);
+
+      // refresh page
+      if (onSave) {
+        onSave();
+      }
+
     } catch (error) {
       console.error("Error adding todo:", error);
     } finally {
@@ -237,7 +245,7 @@ export default function AddIdea({ onSaveIdea }: { onSaveIdea?: (idea: Todo) => v
 
             {/* Save button */}
             <TouchableOpacity
-              onPress={onSave}
+              onPress={onSavingPage}
               className="bg-blue-600 rounded py-3 items-center"
             >
               <Text className="text-white font-bold text-lg">Save Idea</Text>

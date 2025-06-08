@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Text, View } from 'react-native';
-import AddIdea from '../list2/AddIdea';
-import SearchBar from '../list2/SearchBar';
-import Display from '../list2/Display';
+import AddIdea from '../(list)/AddIdea';
+import SearchBar from '../(list)/SearchBar';
+import Display from '../(list)/Display';
 import { Priority } from '../../types'; 
 
 export default function YourLyst() {
   const [filters, setFilters] = useState<{
     query: string; selectedTags: string[]; priority: Priority | null;
   }>({ query: "", selectedTags: [], priority: null });
+
+  const [refresh, setRefresh] = useState(false);
+
+  const refreshPage = useCallback(() => {
+    setRefresh(prev => !prev);
+  }, []);
 
   // TODO: Replace this with your actual tags
   const availableTags = ["Food", "Gifts", "Shopping", "Overseas", "Others"];
@@ -29,7 +35,7 @@ export default function YourLyst() {
           Your Lyst
         </Text>
         <View className="ml-auto">
-          <AddIdea />
+          <AddIdea onSave={refreshPage} />
         </View>
       </View>
 
@@ -40,7 +46,7 @@ export default function YourLyst() {
 
       {/* Main content area */}
       <View className="flex-1 px-4 py-2">
-        <Display filters={filters} />
+        <Display filters={filters} key={refresh.toString()} />
       </View>
     </View>
   );

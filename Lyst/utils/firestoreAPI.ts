@@ -1,8 +1,9 @@
+// FILE NO LONGER IN USE
 import { collection, addDoc, deleteDoc, doc, query, where, getDocs, getDoc, documentId } from 'firebase/firestore';
 import { FIREBASE_AUTH as auth, FIREBASE_DB } from "../FirebaseConfig";
 import { Todo } from '../types';
 
-export const firestoreFunctions = {
+const firestoreFunctions = {
   async addTodo(todo: Omit<Todo, 'id'>) {
     const currentUser = auth.currentUser;
     try {

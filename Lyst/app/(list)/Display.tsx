@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { firestoreFunctions } from '../../utils/firestoreAPI';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH as auth} from '../../FirebaseConfig';
 import { Priority ,Todo } from '../../types';
 import Card from '../card/card';
+import { getTasks } from '@/utils/api';
+import { useAuth } from "@/providers/AuthProvider"
+
 
 const priorityColor: Record<Priority, string> = {
   low: 'text-green-500',
@@ -18,7 +20,8 @@ export default function Display({ filters } : {
     const [todos, setTodos] = useState<Todo[]>([]);
     const [loading, setLoading] = useState(true);
     const [userReady, setUserReady] = useState(false);
-  
+
+    const { token } = useAuth(); 
     { /* Listen for authentication state changes */ }
     { /* This is to allow the list to continue display even when user refreshes */ }
     useEffect(() => {
@@ -39,7 +42,7 @@ export default function Display({ filters } : {
   
       const fetchTodos = async () => {
         try {
-          const fetchedTodos = await firestoreFunctions.getTodos();
+          const fetchedTodos = await getTasks(token);
           setTodos(fetchedTodos);
         } catch (error) {
           console.error("Error fetching todos:", error);
