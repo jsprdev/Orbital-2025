@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { Todo } from "../../types";
+import { Todo } from "@/types";
 
 type Props = {
   todo: Todo;

@@ -5,9 +5,9 @@ import {
   signOut,
   User,
 } from "firebase/auth";
-import { FIREBASE_AUTH as auth } from "../FirebaseConfig";
+import { FIREBASE_AUTH as auth } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { getTasks } from "../utils/api";
+import { getTasks } from "@/utils/api";
 
 interface AuthContextType {
   user: User | null;

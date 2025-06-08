@@ -11,12 +11,11 @@ import {
   ScrollView,
 } from "react-native";
 import AddIdeaButton from "./AddIdeaButton";
-import { Priority, Todo } from "../../types";
+import { Priority } from "@/types";
 import { createTask } from "@/utils/api";
 import { useAuth } from "@/providers/AuthProvider"
+
 const { height } = Dimensions.get("window");
-
-
 const PREMADE_TAGS = ["Food", "Gifts", "Shopping", "Overseas"];
 
 const priorityColor: Record<string, string> = {
@@ -27,8 +26,9 @@ const priorityColor: Record<string, string> = {
 
 
 export default function AddIdea({ onSave }: { onSave?: () => void }) {
-  const [visible, setVisible] = useState(false);
   const slideAnim = useRef(new Animated.Value(height)).current;
+
+  const [visible, setVisible] = useState(false);
   const { token } = useAuth();
   // Form state
   const [description, setDescription] = useState("");

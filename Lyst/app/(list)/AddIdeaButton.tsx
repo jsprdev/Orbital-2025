@@ -10,7 +10,7 @@ export default function AddIdeaButton({ handlePress }: { handlePress: () => void
         onPress={handlePress}
         className="p-3 rounded-full items-center flex-row"
       >
-        <FontAwesome6 name="add" size={24} color="black" />
+        <FontAwesome6 name="add" size={24} color="pink" />
       </TouchableOpacity>
     </View>
   );

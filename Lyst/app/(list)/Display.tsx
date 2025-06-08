@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH as auth} from '../../FirebaseConfig';
-import { Priority ,Todo } from '../../types';
-import Card from '../card/card';
+import { FIREBASE_AUTH as auth} from '@/FirebaseConfig';
+import { Priority ,Todo } from '@/types';
+// Update the import path to the correct relative location of Card
+import Card from './card/card';
 import { getTasks } from '@/utils/api';
 import { useAuth } from "@/providers/AuthProvider"
 

@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { Priority } from "../../types"; 
+import { Priority } from "@/types"; 
 
 type Props = {
   tags: string[];

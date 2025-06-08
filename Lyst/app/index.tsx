@@ -12,7 +12,7 @@ import {
   Alert,
   Image,
 } from "react-native";
-import { useAuth } from "../providers/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 
 
 export default function Index() {

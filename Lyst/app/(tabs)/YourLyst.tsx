@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import AddIdea from '../(list)/AddIdea';
 import SearchBar from '../(list)/SearchBar';
 import Display from '../(list)/Display';
-import { Priority } from '../../types'; 
+import { Priority } from '@/types'; 
 
 export default function YourLyst() {
   const [filters, setFilters] = useState<{

@@ -1,7 +1,7 @@
 import { View, Text, SafeAreaView, TouchableOpacity, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { router } from 'expo-router';
-import { useAuth } from '../../providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 
 const Profile = () => {
   const [showOptions, setShowOptions] = useState(false);
