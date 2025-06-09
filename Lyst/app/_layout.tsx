@@ -1,5 +1,5 @@
 import { Stack, useRouter } from "expo-router";
-import "@/global.css";
+import "./global.css";
 import { AuthProvider } from "@/providers/AuthProvider";
 
 

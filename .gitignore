@@ -1,0 +1,41 @@
+node_modules/
+
+
+# FRONTEND FILES 
+
+# Expo
+Lyst/.expo/
+Lyst/dist/
+Lyst/web-build/
+Lyst/expo-env.d.ts
+
+# Native
+Lyst/.kotlin/
+Lyst/*.orig.*
+Lyst/*.jks
+Lyst/*.p8
+Lyst/*.p12
+Lyst/*.key
+Lyst/*.mobileprovision
+
+# Metro
+Lyst/.metro-health-check*
+
+# debug
+Lyst/npm-debug.*
+Lyst/yarn-debug.*
+Lyst/yarn-error.*
+
+# macOS
+Lyst/.DS_Store
+Lyst/*.pem
+
+# local env files
+Lyst/.env*.local
+
+# typescript
+Lyst/*.tsbuildinfo
+
+Lyst/app-example
+
+Lyst/_dev_info
