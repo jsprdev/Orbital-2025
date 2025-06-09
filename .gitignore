@@ -1,7 +1,11 @@
+# ROOT *
 node_modules/
 
 
-# FRONTEND FILES 
+# FRONTEND FILES *
+
+# VSCODE 
+Lyst/.vscode/
 
 # Expo
 Lyst/.expo/
