@@ -2,7 +2,6 @@ import React, { act } from 'react';
 import { View, Text, Button } from 'react-native';
 import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import { AuthProvider, useAuth } from '@/providers/AuthProvider'
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 // Mock Firebase Authentication and Backend API call
     // Mocking Current User's token to return 'mock-token'
@@ -38,7 +37,7 @@ jest.mock('firebase/auth', () => ({
     ),
 
     signOut: jest.fn( () => Promise.resolve()),
-    
+
 }));
 
 jest.mock('@/utils/api', () => ({ 
