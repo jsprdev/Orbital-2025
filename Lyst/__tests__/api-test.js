@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getTasks, createTask } from '@/utils/api';
+import { getNotes, createNote } from '@/utils/api';
 
 // Mock Firebase Authentication and Axios
 jest.mock('@/FirebaseConfig', () => ({
@@ -43,28 +43,28 @@ describe('API Calls', () => {
             data: { tasks: [firstTask] }
         });
 
-        const tasks = await getTasks(token);
-        expect(mockAxios.get).toHaveBeenCalledWith('/api/task', {
+        const notes = await getNotes(token);
+        expect(mockAxios.get).toHaveBeenCalledWith('/api/notes', {
             headers: { Authorization: 'Bearer ' + token }
         });
 
-        expect(tasks).toEqual([firstTask]);
+        expect(notes).toEqual([firstTask]);
     });
 
-    // [POST] Create Task 
-    it('createTask', async () => {
+    // [POST] Create Note 
+    it('createNote', async () => {
         mockAxios.post.mockResolvedValue({
             data: { task : firstTask }
         });
 
-        const taskData = firstTask;
-        const tasks = await createTask(taskData, token);
+        const noteData = firstTask;
+        const notes = await createNote(noteData, token);
 
-        expect(mockAxios.post).toHaveBeenCalledWith('/api/task', firstTask, {
+        expect(mockAxios.post).toHaveBeenCalledWith('/api/notes', noteData, {
             headers: { Authorization: 'Bearer ' + token }
         });
 
-        expect(tasks).toEqual(firstTask);
+        expect(notes).toEqual(noteData);
 
     });
 });

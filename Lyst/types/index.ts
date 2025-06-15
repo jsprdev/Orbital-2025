@@ -13,14 +13,14 @@ export type User = {
 
 export type Priority = "low" | "medium" | "high";
 
-export interface Todo {
+export interface Note {
   id?: string;
   userId: string;
   createdAt: string;
   description: string;
   place?: string;
   tags: string[];
-  priority: Priority;
+  priority: "low" | "medium" | "high";
 }
 
 export type Category = {

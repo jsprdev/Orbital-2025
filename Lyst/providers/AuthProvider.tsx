@@ -7,13 +7,13 @@ import {
 } from "firebase/auth";
 import { FIREBASE_AUTH as auth } from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { getTasks } from "@/utils/api";
+import { getNotes } from "@/utils/api";
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
   signIn: (email: string, password: string) => Promise<void>;
-  createUser: (email: string, password: string, confirmPassword: string) => Promise<string>;
+  createUser: (email: string, password: string, confirmPassword: string) => Promise<void>;
   signOutUser: () => Promise<void>;
 }
 
@@ -66,8 +66,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(idToken);
 
       // Fetch user's Lyst data
-      console.log('Fetching List of Task')
-      const fetchedLyst = await getTasks(idToken);
+      console.log('Fetching List of Notes')
+      const fetchedLyst = await getNotes(idToken);
       setLyst(fetchedLyst);
       
     } catch (error) {
@@ -106,7 +106,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Get Token from User
       const idToken = await user.getIdToken();
       setToken(idToken);
-      return idToken;
+
+      // Fetch user's Lyst data
+      console.log('Fetching List of Notes')
+      const fetchedLyst = await getNotes(idToken);
+      setLyst(fetchedLyst);
 
     } catch (error) {
       console.error("Create user error:", error);
