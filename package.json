@@ -1,0 +1,29 @@
+{
+  "name": "orbital-2025",
+  "version": "1.0.0",
+  "description": "This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "Lyst",
+    "backend"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run start --prefix Lyst\" \"npm run dev --prefix backend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jeric-Tan/Orbital-2025.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jeric-Tan/Orbital-2025/issues"
+  },
+  "homepage": "https://github.com/Jeric-Tan/Orbital-2025#readme",
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -23,9 +23,9 @@ const TabLayout = () => {
     >
 
       <Tabs.Screen
-        name="saved"
+        name="YourLyst"
         options={{
-          title: "saved",
+          title: "YourLyst",
           tabBarIcon: ({ focused }) => (
             <Image
               source={require('../../assets/icons/heart.png')}
