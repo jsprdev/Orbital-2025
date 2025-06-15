@@ -16,8 +16,8 @@ import { useAuth } from "@/providers/AuthProvider";
 
 
 export default function Index() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("user3@gmail.com");
+  const [password, setPassword] = useState("qwerty");
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -42,7 +42,7 @@ export default function Index() {
   };
 
   const signUpPage = () => {
-    router.push("./(auth)/CreateAccount");
+    router.push("./(auth)/createAccount");
   };
 
   return (

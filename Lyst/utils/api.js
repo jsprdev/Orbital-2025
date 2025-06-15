@@ -11,6 +11,7 @@ const axiosInstance = axios.create({
 
 // GET requests
 export const getNotes = async (token) => {
+
   try {
     const response = await axiosInstance.get('/api/notes', {
       headers: {

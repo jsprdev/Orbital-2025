@@ -1,13 +1,13 @@
 import { Request, Response, Router } from 'express';
-import verifyToken from '../middleware/verifyToken';
-import { notesService } from '../services/notes.service';
+import { verifyToken } from '../middleware/verifyToken';
+import { NotesService } from '../services/notes.service';
 
-const { getNotes, addNote } = notesService;
+const notesServiceInstance = new NotesService();
 const router = Router();
 
-router.get("/notes", verifyToken, async (req: Request, res: Response) => {
+router.get("/", verifyToken, async (req: Request, res: Response) => {
     try {
-        const notes = await getNotes(req.body.user.uid);
+        const notes = await notesServiceInstance.getNotes(req.user.user_id);
         res.status(200).json({ notes });
       } catch (error) {
         console.error('Error fetching notes:', error);
@@ -15,11 +15,11 @@ router.get("/notes", verifyToken, async (req: Request, res: Response) => {
     }
 });
 
-router.post("/notes", verifyToken, async (req: Request, res: Response) => {
+router.post("/", verifyToken, async (req: Request, res: Response) => {
     try {
         const note = req.body;
-        note.userId = req.body.user.uid; 
-        const addedNote = await addNote(note);
+        note.userId = req.user.user_id;
+        const addedNote = await notesServiceInstance.addNote(note);
         res.status(201).json({ note: addedNote });
     } catch (error) {
         console.error('Error adding note:', error);

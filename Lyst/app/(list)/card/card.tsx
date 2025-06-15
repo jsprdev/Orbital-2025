@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { Todo } from "@/types";
+import { Note } from "@/types";
 
 type Props = {
-  todo: Todo;
+  note: Note;
   onPress: (id: string) => void;
 };
 
@@ -13,11 +13,11 @@ const priorityColor: Record<string, string> = {
   high: "bg-red-500 text-white",
 };
 
-export default function Card({ todo, onPress }: Props) {
-  const { id, description, priority, place, tags = [] } = todo;
+export default function Card({ note, onPress }: Props) {
+  const { id, description, priority, place, tags = [] } = note;
 
   return (
-    <TouchableOpacity onPress={() => todo.id && onPress(todo.id)}>
+    <TouchableOpacity onPress={() => note.id && onPress(note.id)}>
       <View className="bg-white rounded-xl shadow p-4 mb-4">
         {/* Row 1: Description | Priority */}
         <View className="flex-row justify-between items-start mb-1">

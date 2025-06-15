@@ -1,8 +1,8 @@
-import express from "express";
+import { Router } from "express";
 
 import NotesRouter from "./notes.controller";
 
-const router = express.Router();
+const router = Router();
 
 router.use("/notes", NotesRouter);
 

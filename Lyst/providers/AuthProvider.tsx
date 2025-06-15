@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from "react";
+import React, { ReactNode, useState, useEffect, createContext, useContext } from "react";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -19,7 +19,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-import { ReactNode } from "react";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -69,6 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log('Fetching List of Notes')
       const fetchedLyst = await getNotes(idToken);
       setLyst(fetchedLyst);
+      console.log(lyst);
       
     } catch (error) {
       console.error("Sign in error:", error);

@@ -11,8 +11,8 @@ import {
   ScrollView,
 } from "react-native";
 import AddIdeaButton from "./AddIdeaButton";
-import { Priority } from "@/types";
-import { createTask } from "@/utils/api";
+import { Note, Priority } from "@/types";
+import { createNote } from "@/utils/api";
 import { useAuth } from "@/providers/AuthProvider"
 
 const { height } = Dimensions.get("window");
@@ -34,9 +34,10 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [showCustomTag, setShowCustomTag] = useState(false);
   const [customTag, setCustomTag] = useState("");
   const [tags, setTags] = useState([...PREMADE_TAGS]);
-  const [priority, setPriority] = useState<Priority>('low');
+  const [priority, setPriority] = useState<Priority>("low");
 
   // Open drawer animation
   const openDrawer = () => {
@@ -113,14 +114,14 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
 
     // backend logic to save the idea
     try {
-      await createTask({
+      await createNote({
         description: description,
         tags: selectedTags,
         place: location,
         priority: priority,
         createdAt: new Date().toISOString(),
         userId: ''
-      }, token);
+      } as Note, token);
 
       // refresh page
       if (onSave) {
@@ -128,7 +129,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
       }
 
     } catch (error) {
-      console.error("Error adding todo:", error);
+      console.error("Error adding note:", error);
     } finally {
       closeDrawer();
     }
@@ -202,9 +203,14 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
                   </Text>
                 </TouchableOpacity>
               ))}
+
+                <TouchableOpacity onPress={() => setShowCustomTag(prev => !prev)} className="border border-gray-400 rounded-full px-3 py-1 m-1">
+                    <Text className="text-gray-700 text-sm">▼</Text>
+                </TouchableOpacity>
             </View>
 
             {/* Custom tag input */}
+            {showCustomTag && (
             <View className="flex-row items-center mb-4">
               <TextInput
                 className="flex-1 border border-gray-300 rounded p-2 mr-2"
@@ -220,7 +226,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
                 <Text className="text-white font-semibold">Add</Text>
               </TouchableOpacity>
             </View>
-
+            )}
             {/* Priority Selection */}
             <Text className="font-semibold mb-1">Priority</Text>
             <View className="flex-row justify-between mb-4">

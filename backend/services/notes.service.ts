@@ -1,26 +1,25 @@
 import { db } from "../config/firebase-config.js";
-import { Note } from "../../Lyst/types/note.dto.ts";
+import { Note } from "../../Lyst/types/note.dto";
 
-export const notesService = {
+export class NotesService {
 
-  async getNotes(userId) {
-    const notesRef = db.collection('notes');
+  async getNotes(userId: string) {
+    const notesRef = db.collection('tasks');
     const snapshot = await notesRef.where('userId', '==', userId).get();
-
     const notes: Note[] = [];
     snapshot.forEach(doc => {
       notes.push({ ...doc.data(), id: doc.id } as Note);
     });
     return notes;
-  },
+  }
 
   async addNote(note: Note) {
-    const docRef = await db.collection('notes').add(note);
-    return { id: docRef.id, ...note};
-  },
+    const docRef = await db.collection('tasks').add(note);
+    return { id: docRef.id, ...note };
+  }
 
   async deleteNote(noteId: string) {
-    await db.collection('notes').doc(noteId).delete();
+    await db.collection('tasks').doc(noteId).delete();
     return true;
   }
 }
