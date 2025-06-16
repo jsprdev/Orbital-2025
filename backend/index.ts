@@ -10,7 +10,7 @@ app.use(express.json());
 app.use('/api', Routes);
 
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running at http://110.9.93.150:${port}`);
 });
 
 

@@ -3,7 +3,7 @@ import { FIREBASE_AUTH as auth } from '@/FirebaseConfig';
 
 // AXIOS Config
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://110.9.93.150:3000',
   headers: {
     'Content-Type': 'application/json',
   },
