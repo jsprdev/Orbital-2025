@@ -15,6 +15,7 @@ const priorityColor: Record<Priority, string> = {
   high: 'text-red-500',
 };
 
+
 export default function Display({ filters } : {
   filters: { query: string; selectedTags: string[]; priority: Priority | null; }
 }) {
@@ -58,12 +59,12 @@ export default function Display({ filters } : {
     // Filter todos based on the provided filters
     function applyFilters(todos: Todo[], filters: { query: string; selectedTags: string[]; priority: Priority | null }) {
         return todos.filter(todo => {
-            const matchesQuery = todo.description.toLowerCase().includes(filters.query.toLowerCase());
+            const matchesQuery = todo.description?.toLowerCase().includes(filters.query.toLowerCase()) ?? false;
             const matchesTags = filters.selectedTags.length === 0 || filters.selectedTags.some(tag => todo.tags?.includes(tag));
             const matchesPriority = !filters.priority || todo.priority === filters.priority;
             return matchesQuery && matchesTags && matchesPriority;
         });
-        }
+    }
     const filteredTodos = applyFilters(todos, filters);
 
     if (!userReady || loading) {
