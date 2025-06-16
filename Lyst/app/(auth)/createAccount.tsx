@@ -41,9 +41,9 @@ export default function CreateAccount() {
 
 
   return (
-    <KeyboardAvoidingView className="flex-1 bg-white">
+    <KeyboardAvoidingView className="flex-1 bg-white ">
       <SafeAreaView className="flex-1">
-        <View className="items-center pt-12 pb-8">
+        <View className="items-center pt-12 pb-8 mt-10">
           <Text className="text-4xl font-bold text-pink-500">
             Create Account
           </Text>
