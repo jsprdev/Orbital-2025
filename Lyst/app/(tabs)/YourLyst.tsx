@@ -4,6 +4,7 @@ import AddIdea from '../(list)/AddIdea';
 import SearchBar from '../(list)/SearchBar';
 import Display from '../(list)/Display';
 import { Priority } from '@/types'; 
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function YourLyst() {
   const [filters, setFilters] = useState<{
@@ -28,7 +29,8 @@ export default function YourLyst() {
   };
 
   return (
-    <View className="flex-1 bg-white">
+
+    <SafeAreaView className="flex-1 bg-white">
       {/* Header with title and Add button */}
       <View className="py-4 mb-2.5 bg-white border-b border-gray-200 relative flex-row items-center px-4">
         <Text className="text-2xl font-bold text-gray-700 absolute left-0 right-0 text-center">
@@ -48,6 +50,6 @@ export default function YourLyst() {
       <View className="flex-1 px-4 py-2">
         <Display filters={filters} key={refresh.toString()} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

@@ -1,8 +1,8 @@
 // Intercepts the requests and helps to validate that the token is valid
 
-const { admin } = require('../firebase-config');
+import { admin } from '../config/firebase-config';
 
-module.exports = async function verifyToken(req, res, next) {
+export async function verifyToken(req, res, next) {
   const token = req.headers.authorization?.split('Bearer ')[1];
 
   if (!token) {
@@ -11,6 +11,8 @@ module.exports = async function verifyToken(req, res, next) {
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
+
+    
     req.user = decodedToken;
     next();
   } catch (error) {

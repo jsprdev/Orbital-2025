@@ -3,40 +3,41 @@ import { FIREBASE_AUTH as auth } from '@/FirebaseConfig';
 
 // AXIOS Config
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://110.9.93.150:3000',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
 // GET requests
-export const getTasks = async (token) => {
+export const getNotes = async (token) => {
+
   try {
-    const response = await axiosInstance.get('/api/task', {
+    const response = await axiosInstance.get('/api/notes', {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     });
-    return response.data.tasks;
+    return response.data.notes;
 
   } catch (error) {
-    console.error('Error fetching tasks:', error);
+    console.error('Error fetching notes:', error);
     throw error;
   }
 };
 
 // POST requests
-export const createTask = async (taskData, token) => {
+export const createNote = async (noteData, token) => {
   try {
-    taskData.userId = auth.currentUser.uid;
-    const response = await axiosInstance.post('/api/task', taskData, {
+    noteData.userId = auth.currentUser.uid;
+    const response = await axiosInstance.post('/api/notes', noteData, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     });
-    return response.data.task;
+    return response.data.note;
   } catch (error) {
-    console.error('Error creating task:', error);
+    console.error('Error creating note:', error);
     throw error;
   }
 };

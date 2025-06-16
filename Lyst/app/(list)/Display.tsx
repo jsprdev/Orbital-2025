@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH as auth} from '@/FirebaseConfig';
-import { Priority ,Todo } from '@/types';
+import { Priority, Note } from '@/types';
 // Update the import path to the correct relative location of Card
 import Card from './card/card';
-import { getTasks } from '@/utils/api';
+import { getNotes } from '@/utils/api';
 import { useAuth } from "@/providers/AuthProvider"
 
 
@@ -19,7 +19,7 @@ const priorityColor: Record<Priority, string> = {
 export default function Display({ filters } : {
   filters: { query: string; selectedTags: string[]; priority: Priority | null; }
 }) {
-    const [todos, setTodos] = useState<Todo[]>([]);
+    const [notes, setNotes] = useState<Note[]>([]);
     const [loading, setLoading] = useState(true);
     const [userReady, setUserReady] = useState(false);
 
@@ -32,7 +32,7 @@ export default function Display({ filters } : {
           setUserReady(true);
         } else {
           setUserReady(false);
-          setTodos([]);
+          setNotes([]);
         }
       });
   
@@ -41,40 +41,40 @@ export default function Display({ filters } : {
   
     useEffect(() => {
       if (!userReady) return;
-  
-      const fetchTodos = async () => {
+
+      const fetchNotes = async () => {
         try {
-          const fetchedTodos = await getTasks(token);
-          setTodos(fetchedTodos);
+          const fetchedNotes = await getNotes(token);
+          setNotes(fetchedNotes);
         } catch (error) {
-          console.error("Error fetching todos:", error);
+          console.error("Error fetching notes:", error);
         } finally {
           setLoading(false);
         }
       };
-  
-      fetchTodos();
+
+      fetchNotes();
     }, [userReady]);
   
-    // Filter todos based on the provided filters
-    function applyFilters(todos: Todo[], filters: { query: string; selectedTags: string[]; priority: Priority | null }) {
-        return todos.filter(todo => {
-            const matchesQuery = todo.description?.toLowerCase().includes(filters.query.toLowerCase()) ?? false;
-            const matchesTags = filters.selectedTags.length === 0 || filters.selectedTags.some(tag => todo.tags?.includes(tag));
-            const matchesPriority = !filters.priority || todo.priority === filters.priority;
+    // Filter notes based on the provided filters
+    function applyFilters(notes: Note[], filters: { query: string; selectedTags: string[]; priority: Priority | null }) {
+        return notes.filter(note => {
+            const matchesQuery = note.description.toLowerCase().includes(filters.query.toLowerCase());
+            const matchesTags = filters.selectedTags.length === 0 || filters.selectedTags.some(tag => note.tags?.includes(tag));
+            const matchesPriority = !filters.priority || note.priority === filters.priority;
             return matchesQuery && matchesTags && matchesPriority;
         });
     }
-    const filteredTodos = applyFilters(todos, filters);
+    const filteredNotes = applyFilters(notes, filters);
 
     if (!userReady || loading) {
       return <Text>Loading...</Text>;
     }
   
     return (
-      <ScrollView className="flex-1 bg-white p-4">
-        {filteredTodos.map((todo) => (
-          <Card key={todo.id} todo={todo} onPress={(id) => console.log("Card pressed:", id)} />
+      <ScrollView style={{ flex: 1, backgroundColor: 'white', padding: 16 }}>
+        {filteredNotes.map((note) => (
+          <Card key={note.id} note={note} onPress={(id) => console.log("Card pressed:", id)} />
         ))}
       </ScrollView>
     );

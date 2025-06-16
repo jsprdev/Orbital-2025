@@ -19,7 +19,7 @@ const Profile = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="p-4">
+      <View className="p-4 mt-8">
         <View className="items-center py-8">
           <View className="w-32 h-32 rounded-full bg-gray-200 mb-4" />
           <Text className="text-2xl font-bold">Welcome!</Text>

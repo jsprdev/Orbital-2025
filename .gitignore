@@ -1,6 +1,9 @@
 # ROOT *
 node_modules/
 
+# BACKEND FILES #
+backend/dist/
+
 
 # FRONTEND FILES *
 
