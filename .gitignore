@@ -3,9 +3,13 @@ node_modules/
 
 # BACKEND FILES #
 backend/dist/
+backend/node_modules/
 
+# SECRETS # 
+backend/.env
+backend/config/serviceAccount.json
 
-# FRONTEND FILES *
+### FRONTEND FILES ###
 
 # VSCODE 
 Lyst/.vscode/
@@ -46,3 +50,6 @@ Lyst/*.tsbuildinfo
 Lyst/app-example
 
 Lyst/_dev_info
+
+# env
+Lyst/.env

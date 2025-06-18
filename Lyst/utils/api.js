@@ -1,9 +1,12 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
 import { FIREBASE_AUTH as auth } from '@/FirebaseConfig';
+
+dotenv.config();
 
 // AXIOS Config
 const axiosInstance = axios.create({
-  baseURL: 'http://110.9.93.150:3000',
+  baseURL: `http://${process.env.HOST}:${process.env.PORT}`,
   headers: {
     'Content-Type': 'application/json',
   },

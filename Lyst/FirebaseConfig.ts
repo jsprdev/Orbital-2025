@@ -1,4 +1,4 @@
-
+import dotenv from 'dotenv';
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from 'firebase/firestore';
@@ -9,13 +9,15 @@ import { getFirestore } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+dotenv.config();
+
 const firebaseConfig = {
-  apiKey: "AIzaSyD9RgSRu7PDzcB30l6ZcxPEgs6wR9CBT-8",
-  authDomain: "lyst-4a45d.firebaseapp.com",
-  projectId: "lyst-4a45d",
-  storageBucket: "lyst-4a45d.firebasestorage.app",
-  messagingSenderId: "874196085920",
-  appId: "1:874196085920:web:a32ecf0c34dc73adb8edc5"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID
 };
 
 export const FIREBASE_APP = initializeApp(firebaseConfig);
