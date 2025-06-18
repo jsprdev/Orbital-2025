@@ -21,7 +21,7 @@ export default function Index() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const { signIn } = useAuth();
+  const { signIn, forgotPassword } = useAuth();
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -43,6 +43,19 @@ export default function Index() {
 
   const signUpPage = () => {
     router.push("./(auth)/createAccount");
+  };
+
+  const handleForgotPassword = () => {
+    if (!email) {
+      Alert.alert("Please enter your email address.");
+    }
+    forgotPassword(email)
+      .then(() => {
+        Alert.alert("Password reset email sent!");
+      })
+      .catch((error) => {
+        Alert.alert("Forgot Password Error", error.message);
+      });
   };
 
   return (
@@ -103,6 +116,14 @@ export default function Index() {
               <TouchableOpacity onPress={signUpPage}>
                 <Text className="text-primary font-semibold text-base">
                   Register now
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View className="flex-row justify-center items-center mt-4">
+              <TouchableOpacity onPress={handleForgotPassword}>
+                <Text className="text-primary font-semibold text-base ml-2">
+                  Forgot Password?
                 </Text>
               </TouchableOpacity>
             </View>

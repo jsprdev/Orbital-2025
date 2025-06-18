@@ -94,16 +94,19 @@ export default function CreateAccount() {
               </Text>
             )}
           </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="items-center"
-          >
-            <Text className="text-secondary">
+          
+          <View className="flex-row justify-center items-center mt-4">
+            <Text className="text-gray-600 text-base">
               Already have an account?{" "}
-              <Text className="font-semibold text-primary">Log In</Text>
             </Text>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.back()}>
+              <Text className="text-primary font-semibold text-base">
+                Log In
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+
         </View>
       </SafeAreaView>
     </KeyboardAvoidingView>
