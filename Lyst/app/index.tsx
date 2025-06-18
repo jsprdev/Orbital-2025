@@ -1,7 +1,7 @@
 // This is the first screen users see when they open the app.
 
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -11,6 +11,9 @@ import {
   KeyboardAvoidingView,
   Alert,
   Image,
+  Platform,
+  ScrollView,
+  Keyboard,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
@@ -20,10 +23,31 @@ export default function Index() {
   const [email, setEmail] = useState("user3@gmail.com");
   const [password, setPassword] = useState("qwerty");
   const [loading, setLoading] = useState(false);
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   const router = useRouter();
   const { signIn } = useAuth();
   const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardVisible(true);
+      }
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardVisible(false);
+      }
+    );
+
+    return () => {
+      keyboardDidShowListener?.remove();
+      keyboardDidHideListener?.remove();
+    };
+  }, []);
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -48,28 +72,33 @@ export default function Index() {
   };
 
   return (
-    <View className="bg-white flex-1">
-      <View className="h-1/2 bg-gray-50 justify-center items-center relative">
-        <Image
-          source={require("../assets/images/loginPic.png")}
-          resizeMode="cover"
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-        />
-        {/* Curved overlay to create irregular border */}
-        <View 
-          className="absolute bottom-0 left-0 right-0 bg-white"
-          style={{
-            height: 20,
-            borderTopLeftRadius: 50,
-            borderTopRightRadius: 50,
-          }}
-        />
-      </View>
-      <View className="flex-1 bg-white">
-        <KeyboardAvoidingView className="h-1/2">
+    <KeyboardAvoidingView 
+      className="flex-1 bg-white"
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <View className="flex-1">
+        <View className="h-1/2 bg-gray-50 justify-center items-center relative">
+          <Image
+            source={require("../assets/images/loginPic.png")}
+            resizeMode="cover"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
+          {/* Curved overlay to create irregular border */}
+          <View 
+            className="absolute bottom-0 left-0 right-0 bg-white"
+            style={{
+              height: 20,
+              borderTopLeftRadius: 50,
+              borderTopRightRadius: 50,
+            }}
+          />
+        </View>
+        
+        <View className="flex-1 bg-white">
           <View className="items-left px-7 pt-6 pb-8">
             <Text className="text-4xl font-bold text-pink-500 shadow-sm">
               Welcome to Lyst
@@ -97,7 +126,7 @@ export default function Index() {
             />
           </View>
 
-          <View className="px-6 bottom" style={{ paddingBottom: insets.bottom }}>
+          <View className="px-6" style={{ paddingBottom: insets.bottom }}>
             <TouchableOpacity
               onPress={handleSignIn}
               className="bg-primary py-3 rounded-lg mb-3 items-center"
@@ -118,8 +147,8 @@ export default function Index() {
               </TouchableOpacity>
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
