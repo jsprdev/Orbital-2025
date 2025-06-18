@@ -5,18 +5,26 @@ import { NotesService } from '../services/notes.service';
 const notesServiceInstance = new NotesService();
 const router = Router();
 
-router.get("/", verifyToken, async (req: Request, res: Response) => {
+router.get("/", verifyToken, async (req: Request, res: Response): Promise<void> => {
     try {
+        if (!req.user) {
+            res.status(401).json({ error: 'User not authenticated' });
+            return;
+        }
         const notes = await notesServiceInstance.getNotes(req.user.user_id);
         res.status(200).json({ notes });
-      } catch (error) {
+    } catch (error) {
         console.error('Error fetching notes:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 
-router.post("/", verifyToken, async (req: Request, res: Response) => {
+router.post("/", verifyToken, async (req: Request, res: Response): Promise<void> => {
     try {
+        if (!req.user) {
+            res.status(401).json({ error: 'User not authenticated' });
+            return;
+        }
         const note = req.body;
         note.userId = req.user.user_id;
         const addedNote = await notesServiceInstance.addNote(note);

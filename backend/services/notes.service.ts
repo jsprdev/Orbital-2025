@@ -1,4 +1,4 @@
-import { db } from "../config/firebase-config.js";
+import { db } from "../config/firebase-config";
 import { Note } from "../../Lyst/types/note.dto";
 
 export class NotesService {

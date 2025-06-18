@@ -12,6 +12,7 @@ import {
   Alert,
   Image,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
 
 
@@ -22,6 +23,7 @@ export default function Index() {
 
   const router = useRouter();
   const { signIn } = useAuth();
+  const insets = useSafeAreaInsets();
 
   const handleSignIn = async () => {
     setLoading(true);
@@ -46,8 +48,8 @@ export default function Index() {
   };
 
   return (
-    <SafeAreaView className="bg-white flex-1">
-      <View className="h-1/2 bg-gray-50 justify-center items-center">
+    <View className="bg-white flex-1">
+      <View className="h-1/2 bg-gray-50 justify-center items-center relative">
         <Image
           source={require("../assets/images/loginPic.png")}
           resizeMode="cover"
@@ -56,11 +58,20 @@ export default function Index() {
             height: "100%",
           }}
         />
+        {/* Curved overlay to create irregular border */}
+        <View 
+          className="absolute bottom-0 left-0 right-0 bg-white"
+          style={{
+            height: 20,
+            borderTopLeftRadius: 50,
+            borderTopRightRadius: 50,
+          }}
+        />
       </View>
-      <View className="flex-1">
-        <KeyboardAvoidingView className="h-1/2 rounded-t-3xl">
-          <View className="items-left px-7 pt-12 pb-8">
-            <Text className="text-4xl font-bold text-pink-500 shadow-md">
+      <View className="flex-1 bg-white">
+        <KeyboardAvoidingView className="h-1/2">
+          <View className="items-left px-7 pt-6 pb-8">
+            <Text className="text-4xl font-bold text-pink-500 shadow-sm">
               Welcome to Lyst
             </Text>
           </View>
@@ -86,7 +97,7 @@ export default function Index() {
             />
           </View>
 
-          <View className="px-6 bottom">
+          <View className="px-6 bottom" style={{ paddingBottom: insets.bottom }}>
             <TouchableOpacity
               onPress={handleSignIn}
               className="bg-primary py-3 rounded-lg mb-3 items-center"
@@ -109,6 +120,6 @@ export default function Index() {
           </View>
         </KeyboardAvoidingView>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
