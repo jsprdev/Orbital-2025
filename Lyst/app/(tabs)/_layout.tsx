@@ -1,6 +1,7 @@
 import { Image, Text } from "react-native";
 import { Tabs } from "expo-router";
 import { COLORS } from "@/constants/colors";
+import Fontisto from '@expo/vector-icons/Fontisto';
 
 const TabLayout = () => {
   return (
@@ -42,6 +43,23 @@ const TabLayout = () => {
               style={{ fontSize: 12, color: focused ? COLORS.primary : COLORS.unfocused }}
             >
               Your Lyst
+            </Text>
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="Gallery"
+        options={{
+          title: "Gallery",
+          tabBarIcon: ({ focused }) => (
+            <Fontisto name="photograph" size={24} color={focused ? COLORS.primary : COLORS.unfocused} />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <Text
+              style={{ fontSize: 12, color: focused ? COLORS.primary : COLORS.unfocused }}
+            >
+              Gallery
             </Text>
           ),
         }}

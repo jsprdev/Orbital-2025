@@ -3,9 +3,8 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH as auth} from '@/FirebaseConfig';
 import { Priority, Note } from '@/types';
-// Update the import path to the correct relative location of Card
 import Card from './card/card';
-import { getNotes } from '@/utils/api';
+import { getNotes, deleteNote } from '@/utils/api';
 import { useAuth } from "@/providers/AuthProvider"
 
 
@@ -56,6 +55,14 @@ export default function Display({ filters } : {
       fetchNotes();
     }, [userReady]);
   
+    const handlePress = (id: string) => {
+      console.log("Card pressed:", id);
+    }
+    const handleDelete = async (id: string) => {
+      setNotes(prevNotes => prevNotes.filter(note => note.id !== id));
+      await deleteNote(id, token);
+    }
+
     // Filter notes based on the provided filters
     function applyFilters(notes: Note[], filters: { query: string; selectedTags: string[]; priority: Priority | null }) {
         return notes.filter(note => {
@@ -74,7 +81,9 @@ export default function Display({ filters } : {
     return (
       <ScrollView style={{ flex: 1, backgroundColor: 'white', padding: 16 }}>
         {filteredNotes.map((note) => (
-          <Card key={note.id} note={note} onPress={(id) => console.log("Card pressed:", id)} />
+          <Card key={note.id} note={note} 
+            onPress={(id) => handlePress(id)}
+            onDelete={() => handleDelete(note.id)} />
         ))}
       </ScrollView>
     );

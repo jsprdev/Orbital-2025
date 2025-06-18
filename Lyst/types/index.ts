@@ -10,11 +10,10 @@ export type User = {
 
 
 // Types used for YourLyst component
-
 export type Priority = "low" | "medium" | "high";
 
 export interface Note {
-  id?: string;
+  id: string;
   userId: string;
   createdAt: string;
   description: string;

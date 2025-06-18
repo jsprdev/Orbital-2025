@@ -27,4 +27,19 @@ router.post("/", verifyToken, async (req: Request, res: Response) => {
     }
 });
 
+router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
+    const noteId = req.params.id;
+    try {
+        const deletedNote = await notesServiceInstance.deleteNote(noteId);
+        if (deletedNote) {
+            res.status(200).json({ message: 'Note deleted successfully' });
+        } else {
+            res.status(404).json({ error: 'Note not found' });
+        }
+    } catch (error) {
+        console.error('Error deleting note:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 export default router;
