@@ -27,6 +27,8 @@ export default function Index() {
   const router = useRouter();
   const { signIn, forgotPassword } = useAuth();
 
+  const insets = useSafeAreaInsets();
+
   const handleSignIn = async () => {
     setLoading(true);
     try {

@@ -37,6 +37,10 @@ router.post("/", verifyToken, async (req: Request, res: Response): Promise<void>
 
 router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
     const noteId = req.params.id;
+    if (!noteId) {
+        res.status(400).json({ error: 'Note ID is required' });
+        return;
+    }
     try {
         const deletedNote = await notesServiceInstance.deleteNote(noteId);
         if (deletedNote) {

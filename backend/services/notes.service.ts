@@ -15,7 +15,7 @@ export class NotesService {
 
   async addNote(note: Note) {
     const docRef = await db.collection('tasks').add(note);
-    return { id: docRef.id, ...note };
+    return { ...note, id: docRef.id };
   }
 
   async deleteNote(noteId: string) {
