@@ -4,10 +4,10 @@ import {
   signInWithEmailAndPassword,
   signOut,
   User,
+  sendPasswordResetEmail
 } from "firebase/auth";
-import { FIREBASE_AUTH as auth } from "@/FirebaseConfig";
+import { FIREBASE_AUTH as auth, FIREBASE_GOOGLE_PROVIDER as provider} from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { getNotes } from "@/utils/api";
 
 interface AuthContextType {
   user: User | null;
@@ -15,6 +15,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   createUser: (email: string, password: string, confirmPassword: string) => Promise<void>;
   signOutUser: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -23,7 +24,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [lyst, setLyst] = useState<any[]>([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setToken(null);
       }
     });
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
 
   const signIn = async (email: string, password: string) => {
@@ -56,20 +56,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     // Try signing in
     try {
-      const userCreds = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCreds.user;
-      setUser(user);
+      await signInWithEmailAndPassword(auth, email, password);
 
-      // Get Token from User
-      const idToken = await user.getIdToken();
-      setToken(idToken);
-
-      // Fetch user's Lyst data
-      console.log('Fetching List of Notes')
-      const fetchedLyst = await getNotes(idToken);
-      setLyst(fetchedLyst);
-      console.log(lyst);
-      
     } catch (error) {
       console.error("Sign in error:", error);
       throw error; 
@@ -99,18 +87,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Try creating user
     try {
-      const userCreds = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCreds.user;
-      setUser(user);
-
-      // Get Token from User
-      const idToken = await user.getIdToken();
-      setToken(idToken);
-
-      // Fetch user's Lyst data
-      console.log('Fetching List of Notes')
-      const fetchedLyst = await getNotes(idToken);
-      setLyst(fetchedLyst);
+      await createUserWithEmailAndPassword(auth, email, password);
 
     } catch (error) {
       console.error("Create user error:", error);
@@ -123,16 +100,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log("Signing out user:", user?.email);
     try {
       await signOut(auth);
-      setUser(null);
-      setToken(null);
     } catch (error) {
       console.error("Sign out error:", error);
       throw error;
     }
   };
 
+  const forgotPassword = async (email: string) => {
+    if (!email) {
+      throw new Error("Email is required");
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      throw new Error("Invalid email format");
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      console.error("Forgot password error:", error);
+      throw error;
+    }
+  }
   return (
-    <AuthContext.Provider value={{ user, token, signIn, createUser, signOutUser }}>
+    <AuthContext.Provider value={{ user, token, signIn, createUser, signOutUser, forgotPassword }}>
       {children}
     </AuthContext.Provider>
   );

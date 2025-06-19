@@ -42,5 +42,19 @@ export const createNote = async (noteData, token) => {
   }
 };
 
+// DELETE requests
+export const deleteNote = async (noteId, token) => {
+  try {
+    const response = await axiosInstance.delete(`/api/notes/${noteId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+
+    });
+  } catch (error) {
+    console.error('Error deleting note:', error);
+    throw error;
+  }
+};
 
 
