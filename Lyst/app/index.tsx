@@ -23,31 +23,10 @@ export default function Index() {
   const [email, setEmail] = useState("user3@gmail.com");
   const [password, setPassword] = useState("qwerty");
   const [loading, setLoading] = useState(false);
-  const [keyboardVisible, setKeyboardVisible] = useState(false);
 
   const router = useRouter();
   const { signIn } = useAuth();
   const insets = useSafeAreaInsets();
-
-  useEffect(() => {
-    const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      () => {
-        setKeyboardVisible(true);
-      }
-    );
-    const keyboardDidHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      () => {
-        setKeyboardVisible(false);
-      }
-    );
-
-    return () => {
-      keyboardDidShowListener?.remove();
-      keyboardDidHideListener?.remove();
-    };
-  }, []);
 
   const handleSignIn = async () => {
     setLoading(true);
