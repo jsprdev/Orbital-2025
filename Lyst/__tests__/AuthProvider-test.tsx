@@ -5,6 +5,9 @@ import { AuthProvider, useAuth } from '@/providers/AuthProvider'
 
 // Mock Firebase Authentication and Backend API call
     // Mocking Current User's token to return 'mock-token'
+let mockCurrentUser: any = null;
+let authStateChangedCallback: any = null;
+
 jest.mock('@/FirebaseConfig', () => ({
     FIREBASE_AUTH: {
         currentUser: { 
@@ -16,7 +19,8 @@ jest.mock('@/FirebaseConfig', () => ({
 jest.mock('firebase/auth', () => ({ 
     
     onAuthStateChanged: jest.fn((auth, callback) => {
-        callback(null);
+        authStateChangedCallback = callback;
+        callback(mockCurrentUser);
         return jest.fn();
     }),
 
@@ -65,6 +69,13 @@ function TestComponent() {
 
 
 describe('AuthProvider', () => { 
+    // Helper to simulate auth state change
+    const triggerAuthStateChanged = (user: any) => {
+        mockCurrentUser = user;
+        if (authStateChangedCallback) {
+            authStateChangedCallback(user);
+        }
+    };
     // Default Values
     it('default values are empty', () => {
         const { getByTestId } = render(
@@ -85,6 +96,7 @@ describe('AuthProvider', () => {
         );
         await act(async () => {
             fireEvent.press(getByText('Sign In'));
+            triggerAuthStateChanged({ email: 'test@gmail.com', getIdToken: jest.fn().mockResolvedValue('mock-token') });
         });
         await waitFor(() => {
             expect(getByTestId('user-email').props.children).toBe('test@gmail.com');
@@ -118,7 +130,7 @@ describe('AuthProvider', () => {
 
         await act(async () => {
             fireEvent.press(getByText('Sign In'));
-
+            triggerAuthStateChanged({ email: 'test@gmail.com', getIdToken: jest.fn().mockResolvedValue('mock-token') });
         });
 
         await waitFor( () => {
@@ -128,6 +140,7 @@ describe('AuthProvider', () => {
 
         await act(async () => {
             fireEvent.press(getByText('Sign Out'));
+            triggerAuthStateChanged(null);
         });
         await waitFor( () => {
             expect(getByTestId('user-email').props.children).toBe('null');

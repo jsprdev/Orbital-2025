@@ -40,7 +40,7 @@ describe('API Calls', () => {
     it('getTasks', async () => {
         mockAxios.create = jest.fn(() => mockAxios);
         mockAxios.get.mockResolvedValue({
-            data: { tasks: [firstTask] }
+            data: { notes: [firstTask] }
         });
 
         const notes = await getNotes(token);
@@ -54,7 +54,7 @@ describe('API Calls', () => {
     // [POST] Create Note 
     it('createNote', async () => {
         mockAxios.post.mockResolvedValue({
-            data: { task : firstTask }
+            data: { note : firstTask }
         });
 
         const noteData = firstTask;
