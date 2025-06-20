@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import { Text, View } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import AddIdea from '../(list)/AddIdea';
 import SearchBar from '../(list)/SearchBar';
 import Display from '../(list)/Display';
 import { Priority } from '@/types'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuth } from '@/providers/AuthProvider';
+
 
 export default function YourLyst() {
   const [filters, setFilters] = useState<{
@@ -16,6 +18,8 @@ export default function YourLyst() {
   const refreshPage = useCallback(() => {
     setRefresh(prev => !prev);
   }, []);
+
+  const { user } = useAuth();
 
   // TODO: Replace this with your actual tags
   const availableTags = ["Food", "Gifts", "Shopping", "Overseas", "Others"];
@@ -32,11 +36,15 @@ export default function YourLyst() {
 
     <SafeAreaView className="flex-1 bg-white">
       {/* Header with title and Add button */}
-      <View className="py-4 mb-2.5 bg-white border-b border-gray-200 relative flex-row items-center px-4">
-        <Text className="text-2xl font-bold text-gray-700 absolute left-0 right-0 text-center">
+      <View className="py-4 mb-2.5 bg-white border-b border-gray-200 relative flex-col items-center px-4">
+        <Image source={require('@/assets/images/testFood.png')} style={{ width: 280, height: 280, marginBottom: -10 }} resizeMode="contain" />
+        {/* <Text className="text-2xl font-bold text-gray-700 absolute left-0 right-0 text-center">
           Your Lyst
+        </Text> */}
+        <Text className="text-5xl font-bold text-gray-700 text-center">
+          Welcome, {user?.displayName}
         </Text>
-        <View className="ml-auto">
+        <View>
           <AddIdea onSave={refreshPage} />
         </View>
       </View>

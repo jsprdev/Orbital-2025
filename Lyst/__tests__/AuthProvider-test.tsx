@@ -61,7 +61,7 @@ function TestComponent() {
             <Text testID='user-email'>{user ? user.email : 'null'}</Text>
             <Text testID='token'>{token || 'null'}</Text>
             <Button title="Sign In" onPress={ () => signIn('test@gmail.com', 'qwerty')} />
-            <Button title="Create User" onPress={ () => createUser('test@gmail.com', 'qwerty', 'qwerty')} />
+            <Button title="Create User" onPress={ () => createUser('test@gmail.com', 'qwerty', 'qwerty', 'Test User')} />
             <Button title="Sign Out" onPress={ signOutUser } />
         </View>
     )

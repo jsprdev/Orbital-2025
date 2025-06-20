@@ -14,6 +14,7 @@ import { useRouter } from "expo-router";
 import { useAuth } from "@/providers/AuthProvider";
 
 export default function CreateAccount() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,7 +26,7 @@ export default function CreateAccount() {
   const handleSignUp = async () => {
     setLoading(true);
     try {
-      await createUser(email, password, confirmPassword);
+      await createUser(email, password, confirmPassword, name);
       router.replace("/(tabs)/Profile");
     } catch (error:any) {
       console.log("Sign Up Error:", error);
@@ -53,6 +54,14 @@ export default function CreateAccount() {
         </View>
 
         <View className="px-6">
+          <TextInput
+            placeholder="Name"
+            placeholderTextColor="#9CA3AF"
+            value={name}
+            onChangeText={setName}
+            className="h-12 border border-gray-300 rounded-lg px-4 mb-4 text-base"
+            autoCapitalize="words"
+          />
           <TextInput
             placeholder="Email"
             placeholderTextColor="#9CA3AF"

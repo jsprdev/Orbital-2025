@@ -5,7 +5,7 @@ import { useAuth } from '@/providers/AuthProvider';
 
 const Profile = () => {
   const [showOptions, setShowOptions] = useState(false);
-  const { signOutUser } = useAuth();
+  const { user, signOutUser } = useAuth();
   
   const handleLogout = async () => {
     try {
@@ -22,7 +22,7 @@ const Profile = () => {
       <View className="p-4 mt-8">
         <View className="items-center py-8">
           <View className="w-32 h-32 rounded-full bg-gray-200 mb-4" />
-          <Text className="text-2xl font-bold">Welcome!</Text>
+          <Text className="text-2xl font-bold">{user?.displayName}'s Profile</Text>
         </View>
         
         <TouchableOpacity

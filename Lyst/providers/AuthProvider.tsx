@@ -4,7 +4,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   User,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  updateProfile
 } from "firebase/auth";
 import { FIREBASE_AUTH as auth, FIREBASE_GOOGLE_PROVIDER as provider} from "@/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -13,7 +14,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   signIn: (email: string, password: string) => Promise<void>;
-  createUser: (email: string, password: string, confirmPassword: string) => Promise<void>;
+  createUser: (email: string, password: string, confirmPassword: string, name: string) => Promise<void>;
   signOutUser: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
 }
@@ -66,7 +67,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Create User
-  const createUser = async (email: string, password: string, confirmPassword: string) => {
+  const createUser = async (email: string, password: string, confirmPassword: string, name: string) => {
     // Validate email and password
     if (!email || !password || !confirmPassword) {
       throw new Error("Email and password are required");
@@ -87,8 +88,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Try creating user
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
-
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      if (userCredential.user && name) {
+        await updateProfile(userCredential.user, { displayName: name });
+      }
     } catch (error) {
       console.error("Create user error:", error);
       throw error;
