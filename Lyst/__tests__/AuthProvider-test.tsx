@@ -40,6 +40,8 @@ jest.mock('firebase/auth', () => ({
         })
     ),
 
+    updateProfile: jest.fn(() => Promise.resolve()),
+
     signOut: jest.fn( () => Promise.resolve()),
 
 }));
