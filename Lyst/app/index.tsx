@@ -20,8 +20,8 @@ import { useAuth } from "@/providers/AuthProvider";
 
 
 export default function Index() {
-  const [email, setEmail] = useState("user3@gmail.com");
-  const [password, setPassword] = useState("qwerty");
+  const [email, setEmail] = useState("jake@gmail.com");
+  const [password, setPassword] = useState("abcabc");
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();

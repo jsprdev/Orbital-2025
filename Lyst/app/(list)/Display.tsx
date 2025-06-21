@@ -79,12 +79,12 @@ export default function Display({ filters } : {
     }
   
     return (
-      <ScrollView style={{ flex: 1, backgroundColor: 'white', padding: 16 }}>
+      <View>
         {filteredNotes.map((note) => (
           <Card key={note.id} note={note} 
             onPress={(id) => handlePress(id)}
             onDelete={() => handleDelete(note.id)} />
         ))}
-      </ScrollView>
+      </View>
     );
   }

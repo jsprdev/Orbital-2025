@@ -18,7 +18,7 @@ export default function AddIdeaButton({ handlePress }: { handlePress: () => void
             height: 24,
           }}
         /> */}
-        <Text className="text-white text-lg font-bold">Add Idea</Text>
+        <Text className="text-white shadow-xl text-lg font-bold">Add Idea</Text>
       </TouchableOpacity>
     </View>
   );
