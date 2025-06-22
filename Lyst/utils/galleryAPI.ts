@@ -1,0 +1,91 @@
+import axiosInstance from './index';
+import { Photo } from "@/types/gallery.dto";
+
+// Cache-ing
+let photoCache: Photo[];
+
+// GET requests
+export const getPhotos = async (token: string) => {
+  try {
+    const response = await axiosInstance.get('/api/images', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data.photos;
+
+  } catch (error: any) {
+    console.error('Error fetching photos:', error);
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    }
+    throw error;
+  }
+};
+
+// GET a specific photo by ID
+export const getPhotoById = async (token: string, photoId: string) => {
+  try {
+    console.log("galleryAPI: Fetching photo by ID:", photoId);
+    const response = await axiosInstance.get(`/api/images/${photoId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data.photo;
+  } catch (error) {
+    console.error('Error fetching photo:', error);
+    throw error;
+  }
+};
+
+// POST - Upload a new photo
+// In React Native, the file argument should be { uri, name, type }
+export const uploadPhoto = async (token: string, imageUri: string[]) => {
+  
+  try {
+    const formData = new FormData();
+    imageUri.forEach((uri, index) => {
+      formData.append("photos", {
+        uri,
+        name: `photo_${Date.now()}_${index}.jpg`,
+        type: "image/jpeg",
+      } as any);
+
+    });
+    const response = await axiosInstance.post('/api/images', formData, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        "Content-Type": "multipart/form-data"
+      }
+    });
+    console.log("galleryAPI: Upload response:", response.data);
+    return response.data.photo;
+
+  } catch (error: any) {
+    console.error('Error uploading photo:', error);
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', error.response.data);
+    }
+    throw error;
+  }
+};
+
+// DELETE - Delete a photo
+export const deletePhoto = async (token: string, photoId: string) => {
+  try {
+    console.log("galleryAPI: Deleting photo:", photoId);
+    const response = await axiosInstance.delete(`/api/images/${photoId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting photo:', error);
+    throw error;
+  }
+};
+

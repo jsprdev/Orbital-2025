@@ -1,11 +1,10 @@
 import { Request, Response, Router } from 'express';
-import { verifyToken } from '../middleware/verifyToken';
 import { NotesService } from '../services/notes.service';
 
 const notesServiceInstance = new NotesService();
 const router = Router();
 
-router.get("/", verifyToken, async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
     try {
         const notes = await notesServiceInstance.getNotes(req.user.user_id);
         res.status(200).json({ notes });
@@ -15,7 +14,7 @@ router.get("/", verifyToken, async (req: Request, res: Response) => {
     }
 });
 
-router.post("/", verifyToken, async (req: Request, res: Response) => {
+router.post("/", async (req: Request, res: Response) => {
     try {
         const note = req.body;
         note.userId = req.user.user_id;
@@ -27,7 +26,7 @@ router.post("/", verifyToken, async (req: Request, res: Response) => {
     }
 });
 
-router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
+router.delete("/:id", async (req: Request, res: Response) => {
     const noteId = req.params.id;
     try {
         const deletedNote = await notesServiceInstance.deleteNote(noteId);

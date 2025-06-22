@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import AddIdeaButton from "./AddIdeaButton";
 import { Note, Priority } from "@/types";
-import { createNote } from "@/utils/api";
+import { createNote } from "@/utils/lystAPI";
 import { useAuth } from "@/providers/AuthProvider"
 
 const { height } = Dimensions.get("window");
@@ -121,7 +121,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
         priority: priority,
         createdAt: new Date().toISOString(),
         userId: ''
-      } as Note, token);
+      } as Note, token!);
 
       // refresh page
       if (onSave) {

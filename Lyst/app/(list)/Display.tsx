@@ -4,7 +4,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH as auth} from '@/FirebaseConfig';
 import { Priority, Note } from '@/types';
 import Card from './card/card';
-import { getNotes, deleteNote } from '@/utils/api';
+import { getNotes, deleteNote } from '@/utils/lystAPI';
 import { useAuth } from "@/providers/AuthProvider"
 
 
@@ -39,7 +39,9 @@ export default function Display({ filters } : {
     }, []);
   
     useEffect(() => {
-      if (!userReady) return;
+      if (!userReady || !token) {
+        return;
+      }
 
       const fetchNotes = async () => {
         try {
@@ -53,14 +55,14 @@ export default function Display({ filters } : {
       };
 
       fetchNotes();
-    }, [userReady]);
+    }, [userReady, token]);
   
     const handlePress = (id: string) => {
       console.log("Card pressed:", id);
     }
     const handleDelete = async (id: string) => {
       setNotes(prevNotes => prevNotes.filter(note => note.id !== id));
-      await deleteNote(id, token);
+      await deleteNote(id, token!);
     }
 
     // Filter notes based on the provided filters

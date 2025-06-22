@@ -2,8 +2,11 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import Routes from './controllers/index.controller';
 import dotenv from 'dotenv';
+import { admin } from './config/firebase-config';
 
 dotenv.config();
+
+console.log('Using bucket:', admin.storage().bucket().file('/images/'));
 
 const port = process.env.PORT;
 const host = process.env.HOST;
