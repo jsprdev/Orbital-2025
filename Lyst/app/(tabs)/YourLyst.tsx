@@ -43,7 +43,7 @@ export default function YourLyst() {
         {/* <Text className="text-2xl font-bold text-gray-700 absolute left-0 right-0 text-center">
           Your Lyst
         </Text> */}
-        <Text className="text-5xl shadow-xl font-extrabold text-gray-700 text-center mt-3">
+        <Text className="text-5xl shadow-xl2 font-extrabold text-gray-700 text-center mt-3">
           Welcome, {user?.displayName}
         </Text>
         <View>

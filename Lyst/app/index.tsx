@@ -1,5 +1,5 @@
 // This is the first screen users see when they open the app.
-
+import 'react-native-get-random-values';
 import { useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
 import {
@@ -20,6 +20,7 @@ import { useAuth } from "@/providers/AuthProvider";
 
 
 export default function Index() {
+
   const [email, setEmail] = useState("jake@gmail.com");
   const [password, setPassword] = useState("abcabc");
   const [loading, setLoading] = useState(false);

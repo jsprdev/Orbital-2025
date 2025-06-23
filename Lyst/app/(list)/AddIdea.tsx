@@ -9,6 +9,8 @@ import {
   Pressable,
   TextInput,
   ScrollView,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
 import AddIdeaButton from "./AddIdeaButton";
 import { Note, Priority } from "@/types";
@@ -30,6 +32,10 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
 
   const [visible, setVisible] = useState(false);
   const { token } = useAuth();
+  
+  // Debug: Check if API key is loaded
+  console.log('Google Places API Key:', process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY ? 'Loaded' : 'NOT LOADED');
+  
   // Form state
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -38,6 +44,9 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
   const [customTag, setCustomTag] = useState("");
   const [tags, setTags] = useState([...PREMADE_TAGS]);
   const [priority, setPriority] = useState<Priority>("low");
+  const [placeInput, setPlaceInput] = useState("");
+  const [placeSuggestions, setPlaceSuggestions] = useState<{ place_id: string; description: string }[]>([]);
+  const [loadingPlaces, setLoadingPlaces] = useState(false);
 
   // Open drawer animation
   const openDrawer = () => {
@@ -95,6 +104,29 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
       setSelectedTags((prev) => [...prev, tag]);
     }
     setCustomTag("");
+  };
+
+  // Fetch suggestions from backend
+  const fetchPlaceSuggestions = async (input: string) => {
+    if (!input) {
+      setPlaceSuggestions([]);
+      return;
+    }
+    setLoadingPlaces(true);
+    try {
+      const res = await fetch(
+        `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places?input=${encodeURIComponent(input)}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await res.json();
+      setPlaceSuggestions(data.predictions || []);
+    } catch (e) {
+      setPlaceSuggestions([]);
+    } finally {
+      setLoadingPlaces(false);
+    }
   };
 
   // Save the idea - call onSaveIdea prop if passed
@@ -156,14 +188,49 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
             padding: 20,
+            overflow: "hidden", 
           }}
         >
           {/* Bar to Indicate closable */}
           <View className="w-12 h-1 bg-gray-300 rounded-full self-center mb-4" />
 
-          {/* Fields */}
-          <ScrollView keyboardShouldPersistTaps="handled">
-            <Text className="text-xl font-bold mb-4">Add New Idea</Text>
+          <Text className="text-xl font-bold mb-4">Add New Idea</Text>
+
+          <Text className="font-semibold mb-1">Place</Text>
+          <View className="mb-4" style={{ zIndex: 1000 }}>
+            <TextInput
+              className="border border-gray-300 rounded p-2 mb-1"
+              placeholder="Search location"
+              value={placeInput}
+              onChangeText={text => {
+                setPlaceInput(text);
+                fetchPlaceSuggestions(text);
+              }}
+            />
+            {loadingPlaces && <ActivityIndicator size="small" color="#22c55e" style={{ marginVertical: 4 }} />}
+            {placeSuggestions.length > 0 && (
+              <FlatList
+                data={placeSuggestions}
+                keyExtractor={item => item.place_id}
+                style={{ maxHeight: 150, backgroundColor: 'white', borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 6, marginTop: 2, zIndex: 1000 }}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setLocation(item.description);
+                      setPlaceInput(item.description);
+                      setPlaceSuggestions([]);
+                    }}
+                    style={{ padding: 10 }}
+                  >
+                    <Text>{item.description}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
+          </View>
+
+          <ScrollView keyboardShouldPersistTaps="handled" style={{ flex: 1, marginTop: 10 }}>
+            
 
             <Text className="font-semibold mb-1">Description</Text>
             <TextInput
@@ -174,13 +241,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
               multiline
             />
 
-            <Text className="font-semibold mb-1">Place</Text>
-            <TextInput
-              className="border border-gray-300 rounded p-2 mb-4"
-              placeholder="Enter location"
-              value={location}
-              onChangeText={setLocation}
-            />
+            
 
             <Text className="font-semibold mb-1">Tags</Text>
             <View className="flex-row flex-wrap mb-2">

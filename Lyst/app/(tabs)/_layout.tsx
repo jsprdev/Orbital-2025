@@ -48,6 +48,30 @@ const TabLayout = () => {
         }}
       />
 
+<Tabs.Screen
+        name="YourPlans"
+        options={{
+          title: "YourPlans",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require('../../assets/icons/save.png')}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? COLORS.primary : COLORS.unfocused
+              }}
+            />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <Text
+              style={{ fontSize: 12, color: focused ? COLORS.primary : COLORS.unfocused }}
+            >
+              Your Plans
+            </Text>
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="Gallery"
         options={{
