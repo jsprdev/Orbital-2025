@@ -89,20 +89,20 @@ export default function GalleryScreen() {
       }
     >
       {/* Header */}
-      <View className="flex-row justify-between items-center mb-4">
+      <View className="flex-row justify-between items-center mb-4 mt-8">
         <Text className="text-2xl font-bold">All Photos ▼</Text>
         <View className="flex-row space-x-4">
           <TouchableOpacity onPress={() => router.push("/(gallery)/AddImage")}>
-            <Feather name="plus" color="hotpink" size={22} />
+            <Feather name="plus" color="hotpink" size={24} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <Feather name="search" color="hotpink" size={22} />
+            <Feather name="search" color="hotpink" size={24} />
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Favourite label */}
-      <Text className="text-lg font-semibold mb-2">Favourite</Text>
+      <Text className="text-lg font-semibold mb-2">Favourites</Text>
 
       {/* Photo Grid */}
       {photos.length === 0 ? (
