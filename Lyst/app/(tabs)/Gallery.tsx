@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -93,10 +93,10 @@ export default function GalleryScreen() {
         <Text className="text-2xl font-bold">All Photos ▼</Text>
         <View className="flex-row space-x-4">
           <TouchableOpacity onPress={() => router.push("/(gallery)/AddImage")}>
-            <Feather name="plus" color="hotpink" size={24} />
+            <Feather name="plus" color="hotpink" size={28} />
           </TouchableOpacity>
           <TouchableOpacity>
-            <Feather name="search" color="hotpink" size={24} />
+            <Feather name="search" color="hotpink" size={28} />
           </TouchableOpacity>
         </View>
       </View>
