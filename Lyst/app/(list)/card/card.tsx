@@ -54,35 +54,37 @@ export default function Card({ note, onPress, onDelete }: Props) {
             paddingHorizontal: 16,
           }}
           >
-          <Pressable onPress={() => note.id && onPress(note.id)}
-            className="">
-            <View className="bg-white rounded-xl shadow-sm p-4 mb-4">
-              
-              <View className="flex-row justify-between items-start mb-1">
-                <Text className="text-base font-semibold flex-1">{description}</Text>
-                <View className={`text-xs px-2 py-1 rounded-full ml-2 ${priorityColor[priority]}`} />
-              </View>
+          <Pressable onPress={() => note.id && onPress(note.id)}>
+            {({ pressed }) => (
+              <View
+                className="rounded-xl shadow-sm p-4 mb-4"
+                style={{ backgroundColor: pressed ? '#f3f4f6' : '#fff' }}
+              >
+                <View className="flex-row justify-between items-start mb-1">
+                  <Text className="text-base font-semibold flex-1">{description}</Text>
+                  <View className={`text-xs px-2 py-1 rounded-full ml-2 ${priorityColor[priority]}`} />
+                </View>
 
-              {/* divider */}
-              <View className="h-px bg-gray-200 my-2" />
+                {/* divider */}
+                <View className="h-px bg-gray-200 my-2" />
 
-              
-              <View className="flex-row justify-between items-end flex-wrap">
-                <Text className="text-sm text-gray-600 max-w-[50%]">
-                  {place || ""}
-                </Text>
-                <View className="flex-row flex-wrap justify-end flex-1">
-                  {tags.map((tag) => (
-                    <Text
-                      key={tag}
-                      className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full ml-1 mb-1"
-                    >
-                      {tag}
-                    </Text>
-                  ))}
+                <View className="flex-row justify-between items-end flex-wrap">
+                  <Text className="text-sm text-gray-600 max-w-[50%]">
+                    {place || ""}
+                  </Text>
+                  <View className="flex-row flex-wrap justify-end flex-1">
+                    {tags.map((tag) => (
+                      <Text
+                        key={tag}
+                        className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full ml-1 mb-1"
+                      >
+                        {tag}
+                      </Text>
+                    ))}
+                  </View>
                 </View>
               </View>
-            </View>
+            )}
           </Pressable>
         </ReanimatedSwipeable>
       </Reanimated.View>

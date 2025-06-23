@@ -169,7 +169,7 @@ export default function LocationDetails() {
                 </View>
                 
             ) : (
-                <View className="flex-1 justify-center items-center min-h-[200px]">
+                <View className="flex-1 justify-center items-center min-h-[800px]">
                     <ActivityIndicator size="large" color="#22c55e" />
                 </View>
             )}

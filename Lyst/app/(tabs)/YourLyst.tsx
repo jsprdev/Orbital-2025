@@ -22,12 +22,11 @@ export default function YourLyst() {
 
   const { user } = useAuth();
 
-  // TODO: Replace this with your actual tags
   const availableTags = ["Food", "Gifts", "Shopping", "Overseas", "Others"];
 
   const handleFilterChange = (filter: { query: string; selectedTags: string[]; priority: Priority | null }) => {
     setFilters(filter);
-    // Use these filters to modify the idea list you're rendering
+    
     console.log("Query:", filter.query);
     console.log("Tags:", filter.selectedTags);
     console.log("Priority:", filter.priority);
