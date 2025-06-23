@@ -4,7 +4,6 @@ import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import { AuthProvider, useAuth } from '@/providers/AuthProvider'
 
 // Mock Firebase Authentication and Backend API call
-    // Mocking Current User's token to return 'mock-token'
 let mockCurrentUser: any = null;
 let authStateChangedCallback: any = null;
 
@@ -55,7 +54,6 @@ jest.mock('@/utils/api', () => ({
 
 
 
-// Sample Component to ensure the values are passed down. 
 function TestComponent() {
     const { user, token, signIn, createUser, signOutUser } = useAuth();
     return (
@@ -71,14 +69,14 @@ function TestComponent() {
 
 
 describe('AuthProvider', () => { 
-    // Helper to simulate auth state change
+    // helper to simulate auth change
     const triggerAuthStateChanged = (user: any) => {
         mockCurrentUser = user;
         if (authStateChangedCallback) {
             authStateChangedCallback(user);
         }
     };
-    // Default Values
+    
     it('default values are empty', () => {
         const { getByTestId } = render(
             <AuthProvider>
@@ -89,7 +87,7 @@ describe('AuthProvider', () => {
         expect(getByTestId('token').props.children).toBe('null');
     })
     
-    // Sign In
+    // test signin
     it('user-email and token is correct when signing in', async () => {
         const { getByText, getByTestId } = render(
             <AuthProvider>
@@ -106,7 +104,7 @@ describe('AuthProvider', () => {
         });
     });
 
-    // Create User
+    // test create user
     it('creates user and sets user and token', async () => {
         const { getByText, getByTestId } = render(
             <AuthProvider>
@@ -122,7 +120,7 @@ describe('AuthProvider', () => {
         });
     });
 
-    // Sign Out
+    // test sign out
     it('clears user-email and token field when signing out', async () => {
         const { getByText, getByTestId } = render(
             <AuthProvider>

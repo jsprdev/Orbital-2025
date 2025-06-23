@@ -57,16 +57,16 @@ export default function Card({ note, onPress, onDelete }: Props) {
           <Pressable onPress={() => note.id && onPress(note.id)}
             className="">
             <View className="bg-white rounded-xl shadow-sm p-4 mb-4">
-              {/* Row 1: Description | Priority */}
+              
               <View className="flex-row justify-between items-start mb-1">
                 <Text className="text-base font-semibold flex-1">{description}</Text>
                 <View className={`text-xs px-2 py-1 rounded-full ml-2 ${priorityColor[priority]}`} />
               </View>
 
-              {/* Divider */}
+              {/* divider */}
               <View className="h-px bg-gray-200 my-2" />
 
-              {/* Row 2: Location | Tags */}
+              
               <View className="flex-row justify-between items-end flex-wrap">
                 <Text className="text-sm text-gray-600 max-w-[50%]">
                   {place || ""}

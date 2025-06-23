@@ -24,7 +24,7 @@ export default function SearchBarWithTags({ tags, onFilterChange }: Props) {
   const [showFilters, setShowFilters] = useState(false);
   const [priority, setPriority] = useState<Priority | null>(null);
 
-  // Passing the changed fields to the parent component
+  // pass the changed fields to the parent component
   const emit = (query: string, selectedTags: string[], priority: Priority | null) => {
     onFilterChange({ query, selectedTags, priority });
   };
@@ -39,7 +39,7 @@ export default function SearchBarWithTags({ tags, onFilterChange }: Props) {
     emit("", selectedTags, priority);
   };
 
-  // Tag Handler
+  
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
       prev.includes(tag)
@@ -49,7 +49,7 @@ export default function SearchBarWithTags({ tags, onFilterChange }: Props) {
     emit(query, selectedTags.includes(tag) ? selectedTags.filter(t => t !== tag) : [...selectedTags, tag], priority);
   };
 
-  // Priority Handler
+  
   const cyclePriority = () => {
     const next: Priority | null =
       priority === null
@@ -66,7 +66,7 @@ export default function SearchBarWithTags({ tags, onFilterChange }: Props) {
   return (
     <View className="mb-4">
 
-      {/* SearchBar Section */}
+      
       <View className="flex-row items-center border border-gray-300 rounded px-3">
         <TextInput
           placeholder="Search ideas..."
@@ -84,12 +84,12 @@ export default function SearchBarWithTags({ tags, onFilterChange }: Props) {
         </TouchableOpacity>
       </View>
 
-      {/* Filters Section */}
+      
       {showFilters && (
         <>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row mt-2">
 
-          {/* Priority Section */}
+          
           <View>
             <TouchableOpacity onPress={cyclePriority} className={`mr-2 px-3 py-1 rounded-full border ${ 
               priority
@@ -108,7 +108,7 @@ export default function SearchBarWithTags({ tags, onFilterChange }: Props) {
             </TouchableOpacity>
           </View>
 
-            {/* Tag Section */}
+            {/* tag */}
             {tags.map((tag) => {
               const isSelected = selectedTags.includes(tag);
               return (

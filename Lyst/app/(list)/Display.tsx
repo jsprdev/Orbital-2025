@@ -25,7 +25,7 @@ export default function Display({ filters } : {
 
     const { token } = useAuth(); 
     { /* Listen for authentication state changes */ }
-    { /* This is to allow the list to continue display even when user refreshes */ }
+    { /* allow the list to continue display even when user refreshes */ }
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -65,7 +65,7 @@ export default function Display({ filters } : {
       await deleteNote(id, token);
     }
 
-    // Filter notes based on the provided filters
+    // filter notes
     function applyFilters(notes: Note[], filters: { query: string; selectedTags: string[]; priority: Priority | null }) {
         return notes.filter(note => {
             const matchesQuery = note.description.toLowerCase().includes(filters.query.toLowerCase());
@@ -76,13 +76,16 @@ export default function Display({ filters } : {
     }
     const filteredNotes = applyFilters(notes, filters);
 
+    // display latest notes on top by default
+    const sortedNotes = filteredNotes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
     if (!userReady || loading) {
       return <Text>Loading...</Text>;
     }
   
     return (
       <View>
-        {filteredNotes.map((note) => (
+        {sortedNotes.map((note) => (
           <Card key={note.id} note={note} 
             onPress={(id) => handlePress(id)}
             onDelete={() => handleDelete(note.id)} />

@@ -1,4 +1,4 @@
-// This is the page where users can create a new account.
+
 import React, { useState } from "react";
 import {
   SafeAreaView,

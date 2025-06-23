@@ -36,7 +36,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
   // logs to see if api key loaded
   console.log('Google Places API Key:', process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY ? 'Loaded' : 'NOT LOADED');
   
-  // Form state
+  
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [place_id, setPlaceId] = useState(""); // different naming here cos google api lmao
@@ -49,7 +49,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
   const [placeSuggestions, setPlaceSuggestions] = useState<{ place_id: string; description: string }[]>([]);
   const [loadingPlaces, setLoadingPlaces] = useState(false);
 
-  // Open drawer animation
+ 
   const openDrawer = () => {
     setVisible(true);
     Animated.timing(slideAnim, {
@@ -59,7 +59,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
     }).start();
   };
 
-  // Close drawer animation
+  
   const closeDrawer = () => {
     Animated.timing(slideAnim, {
       toValue: height,
@@ -76,7 +76,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
     });
   };
 
-  // Toggle tag selection
+ 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
@@ -93,7 +93,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
       .join(" ");
   }
   
-  // Add a new custom tag if unique and non-empty
+  // add custom tag
   const addTag = (tag: string) => {
     tag = formatNewTag(tag);
     if (!tag) return;
@@ -101,7 +101,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
       setTags((prev) => [...prev, tag]);
       setSelectedTags((prev) => [...prev, tag]);
     } else if (!selectedTags.includes(tag)) {
-      // If tag exists but not selected, select it
+      // if tag exists but not selected, select it
       setSelectedTags((prev) => [...prev, tag]);
     }
     setCustomTag("");
@@ -130,7 +130,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
     }
   };
 
-  // Save the idea - call onSaveIdea prop if passed
+  
   const onSavingPage = async () => {
     if (!description.trim()) {
       alert("Please enter a description.");
@@ -193,7 +193,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
             overflow: "hidden", 
           }}
         >
-          {/* Bar to Indicate closable */}
+          
           <View className="w-12 h-1 bg-gray-300 rounded-full self-center mb-4" />
 
           <Text className="text-xl font-bold mb-4">Add New Idea</Text>
@@ -273,7 +273,6 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
                 </TouchableOpacity>
             </View>
 
-            {/* Custom tag input */}
             {showCustomTag && (
             <View className="flex-row items-center mb-4">
               <TextInput
@@ -313,7 +312,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
               ))}
             </View>
 
-            {/* Save button */}
+            {/* save */}
             <TouchableOpacity
               onPress={onSavingPage}
               className="bg-blue-600 rounded py-3 items-center"
@@ -321,7 +320,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
               <Text className="text-white font-bold text-lg">Save Idea</Text>
             </TouchableOpacity>
 
-            {/* Close button */}
+            {/* close */}
             <TouchableOpacity
               onPress={closeDrawer}
               className="mt-3 bg-gray-300 rounded py-2 items-center"

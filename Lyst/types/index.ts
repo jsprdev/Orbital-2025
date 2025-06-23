@@ -1,4 +1,4 @@
-// 
+
 
 export type User = {
   id: string;
@@ -9,7 +9,7 @@ export type User = {
 };
 
 
-// Types used for YourLyst component
+
 export type Priority = "low" | "medium" | "high";
 
 export interface Note {

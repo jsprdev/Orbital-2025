@@ -37,12 +37,11 @@ export default function YourLyst() {
 
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView>
-      {/* Header with title and Add button */}
+      
+      {/* top graphic */}
       <View className="py-4 mb-2.5 bg-white border-b border-gray-200 relative flex-col items-center px-4">
         <Image source={require('@/assets/images/testFood.png')} style={{ width: 280, height: 280, marginBottom: -15 }} resizeMode="contain" />
-        {/* <Text className="text-2xl font-bold text-gray-700 absolute left-0 right-0 text-center">
-          Your Lyst
-        </Text> */}
+        
         <Text className="text-5xl shadow-xl2 font-extrabold text-gray-700 text-center mt-3">
           Welcome, {user?.displayName}
         </Text>
@@ -51,12 +50,12 @@ export default function YourLyst() {
         </View>
       </View>
 
-      {/* Search bar and tag filter */}
+      
       <View className="px-4">
         <SearchBar tags={availableTags} onFilterChange={handleFilterChange} />
       </View>
 
-      {/* Main content area */}
+      
       <View className="flex-1 px-4 py-2">
         <Display filters={filters} key={refresh.toString()} />
       </View>
