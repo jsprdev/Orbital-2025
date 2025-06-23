@@ -5,7 +5,8 @@ import { FIREBASE_AUTH as auth} from '@/FirebaseConfig';
 import { Priority, Note } from '@/types';
 import Card from './card/card';
 import { getNotes, deleteNote } from '@/utils/api';
-import { useAuth } from "@/providers/AuthProvider"
+import { useAuth } from "@/providers/AuthProvider";
+import { router } from "expo-router";
 
 
 const priorityColor: Record<Priority, string> = {
@@ -57,6 +58,7 @@ export default function Display({ filters } : {
   
     const handlePress = (id: string) => {
       console.log("Card pressed:", id);
+      router.push(`/(list)/location-details/${id}`);
     }
     const handleDelete = async (id: string) => {
       setNotes(prevNotes => prevNotes.filter(note => note.id !== id));
