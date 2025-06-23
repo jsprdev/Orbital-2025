@@ -6,6 +6,7 @@ export interface Note {
   createdAt: string;
   description: string;
   place?: string;
+  place_id?: string;
   tags: string[];
   priority: Priority;
 }

@@ -56,7 +56,7 @@ export default function Card({ note, onPress, onDelete }: Props) {
           >
           <Pressable onPress={() => note.id && onPress(note.id)}
             className="">
-            <View className="bg-white rounded-xl shadow-lg p-4 mb-4">
+            <View className="bg-white rounded-xl shadow-sm p-4 mb-4">
               {/* Row 1: Description | Priority */}
               <View className="flex-row justify-between items-start mb-1">
                 <Text className="text-base font-semibold flex-1">{description}</Text>

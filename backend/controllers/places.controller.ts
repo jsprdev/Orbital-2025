@@ -21,4 +21,19 @@ router.get('/', verifyToken, async (req: Request, res: Response) => {
   }
 });
 
+router.get('/details', verifyToken, async (req: Request, res: Response) => {
+  const placeId = req.query.placeId as string;
+  if (!placeId) {
+    res.status(400).json({ error: 'Missing placeId parameter' });
+    return;
+  }
+  try {
+    const data = await placesServiceInstance.getPlaceDetails(placeId);
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching place details:', error);
+    res.status(500).json({ error: 'Failed to fetch place details' });
+  }
+});
+
 export default router;

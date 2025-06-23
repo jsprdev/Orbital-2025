@@ -33,12 +33,13 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
   const [visible, setVisible] = useState(false);
   const { token } = useAuth();
   
-  // Debug: Check if API key is loaded
+  // logs to see if api key loaded
   console.log('Google Places API Key:', process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY ? 'Loaded' : 'NOT LOADED');
   
   // Form state
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
+  const [place_id, setPlaceId] = useState(""); // different naming here cos google api lmao
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showCustomTag, setShowCustomTag] = useState(false);
   const [customTag, setCustomTag] = useState("");
@@ -106,7 +107,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
     setCustomTag("");
   };
 
-  // Fetch suggestions from backend
+  // for searching through saved ideas
   const fetchPlaceSuggestions = async (input: string) => {
     if (!input) {
       setPlaceSuggestions([]);
@@ -150,6 +151,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
         description: description,
         tags: selectedTags,
         place: location,
+        place_id: place_id,
         priority: priority,
         createdAt: new Date().toISOString(),
         userId: ''
@@ -217,6 +219,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
                   <TouchableOpacity
                     onPress={() => {
                       setLocation(item.description);
+                      setPlaceId(item.place_id);
                       setPlaceInput(item.description);
                       setPlaceSuggestions([]);
                     }}
