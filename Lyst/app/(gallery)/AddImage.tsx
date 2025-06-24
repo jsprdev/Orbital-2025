@@ -158,26 +158,12 @@ export default function AddImageScreen() {
           <View className="px-6 space-y-4">
             {/* Description Field */}
             <View>
-              <Text>Description</Text>
+              <Text>Collection</Text>
               <TextInput
                 placeholder="Add a description to your Photo"
                 placeholderTextColor="#9CA3AF"
                 value={description}
                 onChangeText={setDescription}
-                className="h-12 border border-gray-300 rounded-lg px-4 mt-1 text-base"
-                autoCapitalize="none"
-                keyboardType="default"
-              />
-            </View>
-
-            {/* Place Field */}
-            <View className="mt-4">
-              <Text>Place</Text>
-              <TextInput
-                placeholder="Add a location to your Photo"
-                placeholderTextColor="#9CA3AF"
-                value={place}
-                onChangeText={setPlace}
                 className="h-12 border border-gray-300 rounded-lg px-4 mt-1 text-base"
                 autoCapitalize="none"
                 keyboardType="default"
