@@ -14,15 +14,15 @@ import Feather from "@expo/vector-icons/Feather";
 import { uploadPhoto } from "../../utils/gallery.api";
 import { useAuth } from "../../providers/AuthProvider";
 import { TextInput } from "react-native-gesture-handler";
+import ImageCarousel from "./ImageCarousel";
 
 export default function AddImageScreen() {
-  const [selectedImage, setSelectedImage] = useState<string[] | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const { token } = useAuth();
 
   const [album, setAlbum] = useState<string>();
   const [albums, setAlbums] = useState<string[] | null>();
-
 
   const pickImage = async () => {
     try {
@@ -40,14 +40,13 @@ export default function AddImageScreen() {
       // Launch image picker
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
-        allowsEditing: true,
-        aspect: [1, 1],
+        allowsMultipleSelection: true,
         quality: 0.8,
       });
 
-      if (!result.canceled && result.assets[0]) {
-        setSelectedImage([result.assets[0].uri]);
-        console.log("Selected image:", result.assets[0].uri);
+      if (!result.canceled && result.assets) {
+        const uris = result.assets.map((asset) => asset.uri);
+        setSelectedImage(uris);
       }
     } catch (error) {
       console.error("Error picking image:", error);
@@ -75,7 +74,7 @@ export default function AddImageScreen() {
       });
 
       if (!result.canceled && result.assets[0]) {
-        setSelectedImage([result.assets[0].uri]);
+        setSelectedImage((prev) => [...prev, result.assets[0].uri]);
       }
     } catch (error) {
       console.error("Error taking photo:", error);
@@ -95,12 +94,11 @@ export default function AddImageScreen() {
       Alert.alert("Success", "Image uploaded successfully!", [
         { text: "OK", onPress: () => router.back() },
       ]);
+      setSelectedImage([]);
+      setUploading(false);
     } catch (error) {
       console.error("Error uploading image: ", error);
       Alert.alert("Error", "Failed to upload image. Please try again.");
-    } finally {
-      setSelectedImage(null);
-      setUploading(false);
     }
   };
 
@@ -128,19 +126,14 @@ export default function AddImageScreen() {
 
         {/* Image Selection */}
         <View className="p-4">
-          {selectedImage ? (
+          {selectedImage.length != 0 ? (
             <View className="items-center">
-              <Image
-                source={{ uri: selectedImage[0] }}
-                className="w-80 h-80 rounded-lg mb-4"
-                resizeMode="cover"
+              <ImageCarousel
+                images={selectedImage}
+                onDelete={(index) =>
+                  setSelectedImage((prev) => prev.filter((_, i) => i !== index))
+                }
               />
-              <TouchableOpacity
-                onPress={() => setSelectedImage(null)}
-                className="absolute bottom-6 bg-white p-1 rounded-full shadow"
-              >
-                <Feather name="x" size={18} color="red" />
-              </TouchableOpacity>
             </View>
           ) : (
             <View className="items-center">
@@ -156,8 +149,7 @@ export default function AddImageScreen() {
             </View>
           )}
 
-          <View className="px-6 space-y-4">
-            {/* Description Field */}
+          <View className="px-6 space-y-4 mt-4">
             <View>
               <Text>Album (Optional)</Text>
               <TextInput
@@ -171,11 +163,21 @@ export default function AddImageScreen() {
               />
             </View>
 
-            <View className="items-end mt-6">
+            <View className="flex-row items-center justify-end mt-6 space-x-4">
+              {selectedImage.length != 0 && (
+                <TouchableOpacity
+                  onPress={pickImage}
+                  className="px-4 py-3 bg-blue-500 rounded-xl mr-2"
+                >
+                  <Text className="text-white font-semibold">
+                    Add More Photos
+                  </Text>
+                </TouchableOpacity>
+              )}
               <TouchableOpacity
                 onPress={uploadImage}
                 disabled={!selectedImage || uploading}
-                className={`px-6 py-3 rounded-xl shadow-md ${
+                className={`px-4 py-3 rounded-xl shadow-md ${
                   selectedImage && !uploading ? "bg-red-500" : "bg-gray-300"
                 }`}
               >
