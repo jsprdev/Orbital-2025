@@ -27,7 +27,7 @@ const priorityColor: Record<string, string> = {
 };
 
 
-export default function AddIdea({ onSave }: { onSave?: () => void }) {
+export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSave?: () => void; availableTags?: string[]; onAddTag?: (tag: string) => void }) {
   const slideAnim = useRef(new Animated.Value(height)).current;
 
   const [visible, setVisible] = useState(false);
@@ -43,7 +43,6 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showCustomTag, setShowCustomTag] = useState(false);
   const [customTag, setCustomTag] = useState("");
-  const [tags, setTags] = useState([...PREMADE_TAGS]);
   const [priority, setPriority] = useState<Priority>("low");
   const [placeInput, setPlaceInput] = useState("");
   const [placeSuggestions, setPlaceSuggestions] = useState<{ place_id: string; description: string }[]>([]);
@@ -72,7 +71,6 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
       setCustomTag("");
       setSelectedTags([]);
       setPriority("low");
-      setTags([...PREMADE_TAGS]);
     });
   };
 
@@ -97,11 +95,10 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
   const addTag = (tag: string) => {
     tag = formatNewTag(tag);
     if (!tag) return;
-    if (!tags.includes(tag)) {
-      setTags((prev) => [...prev, tag]);
+    if (availableTags && !availableTags.includes(tag)) {
+      if (onAddTag) onAddTag(tag);
       setSelectedTags((prev) => [...prev, tag]);
     } else if (!selectedTags.includes(tag)) {
-      // if tag exists but not selected, select it
       setSelectedTags((prev) => [...prev, tag]);
     }
     setCustomTag("");
@@ -248,7 +245,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
 
             <Text className="font-semibold mb-1">Tags</Text>
             <View className="flex-row flex-wrap mb-2">
-              {tags.map((tag) => (
+              {availableTags.map((tag) => (
                 <TouchableOpacity
                   key={tag}
                   onPress={() => toggleTag(tag)}

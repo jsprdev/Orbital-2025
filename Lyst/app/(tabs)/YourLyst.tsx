@@ -1,13 +1,15 @@
-import React, { useCallback, useState } from 'react';
-import { Image, Text, View } from 'react-native';
+import React, { useCallback, useState, useEffect } from 'react';
+import { Image, Text, View, TouchableOpacity } from 'react-native';
 import AddIdea from '../(list)/AddIdea';
 import SearchBar from '../(list)/SearchBar';
 import Display from '../(list)/Display';
-import { Priority } from '@/types'; 
+import { Priority, Note } from '@/types'; 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/providers/AuthProvider';
 import { ScrollView } from 'react-native-gesture-handler';
+import { getNotes } from '@/utils/api';
 
+const DEFAULT_TAGS = ["Food", "Gifts", "Shopping", "Overseas", "Others"];
 
 export default function YourLyst() {
   const [filters, setFilters] = useState<{
@@ -20,9 +22,45 @@ export default function YourLyst() {
     setRefresh(prev => !prev);
   }, []);
 
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
-  const availableTags = ["Food", "Gifts", "Shopping", "Overseas", "Others"];
+  const [notes, setNotes] = useState<Note[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [availableTags, setAvailableTags] = useState(DEFAULT_TAGS);
+
+  // Fetch notes on mount and when refresh changes
+  useEffect(() => {
+    const fetchNotes = async () => {
+      setLoading(true);
+      try {
+        const fetchedNotes = await getNotes(token);
+        setNotes(fetchedNotes);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchNotes();
+  }, [token, refresh]);
+
+  // Recompute availableTags whenever notes change
+  useEffect(() => {
+    const tagsInNotes = new Set(DEFAULT_TAGS);
+    notes.forEach(note => {
+      (note.tags || []).forEach(tag => tagsInNotes.add(tag));
+    });
+    setAvailableTags(Array.from(tagsInNotes));
+  }, [notes]);
+
+  const handleAddTag = (tag: string) => {
+    tag = tag.trim();
+    if (!tag) return;
+    tag = tag.toLowerCase().split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+    if (!availableTags.includes(tag)) {
+      setAvailableTags(prev => [...prev, tag]);
+    }
+  };
 
   const handleFilterChange = (filter: { query: string; selectedTags: string[]; priority: Priority | null }) => {
     setFilters(filter);
@@ -45,7 +83,7 @@ export default function YourLyst() {
           Welcome, {user?.displayName}
         </Text>
         <View>
-          <AddIdea onSave={refreshPage} />
+          <AddIdea onSave={refreshPage} availableTags={availableTags} onAddTag={handleAddTag} />
         </View>
       </View>
 
@@ -54,9 +92,36 @@ export default function YourLyst() {
         <SearchBar tags={availableTags} onFilterChange={handleFilterChange} />
       </View>
 
+      {/* Tag selector row */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerClassName="px-4 flex-row gap-x-2"
+      >
+        {availableTags.map(tag => {
+          const selected = filters.selectedTags.includes(tag);
+          return (
+            <TouchableOpacity
+              key={tag}
+              onPress={() => {
+                setFilters(prev => ({
+                  ...prev,
+                  selectedTags: prev.selectedTags.includes(tag)
+                    ? prev.selectedTags.filter(t => t !== tag)
+                    : [...prev.selectedTags, tag]
+                }));
+              }}
+              className={`rounded-full px-4 py-2 mr-2 border ${selected ? 'bg-pink-500 border-pink-500' : 'bg-gray-100 border-gray-300'}`}
+            >
+              <Text className={`font-bold ${selected ? 'text-white' : 'text-gray-700'}`}>{tag}</Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
+
       
       <View className="flex-1 px-4 py-2">
-        <Display filters={filters} key={refresh.toString()} />
+        <Display filters={filters} notes={notes} setNotes={setNotes} loading={loading} key={refresh.toString()} />
       </View>
       </ScrollView>
     </SafeAreaView>

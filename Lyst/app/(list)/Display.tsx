@@ -15,47 +15,16 @@ const priorityColor: Record<Priority, string> = {
   high: 'text-red-500',
 };
 
+type DisplayProps = {
+  filters: { query: string; selectedTags: string[]; priority: Priority | null };
+  notes: Note[];
+  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
+  loading: boolean;
+};
 
-export default function Display({ filters } : {
-  filters: { query: string; selectedTags: string[]; priority: Priority | null; }
-}) {
-    const [notes, setNotes] = useState<Note[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [userReady, setUserReady] = useState(false);
 
+export default function Display({ filters, notes, setNotes, loading } : DisplayProps) {
     const { token } = useAuth(); 
-    { /* Listen for authentication state changes */ }
-    { /* allow the list to continue display even when user refreshes */ }
-    useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-          setUserReady(true);
-        } else {
-          setUserReady(false);
-          setNotes([]);
-        }
-      });
-  
-      return unsubscribe;
-    }, []);
-  
-    useEffect(() => {
-      if (!userReady) return;
-
-      const fetchNotes = async () => {
-        try {
-          const fetchedNotes = await getNotes(token);
-          setNotes(fetchedNotes);
-        } catch (error) {
-          console.error("Error fetching notes:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchNotes();
-    }, [userReady]);
-  
     const handlePress = (id: string) => {
       console.log("Card pressed:", id);
       router.push(`/(list)/location-details/${id}`);
@@ -64,7 +33,6 @@ export default function Display({ filters } : {
       setNotes(prevNotes => prevNotes.filter(note => note.id !== id));
       await deleteNote(id, token);
     }
-
     // filter notes
     function applyFilters(notes: Note[], filters: { query: string; selectedTags: string[]; priority: Priority | null }) {
         return notes.filter(note => {
@@ -75,14 +43,11 @@ export default function Display({ filters } : {
         });
     }
     const filteredNotes = applyFilters(notes, filters);
-
     // display latest notes on top by default
     const sortedNotes = filteredNotes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-    if (!userReady || loading) {
+    if (loading) {
       return <Text>Loading...</Text>;
     }
-  
     return (
       <View>
         {sortedNotes.map((note) => (
