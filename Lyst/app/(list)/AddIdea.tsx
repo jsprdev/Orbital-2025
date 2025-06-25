@@ -12,8 +12,8 @@ import {
 } from "react-native";
 import AddIdeaButton from "./AddIdeaButton";
 import { Note, Priority } from "@/types";
-import { createNote } from "@/utils/lystAPI";
-import { useAuth } from "@/providers/AuthProvider"
+import { createNote } from "@/utils/lyst.api";
+import { useAuth } from "@/providers/AuthProvider";
 
 const { height } = Dimensions.get("window");
 const PREMADE_TAGS = ["Food", "Gifts", "Shopping", "Overseas"];
@@ -23,7 +23,6 @@ const priorityColor: Record<string, string> = {
   medium: "bg-yellow-500",
   high: "bg-red-500",
 };
-
 
 export default function AddIdea({ onSave }: { onSave?: () => void }) {
   const slideAnim = useRef(new Animated.Value(height)).current;
@@ -81,8 +80,8 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
       .split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
-  }
-  
+  };
+
   // Add a new custom tag if unique and non-empty
   const addTag = (tag: string) => {
     tag = formatNewTag(tag);
@@ -114,20 +113,22 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
 
     // backend logic to save the idea
     try {
-      await createNote({
-        description: description,
-        tags: selectedTags,
-        place: location,
-        priority: priority,
-        createdAt: new Date().toISOString(),
-        userId: ''
-      } as Note, token!);
+      await createNote(
+        {
+          description: description,
+          tags: selectedTags,
+          place: location,
+          priority: priority,
+          createdAt: new Date().toISOString(),
+          userId: "",
+        } as Note,
+        token!
+      );
 
       // refresh page
       if (onSave) {
         onSave();
       }
-
     } catch (error) {
       console.error("Error adding note:", error);
     } finally {
@@ -196,7 +197,9 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
                 >
                   <Text
                     className={`text-sm ${
-                      selectedTags.includes(tag) ? "text-white" : "text-gray-700"
+                      selectedTags.includes(tag)
+                        ? "text-white"
+                        : "text-gray-700"
                     }`}
                   >
                     {tag}
@@ -204,28 +207,31 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
                 </TouchableOpacity>
               ))}
 
-                <TouchableOpacity onPress={() => setShowCustomTag(prev => !prev)} className="border border-gray-400 rounded-full px-3 py-1 m-1">
-                    <Text className="text-gray-700 text-sm">▼</Text>
-                </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setShowCustomTag((prev) => !prev)}
+                className="border border-gray-400 rounded-full px-3 py-1 m-1"
+              >
+                <Text className="text-gray-700 text-sm">▼</Text>
+              </TouchableOpacity>
             </View>
 
             {/* Custom tag input */}
             {showCustomTag && (
-            <View className="flex-row items-center mb-4">
-              <TextInput
-                className="flex-1 border border-gray-300 rounded p-2 mr-2"
-                placeholder="Add custom tag"
-                value={customTag}
-                onChangeText={setCustomTag}
-                onSubmitEditing={() => addTag(customTag.trim())}
-              />
-              <TouchableOpacity
-                onPress={() => addTag(customTag.trim())}
-                className="bg-blue-600 rounded px-3 py-2"
-              >
-                <Text className="text-white font-semibold">Add</Text>
-              </TouchableOpacity>
-            </View>
+              <View className="flex-row items-center mb-4">
+                <TextInput
+                  className="flex-1 border border-gray-300 rounded p-2 mr-2"
+                  placeholder="Add custom tag"
+                  value={customTag}
+                  onChangeText={setCustomTag}
+                  onSubmitEditing={() => addTag(customTag.trim())}
+                />
+                <TouchableOpacity
+                  onPress={() => addTag(customTag.trim())}
+                  className="bg-blue-600 rounded px-3 py-2"
+                >
+                  <Text className="text-white font-semibold">Add</Text>
+                </TouchableOpacity>
+              </View>
             )}
             {/* Priority Selection */}
             <Text className="font-semibold mb-1">Priority</Text>

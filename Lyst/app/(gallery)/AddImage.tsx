@@ -11,7 +11,7 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
-import { uploadPhoto } from "../../utils/galleryAPI";
+import { uploadPhoto } from "../../utils/gallery.api";
 import { useAuth } from "../../providers/AuthProvider";
 import { TextInput } from "react-native-gesture-handler";
 
@@ -20,8 +20,9 @@ export default function AddImageScreen() {
   const [uploading, setUploading] = useState(false);
   const { token } = useAuth();
 
-  const [description, setDescription] = useState("");
-  const [place, setPlace] = useState("");
+  const [album, setAlbum] = useState<string>();
+  const [albums, setAlbums] = useState<string[] | null>();
+
 
   const pickImage = async () => {
     try {
@@ -158,12 +159,12 @@ export default function AddImageScreen() {
           <View className="px-6 space-y-4">
             {/* Description Field */}
             <View>
-              <Text>Collection</Text>
+              <Text>Album (Optional)</Text>
               <TextInput
-                placeholder="Add a description to your Photo"
+                placeholder="Add to an Album"
                 placeholderTextColor="#9CA3AF"
-                value={description}
-                onChangeText={setDescription}
+                value={album}
+                onChangeText={setAlbum}
                 className="h-12 border border-gray-300 rounded-lg px-4 mt-1 text-base"
                 autoCapitalize="none"
                 keyboardType="default"

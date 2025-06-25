@@ -1,8 +1,4 @@
 import axiosInstance from './index';
-import { Photo } from "@/types/gallery.dto";
-
-// Cache-ing
-let photoCache: Photo[];
 
 // GET requests
 export const getPhotos = async (token: string) => {
@@ -24,21 +20,6 @@ export const getPhotos = async (token: string) => {
   }
 };
 
-// GET a specific photo by ID
-export const getPhotoById = async (token: string, photoId: string) => {
-  try {
-    console.log("galleryAPI: Fetching photo by ID:", photoId);
-    const response = await axiosInstance.get(`/api/images/${photoId}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    return response.data.photo;
-  } catch (error) {
-    console.error('Error fetching photo:', error);
-    throw error;
-  }
-};
 
 // POST - Upload a new photo
 // In React Native, the file argument should be { uri, name, type }

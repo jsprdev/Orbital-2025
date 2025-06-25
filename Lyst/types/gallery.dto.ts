@@ -2,7 +2,7 @@ export interface Photo {
   id: string;
   userId: string;
   url: string;
-  createdAt: Date;
+  createdAt: any;
   storagePath: string;
   
 };

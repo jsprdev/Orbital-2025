@@ -2,33 +2,22 @@ import { db, bucket, admin } from "../config/firebase-config.js";
 import { Photo } from "../../Lyst/types/gallery.dto.js"
 
 export class GalleryService {  
+
   async getPhotos(userId: string): Promise<Photo[]> {
     const photosCollection = db.collection('images');
-    console.log('Fetching photos for userId:', userId);
-    
-    try {
-      const snapshot = await photosCollection
-        .where('userId', '==', userId)
-        .get();
-
-      console.log('Found', snapshot.docs.length, 'photos');
+    const snapshot = await photosCollection
+      .where('userId', '==', userId)
+      .get();
       
-      return snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Photo[];
-    } catch (error) {
-      console.error('Error in getPhotos:', error);
-      throw error;
-    }
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    })) as Photo[];
   }
 
   async uploadPhoto(userId: string, file: Express.Multer.File): Promise<Photo> {
     const photosCollection = db.collection('images');
-    
-    console.log('Uploading photo for userId:', userId, 'filename:', file.originalname);
-    
-    // Use images/ folder structure to match frontend
+
     const storagePath = `images/${Date.now()}_${file.originalname}`;
     const fileRef = bucket.file(storagePath);
 
@@ -56,15 +45,13 @@ export class GalleryService {
       };
 
       const docRef = await photosCollection.add(photoData);
-      
-      console.log('Photo uploaded successfully with ID:', docRef.id);
-      
+  
       return {
         id: docRef.id,
         url: photoData.url,
         userId: photoData.userId,
         storagePath: photoData.storagePath,
-        createdAt: new Date() // Use current date instead of FieldValue
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
       } as Photo;
     } catch (error) {
       console.error('Error in uploadPhoto:', error);
@@ -74,8 +61,6 @@ export class GalleryService {
 
   async deletePhoto(photoId: string): Promise<boolean> {
     const photosCollection = db.collection('images');
-    console.log('Deleting photo with ID:', photoId);
-    
     const docRef = photosCollection.doc(photoId);
     const doc = await docRef.get();
 
@@ -85,17 +70,12 @@ export class GalleryService {
     }
 
     const photo = doc.data() as Photo;
-    
     try {
-      // Delete from Storage
+      // Need to delete from both storage and firestore
       await bucket.file(photo.storagePath).delete();
-      
-      // Delete from Firestore
       await docRef.delete();
-      console.log('Photo deleted successfully:', photoId);
       return true;
     } catch (error) {
-      console.error('Error deleting photo:', error);
       return false;
     }
   }

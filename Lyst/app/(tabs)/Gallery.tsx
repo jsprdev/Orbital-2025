@@ -12,7 +12,7 @@ import {
 import { router } from "expo-router";
 import { useFocusEffect } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
-import { getPhotos, deletePhoto } from "../../utils/galleryAPI";
+import { getPhotos, deletePhoto } from "../../utils/gallery.api";
 import { useAuth } from "../../providers/AuthProvider";
 import { Photo } from "../../types/gallery.dto";
 import PhotoCard from "../(gallery)/PhotoCard";
