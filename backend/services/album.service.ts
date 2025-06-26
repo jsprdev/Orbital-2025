@@ -1,9 +1,10 @@
 import { admin, db } from "../config/firebase-config.js";
 import { Album } from "../../Lyst/types/album.dto";
 
-export class AlbumService {
+export class AlbumsService {
 
   async getAlbums(userId: string) {
+
     const albumsRef = db.collection('albums');
     const snapshot = await albumsRef.where('userId', '==', userId).get();
     const albums: Album[] = [];
@@ -23,16 +24,13 @@ export class AlbumService {
     if (!snapshot.empty) {
       const existing = snapshot.docs[0];
       await db.collection("albums").doc(existing.id).update({
-        photoCount: admin.firestore.FieldValue.increment(1),
         ...(coverPhotoUrl && { coverPhotoUrl }),
       });
-    return { id: existing.id, ...existing.data() } as Album;
+      return { id: existing.id, ...existing.data() } as Album;
     } else {
-
       const newAlbum = {
         userId: userId,
         name: albumName,
-        count: 1,
         createdAt: admin.firestore.FieldValue.serverTimestamp(),
         ...(coverPhotoUrl && { coverPhotoUrl })
       };

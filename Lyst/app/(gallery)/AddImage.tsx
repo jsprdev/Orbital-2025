@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  Image,
   Alert,
   ActivityIndicator,
   ScrollView,
@@ -13,16 +12,32 @@ import { router } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
 import { uploadPhoto } from "../../utils/gallery.api";
 import { useAuth } from "../../providers/AuthProvider";
-import { TextInput } from "react-native-gesture-handler";
 import ImageCarousel from "./ImageCarousel";
+import { getAlbums, addAlbum } from "../../utils/albums.api";
+import AlbumDropdown from "./AlbumDropdown";
 
 export default function AddImageScreen() {
   const [selectedImage, setSelectedImage] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
   const { token } = useAuth();
 
-  const [album, setAlbum] = useState<string>();
-  const [albums, setAlbums] = useState<string[] | null>();
+  const [albumName, setAlbumName] = useState<string>("");
+  const [allAlbums, setAllAlbums] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchAlbums = async () => {
+      if (!token) return;
+      try {
+        const data = await getAlbums(token);
+        const albumNames = data.map((album: any) => album.name);
+        setAllAlbums(albumNames);
+      } catch (error) {
+        console.error("Error fetching albums:", error);
+        setAllAlbums([]);
+      }
+    };
+    fetchAlbums();
+  }, [token]);
 
   const pickImage = async () => {
     try {
@@ -46,7 +61,7 @@ export default function AddImageScreen() {
 
       if (!result.canceled && result.assets) {
         const uris = result.assets.map((asset) => asset.uri);
-        setSelectedImage(uris);
+        setSelectedImage((prev) => [...prev, ...uris]);
       }
     } catch (error) {
       console.error("Error picking image:", error);
@@ -90,7 +105,10 @@ export default function AddImageScreen() {
 
     setUploading(true);
     try {
-      await uploadPhoto(token, selectedImage);
+      const album = await addAlbum(token, albumName);
+      selectedImage.map(async (uri) => await uploadPhoto(token, album.id, [uri]));
+      
+
       Alert.alert("Success", "Image uploaded successfully!", [
         { text: "OK", onPress: () => router.back() },
       ]);
@@ -133,6 +151,7 @@ export default function AddImageScreen() {
                 onDelete={(index) =>
                   setSelectedImage((prev) => prev.filter((_, i) => i !== index))
                 }
+                flag={albumName}
               />
             </View>
           ) : (
@@ -151,15 +170,10 @@ export default function AddImageScreen() {
 
           <View className="px-6 space-y-4 mt-4">
             <View>
-              <Text>Album (Optional)</Text>
-              <TextInput
-                placeholder="Add to an Album"
-                placeholderTextColor="#9CA3AF"
-                value={album}
-                onChangeText={setAlbum}
-                className="h-12 border border-gray-300 rounded-lg px-4 mt-1 text-base"
-                autoCapitalize="none"
-                keyboardType="default"
+              <AlbumDropdown
+                albumsArray={allAlbums}
+                albumName={albumName}
+                setAlbumName={setAlbumName}
               />
             </View>
 
@@ -176,9 +190,11 @@ export default function AddImageScreen() {
               )}
               <TouchableOpacity
                 onPress={uploadImage}
-                disabled={!selectedImage || uploading}
+                disabled={selectedImage.length == 0 || uploading}
                 className={`px-4 py-3 rounded-xl shadow-md ${
-                  selectedImage && !uploading ? "bg-red-500" : "bg-gray-300"
+                  selectedImage.length != 0 && !uploading
+                    ? "bg-red-500"
+                    : "bg-gray-300"
                 }`}
               >
                 {uploading ? (
@@ -186,7 +202,7 @@ export default function AddImageScreen() {
                 ) : (
                   <Text
                     className={`font-semibold text-base ${
-                      selectedImage && !uploading
+                      selectedImage.length != 0 && !uploading
                         ? "text-white"
                         : "text-gray-500"
                     }`}

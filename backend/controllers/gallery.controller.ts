@@ -31,7 +31,6 @@ router.get("/", async (req: Request, res: Response) => {
     try {
         console.log('GET /api/images - User ID:', req.user!.user_id);
         const photos = await galleryServiceInstance.getPhotos(req.user!.user_id);
-        console.log('Returning', photos.length, 'photos');
         res.status(200).json({ photos });
     } catch (error) {
         console.error('Error fetching photos:', error);
@@ -43,7 +42,6 @@ router.get("/", async (req: Request, res: Response) => {
 router.get("/:id", async (req: Request, res: Response) => {
     try {
         const photoId = req.params.id;
-        console.log('GET /api/images/:id - Photo ID:', photoId);
         const photo = await galleryServiceInstance.getPhotoById(photoId);
         
         if (!photo) {
@@ -63,11 +61,15 @@ router.post("/", upload.array('photos'), async (req: MulterRequest, res: Respons
     try {
         console.log('POST /api/images - User ID:', req.user!.user_id,);
         const files = req.files as Express.Multer.File[];
+        const albumName = req.body.albumName;
         
-        const uploadedPhotos =  await files.map(
-            file => galleryServiceInstance.uploadPhoto(
-                req.user!.user_id, 
-                file
+        const uploadedPhotos = await Promise.all(
+            files.map(
+                file => galleryServiceInstance.uploadPhoto(
+                    req.user!.user_id, 
+                    file,
+                    albumName
+                )
             )
         );
         res.status(201).json({ photo: uploadedPhotos });

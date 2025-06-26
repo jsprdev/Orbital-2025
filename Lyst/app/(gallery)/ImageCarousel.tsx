@@ -1,9 +1,9 @@
 import React from "react";
 import {
+  Text,
   View,
   Animated,
   Dimensions,
-  FlatList,
   Image,
   TouchableOpacity,
 } from "react-native";
@@ -18,9 +18,11 @@ const AnimatedView = Animated.createAnimatedComponent(View);
 export default function ImageCarousel({
   images,
   onDelete,
+  flag,
 }: {
   images: string[];
   onDelete: (index: number) => void;
+  flag: string;
 }) {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
@@ -49,7 +51,7 @@ export default function ImageCarousel({
 
         const scale = scrollX.interpolate({
           inputRange,
-          outputRange: [0.92, 1, 0.92],
+          outputRange: [0.8, 1, 0.9],
           extrapolate: "clamp",
         });
 
@@ -61,17 +63,32 @@ export default function ImageCarousel({
               transform: [{ scale }],
             }}
           >
-            <Image
-              source={{ uri: item }}
-              className="w-full h-72 rounded-xl"
-              resizeMode="cover"
-            />
-            <TouchableOpacity
-              onPress={() => onDelete(index)}
-              className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white p-1 rounded-full shadow-lg"
+            <View
+              className={`relative ${
+                index === 0 && flag.trim() != ""
+                  ? "p-1 border-2 rounded-xl"
+                  : ""
+              }`}
             >
-              <Feather name="x" size={18} color="red" />
-            </TouchableOpacity>
+              <Image
+                source={{ uri: item }}
+                className="w-full h-72 rounded-xl"
+                resizeMode="cover"
+                testID="carousel-image"
+              />
+              {index === 0 && flag.trim() != "" && (
+                <Text className="absolute left-1/2 -translate-x-1/2 font-semibold mt-2 bg-white p-1 rounded-lg ">
+                  Cover Page
+                </Text>
+              )}
+              <TouchableOpacity
+                onPress={() => onDelete(index)}
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white p-1 rounded-full shadow-lg"
+                testID="carousel-delete-button"
+              >
+                <Feather name="x" size={18} color="red" />
+              </TouchableOpacity>
+            </View>
           </AnimatedView>
         );
       }}

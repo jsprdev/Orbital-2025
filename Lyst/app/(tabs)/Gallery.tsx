@@ -10,22 +10,24 @@ import {
   RefreshControl,
 } from "react-native";
 import { router } from "expo-router";
-import { useFocusEffect } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
 import { getPhotos, deletePhoto } from "../../utils/gallery.api";
 import { useAuth } from "../../providers/AuthProvider";
 import { Photo } from "../../types/gallery.dto";
-import PhotoCard from "../(gallery)/PhotoCard";
+import GalleryGrid from "../(gallery)/GalleryGrid";
+import { getAlbums } from "@/utils/albums.api";
+
 
 export default function GalleryScreen() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [albumId, setAlbumId] = useState<string[]>([]);
+  const [albumList, setAlbumList] = useState<string[]>([]);
   const { token } = useAuth();
 
   const fetchPhotos = async () => {
     if (!token) return;
-
     try {
       const fetchedPhotos = await getPhotos(token);
       setPhotos(fetchedPhotos);
@@ -38,8 +40,28 @@ export default function GalleryScreen() {
     }
   };
 
-  useEffect(() => {
+  const fetchAlbums = async () => {
+    if (!token) return;
+    try {
+      const data = await getAlbums(token);
+      const albumId = data.map((album: any) => album.id);
+      const albumNames = data.map((album: any) => album.name);
+      setAlbumId(albumId);
+      setAlbumList(albumNames);
+    } catch (error) {
+      console.error("Error fetching albums:", error);
+      setAlbumList([]);
+    }
+  };
+
+
+  const handleRefresh = () => {
     fetchPhotos();
+    fetchAlbums();
+  };
+
+  useEffect(() => {
+    handleRefresh();
   }, [token]);
 
   const handleDeletePhoto = async (photoId: string) => {
@@ -62,10 +84,6 @@ export default function GalleryScreen() {
     ]);
   };
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-    fetchPhotos();
-  };
 
   if (loading) {
     return (
@@ -95,35 +113,17 @@ export default function GalleryScreen() {
           <TouchableOpacity onPress={() => router.push("/(gallery)/AddImage")}>
             <Feather name="plus" color="hotpink" size={28} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Feather name="search" color="hotpink" size={28} />
-          </TouchableOpacity>
         </View>
       </View>
 
-      {/* Favourite label */}
-      <Text className="text-lg font-semibold mb-2">Favourites</Text>
-
       {/* Photo Grid */}
-      {photos.length === 0 ? (
-        <View className="flex-1 justify-center items-center py-20">
-          <Feather name="image" size={64} color="gray" />
-          <Text className="text-gray-500 mt-4 text-lg">No photos yet</Text>
-          <Text className="text-gray-400 mt-2 text-center">
-            Tap the + button to add your first photo
-          </Text>
-        </View>
-      ) : (
-        <View className="flex-row flex-wrap justify-between">
-          {photos.map((photo) => (
-            <PhotoCard
-              key={photo.id}
-              photo={photo}
-              onDelete={handleDeletePhoto}
-            />
-          ))}
-        </View>
-      )}
+
+      <GalleryGrid
+        photos={photos}
+        albumsId={albumId}
+        albums={albumList}
+        onDelete={handleDeletePhoto}
+      />
     </ScrollView>
   );
 }

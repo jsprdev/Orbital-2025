@@ -29,7 +29,7 @@ export const addAlbum = async (token: string, albumName: string, coverPhotoUrl?:
         'Authorization': `Bearer ${token}`
       }
     });
-    return response.data.albums;
+    return response.data.addedAlbum;
   } catch (error: any) {
     console.error('Error fetching photos:', error);
     if (error.response) {

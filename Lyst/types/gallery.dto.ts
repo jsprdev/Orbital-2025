@@ -4,8 +4,7 @@ export interface Photo {
   url: string;
   createdAt: any;
   storagePath: string;
-  album?: string;
-  
+  albumName?: string;
 };
 
 export interface UploadPhoto {

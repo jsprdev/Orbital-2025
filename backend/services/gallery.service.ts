@@ -15,7 +15,7 @@ export class GalleryService {
     })) as Photo[];
   }
 
-  async uploadPhoto(userId: string, file: Express.Multer.File): Promise<Photo> {
+  async uploadPhoto(userId: string, file: Express.Multer.File, albumName: string): Promise<Photo> {
     const photosCollection = db.collection('images');
 
     const storagePath = `images/${Date.now()}_${file.originalname}`;
@@ -41,6 +41,7 @@ export class GalleryService {
         url,
         userId,
         storagePath,
+        albumName,
         createdAt: admin.firestore.FieldValue.serverTimestamp()
       };
 
@@ -51,6 +52,7 @@ export class GalleryService {
         url: photoData.url,
         userId: photoData.userId,
         storagePath: photoData.storagePath,
+        albumName: albumName,
         createdAt: admin.firestore.FieldValue.serverTimestamp()
       } as Photo;
     } catch (error) {
@@ -71,9 +73,18 @@ export class GalleryService {
 
     const photo = doc.data() as Photo;
     try {
-      // Need to delete from both storage and firestore
+
+      // deleting from both storage and firestore
       await bucket.file(photo.storagePath).delete();
       await docRef.delete();
+
+      if (photo.albumName) {
+        const albumsRef = db.collection('albums');
+        const snapshot = await albumsRef
+          .where('userId', '==', photo.userId)
+          .where('name', '==', photo.albumName)
+          .get();
+      }
       return true;
     } catch (error) {
       return false;
@@ -82,8 +93,6 @@ export class GalleryService {
 
   async getPhotoById(photoId: string): Promise<Photo | null> {
     const photosCollection = db.collection('images');
-    console.log('Getting photo by ID:', photoId);
-    
     const docRef = photosCollection.doc(photoId);
     const doc = await docRef.get();
 

@@ -22,11 +22,10 @@ export const getPhotos = async (token: string) => {
 
 
 // POST - Upload a new photo
-// In React Native, the file argument should be { uri, name, type }
-export const uploadPhoto = async (token: string, imageUri: string[]) => {
-  
+export const uploadPhoto = async (token: string, albumName: string, imageUri: string[] ) => {
   try {
     const formData = new FormData();
+    formData.append("albumName", albumName);
     imageUri.forEach((uri, index) => {
       formData.append("photos", {
         uri,
@@ -41,7 +40,6 @@ export const uploadPhoto = async (token: string, imageUri: string[]) => {
         "Content-Type": "multipart/form-data"
       }
     });
-    console.log("galleryAPI: Upload response:", response.data);
     return response.data.photo;
 
   } catch (error: any) {

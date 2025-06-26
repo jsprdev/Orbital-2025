@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
-import { AlbumService } from '../services/album.service';
+import { AlbumsService } from '../services/album.service';
 
-const albumServiceInstance = new AlbumService();
+const albumServiceInstance = new AlbumsService();
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
@@ -16,9 +16,9 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.post("/", async (req: Request, res: Response) => {
     try {
-        const { albumName, coverPhotoUrl } = req.body;
+        const { albumName } = req.body;
         const userId = req.user.user_id;
-        const addedAlbum = await albumServiceInstance.addToAndUpdateAlbum(albumName, userId, coverPhotoUrl);
+        const addedAlbum = await albumServiceInstance.addToAndUpdateAlbum(albumName, userId);
         res.status(201).json({ addedAlbum });
     } catch (error) {
         console.error('Error adding Album:', error);
