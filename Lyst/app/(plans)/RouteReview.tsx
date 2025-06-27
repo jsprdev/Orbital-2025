@@ -1,8 +1,9 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useLocalSearchParams } from 'expo-router';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getWeatherForecast } from '@/utils/api';
 import DraggableFlatList, { NestableDraggableFlatList, RenderItemParams } from 'react-native-draggable-flatlist';
 
 export default function RouteReview() {
@@ -10,6 +11,20 @@ export default function RouteReview() {
     const initialRoute = routeData ? JSON.parse(routeData as string) : [];
     // initialRoute is basically the raw json response from the AI
     const [data, setData] = useState(initialRoute.selectedLocations);
+    const [weatherForecastForNextWeek, setWeatherForecastForNextWeek] = useState([]);
+
+    useEffect(() => {
+        const fetchWeather = async () => {
+          try {
+            const data = await getWeatherForecast("Singapore"); 
+            console.log("Weather API response:", data);
+            setWeatherForecastForNextWeek(data.forecast); 
+          } catch (error) {
+            console.error("failed to fetch weather forecast:", error);
+          }
+        };
+        fetchWeather();
+      }, []);
 
   
     return (
@@ -19,7 +34,7 @@ export default function RouteReview() {
                 <Text className="text-lg text-gray-500 mb-3">Drag and drop to reorder</Text>
                 
                 <DraggableFlatList
-                    className="px-6 mt-4"
+                    className="px-6 mt-4 mb-3"
                     data={data}
                     onDragEnd={({ data }) => setData(data)}
                     keyExtractor={(item, index) => item.id || index.toString()}
@@ -35,6 +50,25 @@ export default function RouteReview() {
                     </TouchableOpacity>
                     )}
                 />
+
+                <View className="flex-col gap-y-1">
+                    <Text className="font-semibold text-xl">
+                        Weekly Weather Forecast
+                    </Text>
+                    <Text className="text-sm text-gray-500 mb-3" >
+                        Data from WeatherAPI
+                    </Text>
+                    {weatherForecastForNextWeek.map((item: any, index) => {
+                    return (
+                        <View key={index} className="mb-2 flex-row gap-x-2">
+                            <Text className="text-gray-600">{item.date}</Text>
+                            <Text className="text-gray-500">Chance of Rain: {item.chance_of_rain}%</Text>
+                            <Text className="text-gray-500">{item.condition}</Text>
+                        </View>
+                    );
+                })}</View>
+
+
             
             
         </SafeAreaView>

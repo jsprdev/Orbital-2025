@@ -84,3 +84,10 @@ export const generateDateRoute = async (cards, token) => {
 };
 
 
+// getting weather from weatherAPI, we just use fetch so its simpler in code
+export const getWeatherForecast = async (location = "Singapore") => {
+  const response = await fetch(
+    `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/weather/forecast?location=${encodeURIComponent(location)}`
+  );
+  return response.json();
+};
