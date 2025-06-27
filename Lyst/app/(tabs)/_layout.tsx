@@ -77,7 +77,15 @@ const TabLayout = () => {
         options={{
           title: "Gallery",
           tabBarIcon: ({ focused }) => (
-            <Fontisto name="photograph" size={24} color={focused ? COLORS.primary : COLORS.unfocused} />
+            <Image
+              source={require('../../assets/icons/gallery.png')}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? COLORS.primary : COLORS.unfocused,
+                resizeMode: 'contain'
+              }}
+            />
           ),
           tabBarLabel: ({ focused }) => (
             <Text

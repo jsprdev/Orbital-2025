@@ -1,5 +1,10 @@
 import { generateDateRoute } from '@/utils/api';
 
+jest.mock('../FirebaseConfig', () => ({
+  initializeApp: jest.fn(),
+  getAuth: jest.fn(),
+}));
+
 jest.mock('@/utils/api', () => ({
   ...jest.requireActual('@/utils/api'),
   generateDateRoute: jest.fn(),
