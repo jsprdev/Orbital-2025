@@ -30,7 +30,7 @@ export class PlacesService {
         types: 'establishment',
         location: '1.3521,103.8198',
         radius: 49000, 
-        // components: 'country:SG', // need figure out how to get local device location
+        // components: 'country:SG', // need figure out how to get local device location or maybe we just put as radius of sg
         };
         const response = await axios.get(url, { params });
         return response.data;

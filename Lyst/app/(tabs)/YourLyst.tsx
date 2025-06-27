@@ -44,7 +44,7 @@ export default function YourLyst() {
     fetchNotes();
   }, [token, refresh]);
 
-  // pill availableTags whenever notes change
+  
   useEffect(() => {
     const tagsInNotes = new Set(DEFAULT_TAGS);
     notes.forEach(note => {

@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import AddIdea from '../(list)/AddIdea'
 import { ScrollView } from 'react-native-gesture-handler'
 import { router } from 'expo-router'
+import GeneratePlan from '../(plans)/GeneratePlan'
 
 export default function YourPlans() {
 
@@ -23,9 +24,7 @@ export default function YourPlans() {
               Your Plans
             </Text>
 
-            <TouchableOpacity className="bg-pink-500" onPress={handlePress}>
-              <Text> Generate date </Text>
-            </TouchableOpacity>
+            <GeneratePlan />
             
           </View>
 
