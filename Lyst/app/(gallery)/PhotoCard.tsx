@@ -20,24 +20,6 @@ export default function PhotoCard({ photo, onDelete }: PhotoCardProps) {
         onLoadEnd={() => setLoading(true)}
         testID="photo"
       />
-      {loading && (
-        <View className="absolute top-2 right-2 flex-row space-x-2">
-          <TouchableOpacity
-            className="bg-white rounded-full p-1"
-            style={{ elevation: 2 }}
-          >
-            <Feather name="heart" size={16} color="hotpink" fill="white" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="bg-white rounded-full p-1"
-            style={{ elevation: 2 }}
-            testID="delete-button"
-            onPress={() => onDelete(photo.id)}
-          >
-            <Feather name="trash-2" size={16} color="red" />
-          </TouchableOpacity>
-        </View>
-      )}
     </View>
   );
 }
