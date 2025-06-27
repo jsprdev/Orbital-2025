@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Priority } from "@/types"; 
@@ -80,7 +81,10 @@ export default function SearchBarWithTags({ tags, onFilterChange }: Props) {
           </TouchableOpacity>
         )}
         <TouchableOpacity onPress={() => setShowFilters((v) => !v)}>
-          <Feather name="filter" size={20} color="#6b7280" />
+          <Image
+              source={require('../../assets/icons/filter.png')}  
+              className="w-6 h-6"            
+          />
         </TouchableOpacity>
       </View>
 

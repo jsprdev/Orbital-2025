@@ -28,7 +28,7 @@ export default function YourLyst() {
   const [loading, setLoading] = useState(true);
   const [availableTags, setAvailableTags] = useState(DEFAULT_TAGS);
 
-  // Fetch notes on mount and when refresh changes
+  
   useEffect(() => {
     const fetchNotes = async () => {
       setLoading(true);
@@ -44,7 +44,7 @@ export default function YourLyst() {
     fetchNotes();
   }, [token, refresh]);
 
-  // Recompute availableTags whenever notes change
+  // pill availableTags whenever notes change
   useEffect(() => {
     const tagsInNotes = new Set(DEFAULT_TAGS);
     notes.forEach(note => {
@@ -91,33 +91,6 @@ export default function YourLyst() {
       <View className="px-4">
         <SearchBar tags={availableTags} onFilterChange={handleFilterChange} />
       </View>
-
-      {/* Tag selector row */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerClassName="px-4 flex-row gap-x-2"
-      >
-        {availableTags.map(tag => {
-          const selected = filters.selectedTags.includes(tag);
-          return (
-            <TouchableOpacity
-              key={tag}
-              onPress={() => {
-                setFilters(prev => ({
-                  ...prev,
-                  selectedTags: prev.selectedTags.includes(tag)
-                    ? prev.selectedTags.filter(t => t !== tag)
-                    : [...prev.selectedTags, tag]
-                }));
-              }}
-              className={`rounded-full px-4 py-2 mr-2 border ${selected ? 'bg-pink-500 border-pink-500' : 'bg-gray-100 border-gray-300'}`}
-            >
-              <Text className={`font-bold ${selected ? 'text-white' : 'text-gray-700'}`}>{tag}</Text>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
 
       
       <View className="flex-1 px-4 py-2">
