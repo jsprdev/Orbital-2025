@@ -12,10 +12,6 @@ export default function RouteSelection() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNotes, setSelectedNotes] = useState<Note[]>([]);
   
-  
-  
-
-  
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -100,7 +96,7 @@ export default function RouteSelection() {
   
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView className="flex-1">
+      <View className="flex-1">
 
             <View className="px-4 mb-4">
               <View className="flex-row justify-between items-center mb-4">
@@ -111,7 +107,7 @@ export default function RouteSelection() {
               </View>
 
               
-              <View className="mb-4">
+              <ScrollView className="h-3/4">
                 {notes.map((note) => {
                   const isSelected = selectedNotes.some(n => n.id === note.id);
                   return (
@@ -140,15 +136,15 @@ export default function RouteSelection() {
                     </TouchableOpacity>
                   );
                 })}
-              </View>
+              </ScrollView>
 
               
               <TouchableOpacity
                 onPress={handleGenerateRoute}
-                className="bg-pink-500"
+                className="bg-pink-500 rounded-lg justify-center items-center"
                 >
               
-                  <Text className="font-bold text-lg">
+                  <Text className="font-bold text-lg text-white">
                     Generate Date Route
                   </Text>
                 
@@ -157,7 +153,7 @@ export default function RouteSelection() {
 
             </View>
 
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 } 

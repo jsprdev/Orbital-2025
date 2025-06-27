@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getWeatherForecast } from '@/utils/api';
@@ -67,6 +67,16 @@ export default function RouteReview() {
                         </View>
                     );
                 })}</View>
+
+                <TouchableOpacity className="bg-blue-500 p-4 rounded-lg mt-3 shadow-md"
+                    onPress={() => {
+                        // goes back to YourPlans
+                        router.push('/(tabs)/YourPlans');
+                    }}>
+                        <Text className="text-white text-center font-bold">
+                            Back to Your Plans
+                        </Text>
+                </TouchableOpacity>
 
 
             

@@ -24,6 +24,14 @@ export default function YourPlans() {
             
           </View>
 
+          {/* saving is not a core feature detailed in ms2 */}
+          <Text className="text-gray-500 text-lg font-bold text-center">
+            Saving Plans coming soon!
+          </Text>
+          <Text className="text-gray-500 text-sm text-center">
+            For now, generate a plan, and take a <Text className="font-semibold">screenshot</Text> to save it!
+          </Text>
+
           </ScrollView>
 
           
