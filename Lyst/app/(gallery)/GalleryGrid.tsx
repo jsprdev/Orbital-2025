@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import { router } from "expo-router";
 import PhotoCard from "./PhotoCard";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useGallery } from "@/providers/GalleryProvider";
@@ -32,6 +33,13 @@ const GalleryGrid: React.FC = () => {
         },
       },
     ]);
+  };
+
+  const handleViewAll = (albumId: string, albumName: string) => {
+    router.push({
+      pathname: "/(gallery)/AlbumView",
+      params: { albumId, albumName },
+    });
   };
 
   // Group photos by albumId (stored in photo.albumId)
@@ -60,7 +68,9 @@ const GalleryGrid: React.FC = () => {
   if (nonEmptyAlbums.length === 0) {
     return (
       <View className="flex-1 items-center justify-center py-8">
-        <Text className="text-gray-500 text-lg" testID="no-photos-found">No photos found</Text>
+        <Text className="text-gray-500 text-lg" testID="no-photos-found">
+          No photos found
+        </Text>
       </View>
     );
   }
@@ -76,7 +86,9 @@ const GalleryGrid: React.FC = () => {
               <Text className="text-lg font-semibold">
                 {albumName} ({albumPhotos.length})
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleViewAll(albumId, albumName)}
+              >
                 <View className="flex-row items-center space-x-1">
                   <Text className="text-base text-black-500 font-medium">
                     See All

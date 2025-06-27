@@ -120,6 +120,7 @@ export default function AddImageScreen() {
           <TouchableOpacity
             onPress={takePhoto}
             className="absolute right-4 mt-7 pr-8"
+            testID="camera-button"
           >
             <Feather name="camera" size={28} color="black" />
           </TouchableOpacity>
@@ -128,13 +129,14 @@ export default function AddImageScreen() {
         {/* Image Selection */}
         <View className="p-4">
           {selectedImage.length != 0 ? (
-            <View className="items-center">
+            <View className="items-center" testID="image-carousel">
               <ImageCarousel
                 images={selectedImage}
                 onDelete={(index) =>
                   setSelectedImage((prev) => prev.filter((_, i) => i !== index))
                 }
                 flag={albumName}
+                
               />
             </View>
           ) : (
@@ -142,6 +144,7 @@ export default function AddImageScreen() {
               <TouchableOpacity
                 onPress={pickImage}
                 className="w-80 h-80 border-2 border-dashed border-gray-300 rounded-lg items-center justify-center mb-4"
+                testID="sample-image-button"
               >
                 <Feather name="image" size={64} color="gray" />
                 <Text className="text-gray-500 mt-2 text-center">
@@ -164,6 +167,7 @@ export default function AddImageScreen() {
                 <TouchableOpacity
                   onPress={pickImage}
                   className="px-4 py-3 bg-blue-500 rounded-xl mr-2"
+                  testID="add-more-image-button"
                 >
                   <Text className="text-white font-semibold">
                     Add More Photos
@@ -180,7 +184,7 @@ export default function AddImageScreen() {
                 }`}
               >
                 {uploading || loading ? (
-                  <ActivityIndicator size="small" color="#fff" />
+                  <ActivityIndicator size="small" color="#fff" testID="loading-indicator"/>
                 ) : (
                   <Text
                     className={`font-semibold text-base ${
