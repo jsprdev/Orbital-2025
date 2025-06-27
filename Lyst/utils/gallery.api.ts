@@ -22,10 +22,10 @@ export const getPhotos = async (token: string) => {
 
 
 // POST - Upload a new photo
-export const uploadPhoto = async (token: string, albumName: string, imageUri: string[] ) => {
+export const uploadPhoto = async (token: string, albumId: string, imageUri: string[] ) => {
   try {
     const formData = new FormData();
-    formData.append("albumName", albumName);
+    formData.append("albumName", albumId);
     imageUri.forEach((uri, index) => {
       formData.append("photos", {
         uri,

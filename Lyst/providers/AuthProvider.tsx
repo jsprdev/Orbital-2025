@@ -88,7 +88,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Try creating user
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-
     } catch (error) {
       console.error("Create user error:", error);
       throw error;

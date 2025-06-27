@@ -6,32 +6,40 @@ import {
   TextInput,
   Keyboard,
   ScrollView,
-  TouchableWithoutFeedback,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useGallery } from "@/providers/GalleryProvider";
 
 interface AlbumDropdownProps {
-  albumsArray: string[];
   albumName: string;
-  setAlbumName: (album: string) => void;
+  setAlbumName: (name: string) => void;
 }
 
 export default function AlbumDropdown({
-  albumsArray,
   albumName,
   setAlbumName,
 }: AlbumDropdownProps) {
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const { albums, photos } = useGallery();
 
-  const handleSelect = (item: string) => {
-    setAlbumName(item);
+  const handleSelect = (selectedAlbumName: string) => {
+    setAlbumName(selectedAlbumName);
     setDropdownVisible(false);
     Keyboard.dismiss();
   };
 
-  const filteredAlbums = albumsArray
-    .filter((album) => album && album.trim() !== "")
-    .filter((album) => album.toLowerCase().includes(albumName.toLowerCase()));
+  // Filter out albums with no photos, but allow albums with empty names
+  const nonEmptyAlbums = albums.filter((album) => {
+    if (!album) return false;
+
+    // Check if album has any photos
+    const albumPhotos = photos.filter((photo) => photo.albumId === album.id);
+    return albumPhotos.length > 0;
+  });
+
+  const filteredAlbums = nonEmptyAlbums.filter((album) =>
+    album.name.toLowerCase().includes(albumName.toLowerCase())
+  );
 
   return (
     <View className="relative">
@@ -41,6 +49,7 @@ export default function AlbumDropdown({
         <TouchableOpacity
           onPress={() => setDropdownVisible((prev) => !prev)}
           className="ml-1 mr-2"
+          testID="album-icon"
         >
           <Ionicons name="albums" size={24} color="black" />
         </TouchableOpacity>
@@ -62,13 +71,13 @@ export default function AlbumDropdown({
             style={{ maxHeight: 200 }}
             keyboardShouldPersistTaps="handled"
           >
-            {filteredAlbums.map((item) => (
+            {filteredAlbums.map((album) => (
               <TouchableOpacity
-                key={item}
-                onPress={() => handleSelect(item)}
+                key={album.id}
+                onPress={() => handleSelect(album.name)}
                 className="p-3 border-b border-gray-100"
               >
-                <Text className="text-base">{item}</Text>
+                <Text className="text-base">{album.name}</Text>
               </TouchableOpacity>
             ))}
           </ScrollView>

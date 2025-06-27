@@ -14,30 +14,16 @@ export class AlbumsService {
     return albums; 
   }
 
-  async addToAndUpdateAlbum(albumName: string, userId: string, coverPhotoUrl?: string) {
+  async addToAndUpdateAlbum(albumName: string, userId: string) {
     const albumRef = db.collection("albums");
-    const snapshot = await albumRef
-      .where('userId', '==', userId)
-      .where('name', '==', albumName)
-      .get();
+    const newAlbum = {
+      userId: userId,
+      name: albumName,
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    };
     
-    if (!snapshot.empty) {
-      const existing = snapshot.docs[0];
-      await db.collection("albums").doc(existing.id).update({
-        ...(coverPhotoUrl && { coverPhotoUrl }),
-      });
-      return { id: existing.id, ...existing.data() } as Album;
-    } else {
-      const newAlbum = {
-        userId: userId,
-        name: albumName,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
-        ...(coverPhotoUrl && { coverPhotoUrl })
-      };
-
-      const docRef = await albumRef.add(newAlbum)
-      return { id: docRef.id, ...newAlbum };
-    }
+    const docRef = await albumRef.add(newAlbum)
+    return { id: docRef.id, ...newAlbum };
   }
 
   async deleteAlbum(albumId: string) {

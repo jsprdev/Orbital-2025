@@ -61,14 +61,14 @@ router.post("/", upload.array('photos'), async (req: MulterRequest, res: Respons
     try {
         console.log('POST /api/images - User ID:', req.user!.user_id,);
         const files = req.files as Express.Multer.File[];
-        const albumName = req.body.albumName;
+        const albumId = req.body.albumName;
         
         const uploadedPhotos = await Promise.all(
             files.map(
                 file => galleryServiceInstance.uploadPhoto(
                     req.user!.user_id, 
                     file,
-                    albumName
+                    albumId
                 )
             )
         );

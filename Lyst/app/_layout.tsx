@@ -1,8 +1,9 @@
 import { Stack, useRouter } from "expo-router";
 import "./global.css";
-import { AuthProvider } from "@/providers/AuthProvider";
 import { GestureHandlerRootView } from "react-native-gesture-handler"; 
 
+import { AuthProvider } from "@/providers/AuthProvider";
+import { GalleryProvider } from "@/providers/GalleryProvider";
 
 export default function RootLayout() {
   const router = useRouter();
@@ -10,12 +11,14 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(gallery)" options={{ headerShown: false }} />
-        </Stack>
+        <GalleryProvider>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(gallery)" options={{ headerShown: false }} />
+          </Stack>
+        </GalleryProvider>
       </AuthProvider>
     </GestureHandlerRootView>
   );

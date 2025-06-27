@@ -5,6 +5,7 @@ export interface Photo {
   createdAt: any;
   storagePath: string;
   albumName?: string;
+  albumId?: string;
 };
 
 export interface UploadPhoto {

@@ -5,46 +5,54 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import PhotoCard from "./PhotoCard";
-import { Photo } from "../../types/gallery.dto";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useGallery } from "@/providers/GalleryProvider";
 
-interface GalleryGridProps {
-  photos: Photo[];
-  albumsId: string[];
-  albums: string[];
-  onDelete: (photoId: string) => void;
-}
+const GalleryGrid: React.FC = () => {
+  const { photos, albums, deletePhoto } = useGallery();
 
-const GalleryGrid: React.FC<GalleryGridProps> = ({
-  photos = [],
-  albumsId = [],
-  albums = [],
-  onDelete,
-}) => {
-  // Group photos by albumId (stored in photo.albumName)
-  const photosByAlbum: Record<string, Photo[]> = {};
+  // Handle Delete
+  const handleDeletePhoto = async (photoId: string) => {
+    Alert.alert("Delete Photo", "Are you sure you want to delete this photo?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await deletePhoto(photoId);
+            Alert.alert("Success", "Photo deleted successfully");
+          } catch (error) {
+            console.error("Error deleting photo:", error);
+            Alert.alert("Error", "Failed to delete photo");
+          }
+        },
+      },
+    ]);
+  };
 
-  // Initialize albums by ID
-  albumsId.forEach((albumId) => {
-    photosByAlbum[albumId] = [];
+  // Group photos by albumId (stored in photo.albumId)
+  const photosByAlbum: Record<string, any[]> = {};
+  albums.forEach((album) => {
+    if (album.id) {
+      photosByAlbum[album.id] = [];
+    }
   });
-
-  // Always include Uncategorized
   photosByAlbum["Uncategorized"] = [];
 
-  // Categorize photos
   photos.forEach((photo) => {
-    const albumId = photo.albumName?.trim() || "";
-    if (albumId && albumsId.includes(albumId)) {
-      photosByAlbum[albumId].push(photo);
+    const photoAlbumId = photo.albumId || "";
+
+    if (photoAlbumId && photosByAlbum[photoAlbumId] !== undefined) {
+      photosByAlbum[photoAlbumId].push(photo);
     } else {
       photosByAlbum["Uncategorized"].push(photo);
     }
   });
 
-  // Only show albums with photos
   const nonEmptyAlbums = Object.entries(photosByAlbum).filter(
     ([_, albumPhotos]) => albumPhotos.length > 0
   );
@@ -52,18 +60,16 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
   if (nonEmptyAlbums.length === 0) {
     return (
       <View className="flex-1 items-center justify-center py-8">
-        <Text className="text-gray-500 text-lg">No photos found</Text>
+        <Text className="text-gray-500 text-lg" testID="no-photos-found">No photos found</Text>
       </View>
     );
   }
-
   return (
-    <ScrollView className="flex-1 w-full">
+    <View className="w-full">
       {nonEmptyAlbums.map(([albumId, albumPhotos]) => {
-        // Find the album name by index
-        const albumIndex = albumsId.indexOf(albumId);
-        const albumName =
-          albumIndex !== -1 ? albums[albumIndex] : "Uncategorized";
+        const album = albums.find((a) => a.id === albumId);
+        const albumName = album ? album.name : "Uncategorized";
+
         return (
           <View key={albumId} className="mb-6 w-full">
             <View className="flex-row items-center justify-between mb-3 px-1">
@@ -89,7 +95,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <View className="mr-3 w-[150px] h-[150px]">
-                  <PhotoCard photo={item} onDelete={onDelete} />
+                  <PhotoCard photo={item} onDelete={handleDeletePhoto} />
                 </View>
               )}
               contentContainerStyle={{ paddingHorizontal: 4 }}
@@ -98,7 +104,7 @@ const GalleryGrid: React.FC<GalleryGridProps> = ({
           </View>
         );
       })}
-    </ScrollView>
+    </View>
   );
 };
 

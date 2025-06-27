@@ -18,7 +18,7 @@ export default function PhotoCard({ photo, onDelete }: PhotoCardProps) {
         className="w-full h-full rounded-lg"
         resizeMode="cover"
         onLoadEnd={() => setLoading(true)}
-        testID="photo-image"
+        testID="photo"
       />
       {loading && (
         <View className="absolute top-2 right-2 flex-row space-x-2">

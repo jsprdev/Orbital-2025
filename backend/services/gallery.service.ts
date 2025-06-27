@@ -15,7 +15,7 @@ export class GalleryService {
     })) as Photo[];
   }
 
-  async uploadPhoto(userId: string, file: Express.Multer.File, albumName: string): Promise<Photo> {
+  async uploadPhoto(userId: string, file: Express.Multer.File, albumId: string): Promise<Photo> {
     const photosCollection = db.collection('images');
 
     const storagePath = `images/${Date.now()}_${file.originalname}`;
@@ -41,7 +41,7 @@ export class GalleryService {
         url,
         userId,
         storagePath,
-        albumName,
+        albumId,
         createdAt: admin.firestore.FieldValue.serverTimestamp()
       };
 
@@ -52,7 +52,7 @@ export class GalleryService {
         url: photoData.url,
         userId: photoData.userId,
         storagePath: photoData.storagePath,
-        albumName: albumName,
+        albumName: albumId,
         createdAt: admin.firestore.FieldValue.serverTimestamp()
       } as Photo;
     } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -10,38 +10,21 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
-import { uploadPhoto } from "../../utils/gallery.api";
-import { useAuth } from "../../providers/AuthProvider";
 import ImageCarousel from "./ImageCarousel";
-import { getAlbums, addAlbum } from "../../utils/albums.api";
 import AlbumDropdown from "./AlbumDropdown";
+import { useGallery } from "@/providers/GalleryProvider";
 
 export default function AddImageScreen() {
   const [selectedImage, setSelectedImage] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
-  const { token } = useAuth();
-
   const [albumName, setAlbumName] = useState<string>("");
-  const [allAlbums, setAllAlbums] = useState<string[]>([]);
+  const { albums, uploadPhoto, addAlbum, loading, fetchAlbums } = useGallery();
 
-  useEffect(() => {
-    const fetchAlbums = async () => {
-      if (!token) return;
-      try {
-        const data = await getAlbums(token);
-        const albumNames = data.map((album: any) => album.name);
-        setAllAlbums(albumNames);
-      } catch (error) {
-        console.error("Error fetching albums:", error);
-        setAllAlbums([]);
-      }
-    };
-    fetchAlbums();
-  }, [token]);
+  // Get album names for dropdown
+  const allAlbumsName = albums.map((album) => album.name);
 
   const pickImage = async () => {
     try {
-      // Request permissions
       const { status } =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== "granted") {
@@ -51,14 +34,11 @@ export default function AddImageScreen() {
         );
         return;
       }
-
-      // Launch image picker
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images"],
         allowsMultipleSelection: true,
         quality: 0.8,
       });
-
       if (!result.canceled && result.assets) {
         const uris = result.assets.map((asset) => asset.uri);
         setSelectedImage((prev) => [...prev, ...uris]);
@@ -71,7 +51,6 @@ export default function AddImageScreen() {
 
   const takePhoto = async () => {
     try {
-      // Request permissions
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
       if (status !== "granted") {
         Alert.alert(
@@ -80,14 +59,11 @@ export default function AddImageScreen() {
         );
         return;
       }
-
-      // Launch camera
       const result = await ImagePicker.launchCameraAsync({
         allowsEditing: true,
         aspect: [1, 1],
         quality: 0.8,
       });
-
       if (!result.canceled && result.assets[0]) {
         setSelectedImage((prev) => [...prev, result.assets[0].uri]);
       }
@@ -98,17 +74,23 @@ export default function AddImageScreen() {
   };
 
   const uploadImage = async () => {
-    if (!selectedImage || !token) {
+    if (!selectedImage) {
       Alert.alert("Error", "Please select an image first.");
       return;
     }
-
     setUploading(true);
     try {
-      const album = await addAlbum(token, albumName);
-      selectedImage.map(async (uri) => await uploadPhoto(token, album.id, [uri]));
-      
+      // Ensure album exists or create it
+      let album = albums.find((a) => a.name === albumName);
+      if (!album) {
+        album = await addAlbum(albumName);
+      }
+      if (!album || !album.id) {
+        throw new Error("Album could not be found or created.");
+      }
 
+      await uploadPhoto(album.id!, selectedImage);
+      await fetchAlbums(); // Refresh albums to ensure everything is in sync
       Alert.alert("Success", "Image uploaded successfully!", [
         { text: "OK", onPress: () => router.back() },
       ]);
@@ -117,6 +99,7 @@ export default function AddImageScreen() {
     } catch (error) {
       console.error("Error uploading image: ", error);
       Alert.alert("Error", "Failed to upload image. Please try again.");
+      setUploading(false);
     }
   };
 
@@ -171,7 +154,6 @@ export default function AddImageScreen() {
           <View className="px-6 space-y-4 mt-4">
             <View>
               <AlbumDropdown
-                albumsArray={allAlbums}
                 albumName={albumName}
                 setAlbumName={setAlbumName}
               />
@@ -190,19 +172,19 @@ export default function AddImageScreen() {
               )}
               <TouchableOpacity
                 onPress={uploadImage}
-                disabled={selectedImage.length == 0 || uploading}
+                disabled={selectedImage.length == 0 || uploading || loading}
                 className={`px-4 py-3 rounded-xl shadow-md ${
-                  selectedImage.length != 0 && !uploading
+                  selectedImage.length != 0 && !uploading && !loading
                     ? "bg-red-500"
                     : "bg-gray-300"
                 }`}
               >
-                {uploading ? (
+                {uploading || loading ? (
                   <ActivityIndicator size="small" color="#fff" />
                 ) : (
                   <Text
                     className={`font-semibold text-base ${
-                      selectedImage.length != 0 && !uploading
+                      selectedImage.length != 0 && !uploading && !loading
                         ? "text-white"
                         : "text-gray-500"
                     }`}

@@ -21,10 +21,10 @@ export const getAlbums = async (token: string) => {
 };
 
 // POST a new album
-export const addAlbum = async (token: string, albumName: string, coverPhotoUrl?: string) => {
+export const addAlbum = async (token: string, albumName: string) => {
 
   try {
-    const response = await axiosInstance.post('/api/albums', { albumName, coverPhotoUrl }, {
+    const response = await axiosInstance.post('/api/albums', { albumName }, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
