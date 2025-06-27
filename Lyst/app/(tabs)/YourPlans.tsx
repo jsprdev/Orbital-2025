@@ -8,10 +8,6 @@ import GeneratePlan from '../(plans)/GeneratePlan'
 
 export default function YourPlans() {
 
-  const handlePress = () => {
-    router.push('/(plans)/route-selection');
-  }
-
   return (
     <SafeAreaView className="flex-1 bg-white">
         <ScrollView>

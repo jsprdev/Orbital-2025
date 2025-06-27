@@ -6,7 +6,7 @@ import GeneratePlanButton from './GeneratePlanButton';
 export default function GeneratePlan() {
 
     const handlePress = () => {
-        router.push('/(plans)/route-selection');
+        router.push('/(plans)/RouteSelection');
     }
 
     return (

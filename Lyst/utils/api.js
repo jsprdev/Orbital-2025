@@ -64,6 +64,7 @@ export const deleteNote = async (noteId, token) => {
 
 // generate date route
 export const generateDateRoute = async (cards, token) => {
+  console.log("Token being sent:", token);
   try {
     const response = await axiosInstance.post('/api/date-route/generate', 
       { cards },

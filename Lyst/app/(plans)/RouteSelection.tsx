@@ -4,17 +4,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useAuth } from '@/providers/AuthProvider'
 import { getNotes, generateDateRoute } from '@/utils/api'
 import { Note } from '@/types'
-import { router } from 'expo-router'
+import { router, usePathname } from 'expo-router'
 
 
 export default function RouteSelection() {
   const { token } = useAuth();
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNotes, setSelectedNotes] = useState<Note[]>([]);
-  const [dateRoute, setDateRoute] = useState(null);
   
-  
-
   
   useEffect(() => {
     const fetchNotes = async () => {
@@ -77,7 +74,12 @@ export default function RouteSelection() {
       console.log("Sending cards to API:", cards);
       const result = await generateDateRoute(cards, token);
       console.log("Received date route result:", result);
-      setDateRoute(result);
+
+      router.push({
+        pathname: '/(plans)/RouteReview',
+        params: { routeData: JSON.stringify(result) }
+      });
+
     } catch (error: any) {
       console.error("Error generating date route:", error);
       if (error.response?.status === 401) {
@@ -144,8 +146,7 @@ export default function RouteSelection() {
                   </Text>
                 
               </TouchableOpacity>
-              {/* temp debug */}
-              { dateRoute && <Text> {JSON.stringify(dateRoute, null, 2)} </Text>}
+              
 
             </View>
 
