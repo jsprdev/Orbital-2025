@@ -40,6 +40,7 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [place_id, setPlaceId] = useState(""); // different naming here cos google api lmao
+  const [about, setAbout] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showCustomTag, setShowCustomTag] = useState(false);
   const [customTag, setCustomTag] = useState("");
@@ -148,6 +149,7 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
         description: description,
         tags: selectedTags,
         place: location,
+        about,
         place_id: place_id,
         priority: priority,
         createdAt: new Date().toISOString(),
@@ -219,6 +221,7 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
                       setPlaceId(item.place_id);
                       setPlaceInput(item.description);
                       setPlaceSuggestions([]);
+                      
                     }}
                     style={{ padding: 10 }}
                   >

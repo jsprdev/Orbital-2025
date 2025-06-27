@@ -59,7 +59,6 @@ export default function LocationDetails() {
         <Stack.Screen
             options={{
                 headerShown: false, // hide header for now for our design
-                
             }}
         />
         

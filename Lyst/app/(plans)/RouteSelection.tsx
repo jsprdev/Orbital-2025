@@ -13,6 +13,9 @@ export default function RouteSelection() {
   const [selectedNotes, setSelectedNotes] = useState<Note[]>([]);
   
   
+  
+
+  
   useEffect(() => {
     const fetchNotes = async () => {
       try {
@@ -38,8 +41,10 @@ export default function RouteSelection() {
   
   const toggleNoteSelection = (note: Note) => {
     setSelectedNotes(prev => {
+      // checks if the current state alr contains the note
       const isSelected = prev.some(n => n.id === note.id);
       if (isSelected) {
+        // if is alr inside then filter it out by setting state to be every note that is not the same as the current note
         return prev.filter(n => n.id !== note.id);
       } else {
         return [...prev, note];
@@ -65,7 +70,9 @@ export default function RouteSelection() {
       // mapping the selected activities to the cards variable, to pass into the prompt
       const cards = selectedNotes.map(note => ({
         name: note.description,
+        description: note.description,
         address: note.place || "No address",
+        place_id: note.place_id,
         tags: note.tags || [],
         priority: note.priority,
         id: note.id

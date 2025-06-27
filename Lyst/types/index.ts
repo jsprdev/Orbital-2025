@@ -16,6 +16,7 @@ export interface Note {
   id: string;
   userId: string;
   createdAt: string;
+  about: string;
   description: string;
   place?: string;
   place_id?: string;
