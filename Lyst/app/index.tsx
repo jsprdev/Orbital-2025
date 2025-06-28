@@ -81,7 +81,7 @@ export default function Index() {
               height: "100%",
             }}
           />
-          {/* Curved overlay to create irregular border */}
+          
           <View 
             className="absolute bottom-0 left-0 right-0 bg-white"
             style={{

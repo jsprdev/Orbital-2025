@@ -54,7 +54,7 @@ export const deleteNote = async (noteId: string, token: string) => {
 //FOR DATE GENERATION
 
 // generate date route
-export const generateDateRoute = async (cards, token: string) => {
+export const generateDateRoute = async (cards: any, token: string) => {
   console.log("Token being sent:", token);
   console.log("1");
   try {

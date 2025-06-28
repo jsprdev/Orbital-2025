@@ -5,6 +5,11 @@ const albumServiceInstance = new AlbumsService();
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
+    if (!req.user) {
+        res.status(401).json({ error: 'User not authenticated' });
+        return;
+    }
+
     try {
         const albums = await albumServiceInstance.getAlbums(req.user.user_id);
         res.status(200).json({ albums });
@@ -15,6 +20,11 @@ router.get("/", async (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
+    if (!req.user) {
+        res.status(401).json({ error: 'User not authenticated' });
+        return; 
+    }
+
     try {
         const { albumName } = req.body;
         const userId = req.user.user_id;
@@ -28,6 +38,10 @@ router.post("/", async (req: Request, res: Response) => {
 
 router.delete("/:id", async (req: Request, res: Response) => {
     const albumId = req.params.id;
+    if (!albumId) {
+        res.status(401).json({ error: 'User not authenticated' });
+        return; 
+    }
     try {
         const deletedAlbum = await albumServiceInstance.deleteAlbum(albumId);
         if (deletedAlbum) {

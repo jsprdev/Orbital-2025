@@ -40,8 +40,12 @@ router.get("/", async (req: Request, res: Response) => {
 
 // Get a specific photo by ID
 router.get("/:id", async (req: Request, res: Response) => {
+    const photoId = req.params.id;
+    if (!photoId) {
+        res.status(401).json({ error: 'No PhotoId Found' });
+        return; 
+    }
     try {
-        const photoId = req.params.id;
         const photo = await galleryServiceInstance.getPhotoById(photoId);
         
         if (!photo) {
@@ -57,7 +61,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 // Upload a new photo
-router.post("/", upload.array('photos'), async (req: MulterRequest, res: Response) => {
+router.post("/", upload.array('photos'), async (req: any, res: Response) => {
     try {
         console.log('POST /api/images - User ID:', req.user!.user_id,);
         const files = req.files as Express.Multer.File[];
@@ -82,7 +86,10 @@ router.post("/", upload.array('photos'), async (req: MulterRequest, res: Respons
 // Delete a photo
 router.delete("/:id", async (req: Request, res: Response) => {
     const photoId = req.params.id;
-    console.log('DELETE /api/images/:id - Photo ID:', photoId);
+    if (!photoId) {
+        res.status(401).json({ error: 'User not authenticated' });
+        return; 
+    }
     
     try {
         const deleted = await galleryServiceInstance.deletePhoto(photoId);

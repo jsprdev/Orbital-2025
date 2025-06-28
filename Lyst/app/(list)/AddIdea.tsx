@@ -27,7 +27,7 @@ const priorityColor: Record<string, string> = {
 };
 
 
-export default function AddIdea({ onSave }: { onSave?: () => void }) {
+export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSave?: () => void; availableTags?: string[]; onAddTag?: (tag: string) => void }) {
   const slideAnim = useRef(new Animated.Value(height)).current;
 
   const [visible, setVisible] = useState(false);
@@ -92,7 +92,7 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
       .join(" ");
   }
   
-  // Add a new custom tag if unique and non-empty
+  // add custom tag
   const addTag = (tag: string) => {
     tag = formatNewTag(tag);
     if (!tag) return;
@@ -149,10 +149,12 @@ export default function AddIdea({ onSave }: { onSave?: () => void }) {
         description: description,
         tags: selectedTags,
         place: location,
+        about,
+        place_id: place_id,
         priority: priority,
         createdAt: new Date().toISOString(),
         userId: ''
-      } as Note, token);
+      } as Note, token!);
 
       // refresh page
       if (onSave) {

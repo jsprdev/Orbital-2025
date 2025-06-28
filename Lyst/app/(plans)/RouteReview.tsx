@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { router, useLocalSearchParams } from 'expo-router';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getWeatherForecast } from '@/utils/api';
+import { getWeatherForecast } from '@/utils/lyst.api';
 import DraggableFlatList, { NestableDraggableFlatList, RenderItemParams } from 'react-native-draggable-flatlist';
 
 export default function RouteReview() {

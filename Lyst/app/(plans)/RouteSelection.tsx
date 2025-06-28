@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator, Alert, ScrollView } fr
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useAuth } from '@/providers/AuthProvider'
-import { getNotes, generateDateRoute } from '@/utils/api'
+import { getNotes, generateDateRoute } from '@/utils/lyst.api'
 import { Note } from '@/types'
 import { router, usePathname } from 'expo-router'
 

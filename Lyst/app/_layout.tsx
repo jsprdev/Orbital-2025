@@ -17,6 +17,7 @@ export default function RootLayout() {
             <Stack.Screen name="(auth)" options={{ headerShown: false }} />
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="(gallery)" options={{ headerShown: false }} />
+            <Stack.Screen name="(plans)" options={{ headerShown: false }} />
           </Stack>
         </GalleryProvider>
       </AuthProvider>

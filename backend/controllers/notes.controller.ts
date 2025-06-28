@@ -4,7 +4,7 @@ import { NotesService } from '../services/notes.service';
 const notesServiceInstance = new NotesService();
 const router = Router();
 
-router.get("/", verifyToken, async (req: Request, res: Response): Promise<void> => {
+router.get("/", async (req: Request, res: Response): Promise<void> => {
     try {
         if (!req.user) {
             res.status(401).json({ error: 'User not authenticated' });
@@ -18,7 +18,7 @@ router.get("/", verifyToken, async (req: Request, res: Response): Promise<void> 
     }
 });
 
-router.post("/", verifyToken, async (req: Request, res: Response): Promise<void> => {
+router.post("/", async (req: Request, res: Response): Promise<void> => {
     try {
         if (!req.user) {
             res.status(401).json({ error: 'User not authenticated' });
