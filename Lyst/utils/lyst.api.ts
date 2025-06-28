@@ -1,16 +1,9 @@
-import axios from 'axios';
+import  axiosInstance  from './index';
 import { FIREBASE_AUTH as auth } from '@/FirebaseConfig';
-
-// AXIOS Config
-const axiosInstance = axios.create({
-  baseURL: `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}`,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+import { Note } from "@/types";
 
 // fetch notes
-export const getNotes = async (token) => {
+export const getNotes = async (token: string) => {
 
   try {
     const response = await axiosInstance.get('/api/notes', {
@@ -26,11 +19,10 @@ export const getNotes = async (token) => {
   }
 };
 
-
-//create notes
-export const createNote = async (noteData, token) => {
+// POST requests
+export const createNote = async (noteData: Note, token: string) => {
   try {
-    noteData.userId = auth.currentUser.uid;
+    noteData.userId = auth.currentUser!.uid;
     const response = await axiosInstance.post('/api/notes', noteData, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -43,9 +35,8 @@ export const createNote = async (noteData, token) => {
   }
 };
 
-
-// deletere notes
-export const deleteNote = async (noteId, token) => {
+// DELETE requests
+export const deleteNote = async (noteId: string, token: string) => {
   try {
     const response = await axiosInstance.delete(`/api/notes/${noteId}`, {
       headers: {
@@ -63,7 +54,7 @@ export const deleteNote = async (noteId, token) => {
 //FOR DATE GENERATION
 
 // generate date route
-export const generateDateRoute = async (cards, token) => {
+export const generateDateRoute = async (cards, token: string) => {
   console.log("Token being sent:", token);
   console.log("1");
   try {

@@ -10,9 +10,9 @@ import { router } from "expo-router";
 
 
 const priorityColor: Record<Priority, string> = {
-  low: 'text-green-500',
-  medium: 'text-yellow-500',
-  high: 'text-red-500',
+  low: "text-green-500",
+  medium: "text-yellow-500",
+  high: "text-red-500",
 };
 
 type DisplayProps = {

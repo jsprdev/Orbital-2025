@@ -1,5 +1,4 @@
 import { Request, Response, Router } from 'express';
-import { verifyToken } from '../middleware/verifyToken';
 import { NotesService } from '../services/notes.service';
 
 const notesServiceInstance = new NotesService();
@@ -35,7 +34,7 @@ router.post("/", verifyToken, async (req: Request, res: Response): Promise<void>
     }
 });
 
-router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
+router.delete("/:id", async (req: Request, res: Response) => {
     const noteId = req.params.id;
     if (!noteId) {
         res.status(400).json({ error: 'Note ID is required' });

@@ -17,6 +17,7 @@
     "app/_layout.tsx",
     "nativewind-env.d.ts",
     "types/**/*.d.ts",
-    "Orbital-2025/Lyst/assets"
+    "Orbital-2025/Lyst/assets",
+    "utils/*.ts"
 , "types/note.dto.ts"  ]
 }
