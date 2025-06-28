@@ -1,23 +1,11 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-  Dimensions,
-} from "react-native";
+import { View, Text, TouchableOpacity, Alert, Dimensions } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
-import PhotoCard from "./PhotoCard";
 import { useGallery } from "@/providers/GalleryProvider";
 import MasonryList from "@react-native-seoul/masonry-list";
 import MasonryPhotoCard from "./MasonryPhotoCard";
 import { Photo } from "@/types/gallery.dto";
-
-const { width } = Dimensions.get("window");
-const numColumns = 2;
-const photoSize = (width - 48) / numColumns; // 48 = padding + gap
 
 export default function AlbumView() {
   const { albumId, albumName } = useLocalSearchParams<{
@@ -25,7 +13,7 @@ export default function AlbumView() {
     albumName: string;
   }>();
 
-  const { photos, albums, deletePhoto } = useGallery();
+  const { photos, deletePhoto } = useGallery();
   const [showDeleteIcons, setShowDeleteIcons] = useState<boolean>(false);
 
   const handleDeletePhoto = async (photoId: string) => {
@@ -54,7 +42,7 @@ export default function AlbumView() {
     }
     return photo.albumId === albumId;
   });
-  
+
   const displayName = albumName || "Uncategorized";
 
   if (albumPhotos.length === 0) {
@@ -82,15 +70,19 @@ export default function AlbumView() {
   return (
     <View className="flex-1 bg-white">
       {/* Header */}
-      <View className="relative flex-row justify-center items-center p-4 pt-12 mt-8">
+      <View
+        className="relative flex-row justify-center items-center p-4 pt-12 mt-8"
+        testID="album-header"
+      >
         <TouchableOpacity
           onPress={() => router.back()}
           className="absolute left-4 mt-7 pl-4"
         >
           <Feather name="arrow-left" size={28} color="hotpink" />
         </TouchableOpacity>
-        <Text className="text-xl font-bold">{displayName} - </Text>
-        <Text className="text-xl font-bold">({albumPhotos.length})</Text>
+        <Text className="text-xl font-bold">
+          {displayName} - ({albumPhotos.length})
+        </Text>
 
         <TouchableOpacity
           onPress={() => setShowDeleteIcons(!showDeleteIcons)}

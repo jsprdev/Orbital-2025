@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
-  Alert,
   ActivityIndicator,
   RefreshControl,
 } from "react-native";
@@ -14,9 +13,8 @@ import GalleryGrid from "../(gallery)/GalleryGrid";
 import { useGallery } from "@/providers/GalleryProvider";
 
 export default function GalleryScreen() {
-  const { photos, albums, loading, fetchPhotos, fetchAlbums, deletePhoto } =
-    useGallery();
-  const [refreshing, setRefreshing] = React.useState(false);
+  const { loading, fetchPhotos, fetchAlbums } = useGallery();
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -36,19 +34,24 @@ export default function GalleryScreen() {
 
   return (
     <View className="flex-1 bg-white">
-      {/* Header - Outside ScrollView */}
       <View className="flex-row justify-between items-center mb-4 mt-8 px-4 pt-12">
-        <Text className="text-2xl font-bold">All Photos ▼</Text>
+        <Text className="text-2xl font-bold" testID="gallery-header">
+          All Photos ▼
+        </Text>
+
         <View className="flex-row space-x-4">
-          <TouchableOpacity onPress={() => router.push("/(gallery)/AddImage")}>
+          <TouchableOpacity
+            onPress={() => router.push("/(gallery)/AddImage")}
+            testID="add-icon"
+          >
             <Feather name="plus" color="hotpink" size={28} />
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Photo Grid - Inside ScrollView */}
       <ScrollView
         className="flex-1 px-4"
+        testID="photo-grid"
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}
         refreshControl={
           <RefreshControl

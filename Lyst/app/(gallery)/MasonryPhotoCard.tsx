@@ -6,13 +6,7 @@ import {
   Image,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-
-type Photo = {
-  id: string;
-  url: string;
-  width?: number;
-  height?: number;
-};
+import { Photo } from "@/types/gallery.dto"
 
 type Props = {
   photo: Photo;
@@ -25,19 +19,10 @@ export default function MansonryPhotoCard({ photo, onDelete, toggleDeleteIcons }
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (photo.width && photo.height) {
-      setAspectRatio(photo.width / photo.height);
-      setLoading(false);
-    } else {
-      Image.getSize(
-        photo.url,
-        (w, h) => {
-          setAspectRatio(w > 0 && h > 0 ? w / h : 1);
-          setLoading(false);
-        },
-        () => setLoading(false)
-      );
-    }
+    Image.getSize(photo.url, (w, h) => {
+        setAspectRatio(w > 0 && h > 0 ? w / h : 1);
+        setLoading(false);
+      }, () => setLoading(false));
   }, [photo.url]);
 
   return (
@@ -51,6 +36,7 @@ export default function MansonryPhotoCard({ photo, onDelete, toggleDeleteIcons }
           source={{ uri: photo.url }}
           style={{ aspectRatio }}
           className="w-full rounded-2xl"
+          testID="image"
         />
       )}
       { toggleDeleteIcons && (
@@ -58,7 +44,7 @@ export default function MansonryPhotoCard({ photo, onDelete, toggleDeleteIcons }
         onPress={() => onDelete(photo.id)}
         className="absolute top-2 right-2 bg-black/60 p-1.5 rounded-full"
       >
-        <Feather name="trash" size={16} color="white" />
+        <Feather name="trash" size={16} color="white" testID="trash-icon"/>
       </TouchableOpacity>
       )}
       

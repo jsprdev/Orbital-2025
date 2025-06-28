@@ -2,7 +2,6 @@ import React from "react";
 import {
   View,
   Text,
-  ScrollView,
   FlatList,
   TouchableOpacity,
   Alert,
@@ -12,7 +11,7 @@ import PhotoCard from "./PhotoCard";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useGallery } from "@/providers/GalleryProvider";
 
-const GalleryGrid: React.FC = () => {
+const GalleryGrid = () => {
   const { photos, albums, deletePhoto } = useGallery();
 
   // Handle Delete

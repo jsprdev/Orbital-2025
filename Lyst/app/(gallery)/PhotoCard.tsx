@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { View, Image, TouchableOpacity } from "react-native";
-import Feather from "@expo/vector-icons/Feather";
 import { Photo } from "../../types/gallery.dto";
 
 interface PhotoCardProps {
