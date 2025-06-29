@@ -46,8 +46,8 @@ export default function GalleryScreen() {
             testID="add-icon"
           >
             <Image
-              source={require('../../assets/icons/add.png')}  
-              className="w-6 h-6"            
+              source={require("../../assets/icons/add.png")}
+              className="w-6 h-6"
             />
           </TouchableOpacity>
         </View>

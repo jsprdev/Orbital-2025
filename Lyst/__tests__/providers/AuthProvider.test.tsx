@@ -62,7 +62,7 @@ describe("AuthProvider", () => {
             getIdToken: jest.fn().mockResolvedValue("mock-token"),
           },
         };
-      }
+      },
     );
 
     (createUserWithEmailAndPassword as jest.Mock).mockImplementation(
@@ -86,7 +86,7 @@ describe("AuthProvider", () => {
             getIdToken: jest.fn().mockResolvedValue("mock-token"),
           },
         };
-      }
+      },
     );
 
     (signOut as jest.Mock).mockResolvedValue(undefined);
@@ -106,7 +106,7 @@ describe("AuthProvider", () => {
       render(
         <AuthProvider>
           <TestWrapper />
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       expect(authContext.user).toBe(null);
@@ -127,11 +127,11 @@ describe("AuthProvider", () => {
       render(
         <AuthProvider>
           <TestWrapper />
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await expect(
-        authContext.signIn("test@gmail.com", "qwerty")
+        authContext.signIn("test@gmail.com", "qwerty"),
       ).resolves.not.toThrow();
     });
 
@@ -146,11 +146,11 @@ describe("AuthProvider", () => {
       render(
         <AuthProvider>
           <TestWrapper />
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await expect(authContext.signIn("", "qwerty")).rejects.toThrow(
-        "Email and password are required"
+        "Email and password are required",
       );
     });
 
@@ -165,11 +165,11 @@ describe("AuthProvider", () => {
       render(
         <AuthProvider>
           <TestWrapper />
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await expect(authContext.signIn("test", "qwerty")).rejects.toThrow(
-        "Invalid email format"
+        "Invalid email format",
       );
     });
 
@@ -184,11 +184,11 @@ describe("AuthProvider", () => {
       render(
         <AuthProvider>
           <TestWrapper />
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await expect(authContext.signIn("test@gmail.com", "")).rejects.toThrow(
-        "Email and password are required"
+        "Email and password are required",
       );
     });
 
@@ -203,11 +203,11 @@ describe("AuthProvider", () => {
       render(
         <AuthProvider>
           <TestWrapper />
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await expect(authContext.signIn("test@gmail.com", "abc")).rejects.toThrow(
-        "Password must be at least 6 characters long"
+        "Password must be at least 6 characters long",
       );
     });
   });
@@ -225,12 +225,12 @@ describe("AuthProvider", () => {
       render(
         <AuthProvider>
           <TestWrapper />
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       // Test that createUser doesn't throw an error for valid inputs
       await expect(
-        authContext.createUser("test@gmail.com", "qwerty", "qwerty")
+        authContext.createUser("test@gmail.com", "qwerty", "qwerty"),
       ).resolves.not.toThrow();
     });
 
@@ -245,11 +245,11 @@ describe("AuthProvider", () => {
       render(
         <AuthProvider>
           <TestWrapper />
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await expect(
-        authContext.createUser("test@gmail.com", "abc", "abc")
+        authContext.createUser("test@gmail.com", "abc", "abc"),
       ).rejects.toThrow("Password must be at least 6 characters long");
     });
 
@@ -264,11 +264,11 @@ describe("AuthProvider", () => {
       render(
         <AuthProvider>
           <TestWrapper />
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await expect(
-        authContext.createUser("test@gmail.com", "qwerty", "different")
+        authContext.createUser("test@gmail.com", "qwerty", "different"),
       ).rejects.toThrow("Passwords do not match");
     });
   });
@@ -286,7 +286,7 @@ describe("AuthProvider", () => {
       render(
         <AuthProvider>
           <TestWrapper />
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       // Test that signOutUser doesn't throw an error

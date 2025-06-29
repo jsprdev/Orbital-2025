@@ -6,7 +6,7 @@ export interface Photo {
   storagePath: string;
   albumName?: string;
   albumId?: string;
-};
+}
 
 export interface UploadPhoto {
   uri: string;

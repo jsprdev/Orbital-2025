@@ -47,7 +47,7 @@ export default function Display({
       query: string;
       selectedTags: string[];
       priority: Priority | null;
-    }
+    },
   ) {
     return notes.filter((note) => {
       const matchesQuery = note.description
@@ -64,7 +64,7 @@ export default function Display({
   const filteredNotes = applyFilters(notes, filters);
   // display latest notes on top by default
   const sortedNotes = filteredNotes.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
   if (loading) {
     return <Text>Loading...</Text>;

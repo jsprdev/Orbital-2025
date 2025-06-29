@@ -9,7 +9,7 @@ const mockPhoto = {
   createdAt: new Date(),
   storagePath: "test-path.app/test-image",
   url: "https://example.com/photo.jpg",
-  userId: "test-id"
+  userId: "test-id",
 };
 
 describe("MansonryPhotoCard", () => {
@@ -19,7 +19,7 @@ describe("MansonryPhotoCard", () => {
       .mockImplementation(
         (uri: string, success: (w: number, h: number) => void) => {
           success(400, 200); // simulate a successful image load
-        }
+        },
       );
   });
 
@@ -29,7 +29,7 @@ describe("MansonryPhotoCard", () => {
         photo={mockPhoto}
         onDelete={jest.fn()}
         toggleDeleteIcons={true}
-      />
+      />,
     );
     await waitFor(() => {
       expect(getByTestId("image")).toBeTruthy();
@@ -42,7 +42,7 @@ describe("MansonryPhotoCard", () => {
         photo={mockPhoto}
         onDelete={jest.fn()}
         toggleDeleteIcons={false}
-      />
+      />,
     );
     await waitFor(() => {
       expect(queryByTestId("delete-button")).toBeNull();
@@ -55,7 +55,7 @@ describe("MansonryPhotoCard", () => {
         photo={mockPhoto}
         onDelete={jest.fn()}
         toggleDeleteIcons={true}
-      />
+      />,
     );
     await waitFor(() => {
       expect(getByTestId("trash-icon")).toBeTruthy();
@@ -69,12 +69,11 @@ describe("MansonryPhotoCard", () => {
         photo={mockPhoto}
         onDelete={onDelete}
         toggleDeleteIcons={true}
-      />
+      />,
     );
     await waitFor(() => {
       fireEvent.press(getByTestId("trash-icon"));
       expect(onDelete).toHaveBeenCalledWith("1");
     });
   });
-
 });

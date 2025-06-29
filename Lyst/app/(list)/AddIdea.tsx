@@ -26,17 +26,26 @@ const priorityColor: Record<string, string> = {
   high: "bg-red-500",
 };
 
-
-export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSave?: () => void; availableTags?: string[]; onAddTag?: (tag: string) => void }) {
+export default function AddIdea({
+  onSave,
+  availableTags = [],
+  onAddTag,
+}: {
+  onSave?: () => void;
+  availableTags?: string[];
+  onAddTag?: (tag: string) => void;
+}) {
   const slideAnim = useRef(new Animated.Value(height)).current;
 
   const [visible, setVisible] = useState(false);
   const { token } = useAuth();
-  
+
   // logs to see if api key loaded
-  console.log('Google Places API Key:', process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY ? 'Loaded' : 'NOT LOADED');
-  
-  
+  console.log(
+    "Google Places API Key:",
+    process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY ? "Loaded" : "NOT LOADED",
+  );
+
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [place_id, setPlaceId] = useState(""); // different naming here cos google api lmao
@@ -46,10 +55,11 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
   const [customTag, setCustomTag] = useState("");
   const [priority, setPriority] = useState<Priority>("low");
   const [placeInput, setPlaceInput] = useState("");
-  const [placeSuggestions, setPlaceSuggestions] = useState<{ place_id: string; description: string }[]>([]);
+  const [placeSuggestions, setPlaceSuggestions] = useState<
+    { place_id: string; description: string }[]
+  >([]);
   const [loadingPlaces, setLoadingPlaces] = useState(false);
 
- 
   const openDrawer = () => {
     setVisible(true);
     Animated.timing(slideAnim, {
@@ -59,7 +69,6 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
     }).start();
   };
 
-  
   const closeDrawer = () => {
     Animated.timing(slideAnim, {
       toValue: height,
@@ -75,10 +84,9 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
     });
   };
 
- 
   const toggleTag = (tag: string) => {
     setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     );
   };
 
@@ -90,8 +98,8 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
       .split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
-  }
-  
+  };
+
   // add custom tag
   const addTag = (tag: string) => {
     tag = formatNewTag(tag);
@@ -114,10 +122,10 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
     setLoadingPlaces(true);
     try {
       const res = await fetch(
-        `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places?input=${encodeURIComponent(input)}`,
+        `https://${process.env.EXPO_PUBLIC_HOST}/api/places?input=${encodeURIComponent(input)}`,
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
       const data = await res.json();
       setPlaceSuggestions(data.predictions || []);
@@ -128,7 +136,6 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
     }
   };
 
-  
   const onSavingPage = async () => {
     if (!description.trim()) {
       alert("Please enter a description.");
@@ -145,16 +152,19 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
 
     // backend logic to save the idea
     try {
-      await createNote({
-        description: description,
-        tags: selectedTags,
-        place: location,
-        about,
-        place_id: place_id,
-        priority: priority,
-        createdAt: new Date().toISOString(),
-        userId: ''
-      } as Note, token!);
+      await createNote(
+        {
+          description: description,
+          tags: selectedTags,
+          place: location,
+          about,
+          place_id: place_id,
+          priority: priority,
+          createdAt: new Date().toISOString(),
+          userId: "",
+        } as Note,
+        token!,
+      );
 
       // refresh page
       if (onSave) {
@@ -188,10 +198,9 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
             padding: 20,
-            overflow: "hidden", 
+            overflow: "hidden",
           }}
         >
-          
           <View className="w-12 h-1 bg-gray-300 rounded-full self-center mb-4" />
 
           <Text className="text-xl font-bold mb-4">Add New Idea</Text>
@@ -202,17 +211,31 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
               className="border border-gray-300 rounded p-2 mb-1"
               placeholder="Search location"
               value={placeInput}
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setPlaceInput(text);
                 fetchPlaceSuggestions(text);
               }}
             />
-            {loadingPlaces && <ActivityIndicator size="small" color="#22c55e" style={{ marginVertical: 4 }} />}
+            {loadingPlaces && (
+              <ActivityIndicator
+                size="small"
+                color="#22c55e"
+                style={{ marginVertical: 4 }}
+              />
+            )}
             {placeSuggestions.length > 0 && (
               <FlatList
                 data={placeSuggestions}
-                keyExtractor={item => item.place_id}
-                style={{ maxHeight: 150, backgroundColor: 'white', borderWidth: 1, borderColor: '#D1D5DB', borderRadius: 6, marginTop: 2, zIndex: 1000 }}
+                keyExtractor={(item) => item.place_id}
+                style={{
+                  maxHeight: 150,
+                  backgroundColor: "white",
+                  borderWidth: 1,
+                  borderColor: "#D1D5DB",
+                  borderRadius: 6,
+                  marginTop: 2,
+                  zIndex: 1000,
+                }}
                 renderItem={({ item }) => (
                   <TouchableOpacity
                     onPress={() => {
@@ -220,7 +243,6 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
                       setPlaceId(item.place_id);
                       setPlaceInput(item.description);
                       setPlaceSuggestions([]);
-                      
                     }}
                     style={{ padding: 10 }}
                   >
@@ -231,9 +253,10 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
             )}
           </View>
 
-          <ScrollView keyboardShouldPersistTaps="handled" style={{ flex: 1, marginTop: 10 }}>
-            
-
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            style={{ flex: 1, marginTop: 10 }}
+          >
             <Text className="font-semibold mb-1">Description</Text>
             <TextInput
               className="border border-gray-300 rounded p-2 mb-4"
@@ -242,8 +265,6 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
               onChangeText={setDescription}
               multiline
             />
-
-            
 
             <Text className="font-semibold mb-1">Tags</Text>
             <View className="flex-row flex-wrap mb-2">

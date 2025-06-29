@@ -4,9 +4,7 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
@@ -18,6 +16,8 @@
     "nativewind-env.d.ts",
     "types/**/*.d.ts",
     "Orbital-2025/Lyst/assets",
-    "utils/*.ts"
-, "types/note.dto.ts", "__tests__/gallery/ImageCarousel.test.jsx"  ]
+    "utils/*.ts",
+    "types/note.dto.ts",
+    "__tests__/gallery/ImageCarousel.test.jsx"
+  ]
 }

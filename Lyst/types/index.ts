@@ -1,5 +1,3 @@
-
-
 export type User = {
   id: string;
   email: string;
@@ -7,8 +5,6 @@ export type User = {
   partnerId?: string;
   profilePicture?: string;
 };
-
-
 
 export type Priority = "low" | "medium" | "high";
 
@@ -28,7 +24,7 @@ export type Category = {
   id: string;
   name: string;
   color: string;
-}; 
+};
 
 export type FilterState = {
   query: string;

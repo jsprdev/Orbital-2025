@@ -1,19 +1,18 @@
-import { getWeatherForecast } from '@/utils/lyst.api';
+import { getWeatherForecast } from "@/utils/lyst.api";
 
+jest.mock("../FirebaseConfig", () => ({
+  initializeApp: jest.fn(),
+  getAuth: jest.fn(),
+}));
 
-jest.mock('../FirebaseConfig', () => ({
-    initializeApp: jest.fn(),
-    getAuth: jest.fn(),
-  }));
-
-describe('getWeatherForecast', () => {
-  it('returns weather data for a location', async () => {
-    const mockWeather = { forecast: 'sunny', temp: 30 };
+describe("getWeatherForecast", () => {
+  it("returns weather data for a location", async () => {
+    const mockWeather = { forecast: "sunny", temp: 30 };
     global.fetch = jest.fn(() =>
-      Promise.resolve({ json: () => Promise.resolve(mockWeather) })
+      Promise.resolve({ json: () => Promise.resolve(mockWeather) }),
     ) as jest.Mock;
 
-    const data = await getWeatherForecast('Singapore');
+    const data = await getWeatherForecast("Singapore");
     expect(data).toEqual(mockWeather);
     expect(global.fetch).toHaveBeenCalled();
   });

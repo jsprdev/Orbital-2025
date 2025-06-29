@@ -1,37 +1,41 @@
-import { generateDateRoute } from '@/utils/lyst.api';
+import { generateDateRoute } from "@/utils/lyst.api";
 
-jest.mock('../FirebaseConfig', () => ({
+jest.mock("../FirebaseConfig", () => ({
   initializeApp: jest.fn(),
   getAuth: jest.fn(),
 }));
 
-jest.mock('@/utils/lyst.api', () => ({
-  ...jest.requireActual('@/utils/lyst.api'),
+jest.mock("@/utils/lyst.api", () => ({
+  ...jest.requireActual("@/utils/lyst.api"),
   generateDateRoute: jest.fn(),
 }));
 
-describe('generateDateRoute', () => {
-  it('returns a date route', async () => {
+describe("generateDateRoute", () => {
+  it("returns a date route", async () => {
     (generateDateRoute as jest.Mock).mockResolvedValue({
       selectedLocations: [
-        { name: 'A', address: 'test A' },
-        { name: 'B', address: 'test B' }
+        { name: "A", address: "test A" },
+        { name: "B", address: "test B" },
       ],
-      visitOrder: [0, 1]
+      visitOrder: [0, 1],
     });
 
     const cards = [
-      { name: 'A', address: 'test A' },
-      { name: 'B', address: 'test B' }
+      { name: "A", address: "test A" },
+      { name: "B", address: "test B" },
     ];
-    const token = 'mock-token';
+    const token = "mock-token";
     const result = await generateDateRoute(cards, token);
 
     expect(generateDateRoute).toHaveBeenCalledWith(cards, token);
   });
 
-  it('throws or returns error for missing cards', async () => {
-    (generateDateRoute as jest.Mock).mockRejectedValue(new Error('Missing cards'));
-    await expect(generateDateRoute([], 'mock-token')).rejects.toThrow('Missing cards');
+  it("throws or returns error for missing cards", async () => {
+    (generateDateRoute as jest.Mock).mockRejectedValue(
+      new Error("Missing cards"),
+    );
+    await expect(generateDateRoute([], "mock-token")).rejects.toThrow(
+      "Missing cards",
+    );
   });
 });

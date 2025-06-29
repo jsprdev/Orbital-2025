@@ -1,28 +1,30 @@
-import axiosInstance from './index';
+import axiosInstance from "./index";
 
 // GET requests
 export const getPhotos = async (token: string) => {
   try {
-    const response = await axiosInstance.get('/api/images', {
+    const response = await axiosInstance.get("/api/images", {
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data.photos;
-
   } catch (error: any) {
-    console.error('Error fetching photos:', error);
+    console.error("Error fetching photos:", error);
     if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', error.response.data);
+      console.error("Response status:", error.response.status);
+      console.error("Response data:", error.response.data);
     }
     throw error;
   }
 };
 
-
 // POST - Upload a new photo
-export const uploadPhoto = async (token: string, albumId: string, imageUri: string[] ) => {
+export const uploadPhoto = async (
+  token: string,
+  albumId: string,
+  imageUri: string[],
+) => {
   try {
     const formData = new FormData();
     formData.append("albumName", albumId);
@@ -32,21 +34,19 @@ export const uploadPhoto = async (token: string, albumId: string, imageUri: stri
         name: `photo_${Date.now()}_${index}.jpg`,
         type: "image/jpeg",
       } as any);
-
     });
-    const response = await axiosInstance.post('/api/images', formData, {
+    const response = await axiosInstance.post("/api/images", formData, {
       headers: {
-        'Authorization': `Bearer ${token}`,
-        "Content-Type": "multipart/form-data"
-      }
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
     });
     return response.data.photo;
-
   } catch (error: any) {
-    console.error('Error uploading photo:', error);
+    console.error("Error uploading photo:", error);
     if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', error.response.data);
+      console.error("Response status:", error.response.status);
+      console.error("Response data:", error.response.data);
     }
     throw error;
   }
@@ -58,13 +58,12 @@ export const deletePhoto = async (token: string, photoId: string) => {
     console.log("galleryAPI: Deleting photo:", photoId);
     const response = await axiosInstance.delete(`/api/images/${photoId}`, {
       headers: {
-        'Authorization': `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.data;
   } catch (error) {
-    console.error('Error deleting photo:', error);
+    console.error("Error deleting photo:", error);
     throw error;
   }
 };
-

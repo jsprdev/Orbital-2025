@@ -27,7 +27,7 @@ export default function YourLyst() {
   const { user, token } = useAuth();
   if (!token) {
     throw Error("No token received, please Sign In again");
-  } 
+  }
 
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);

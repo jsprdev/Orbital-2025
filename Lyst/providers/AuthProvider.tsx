@@ -12,12 +12,12 @@ import {
   User,
   sendPasswordResetEmail,
   updateProfile,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import {
   FIREBASE_AUTH as auth,
   FIREBASE_GOOGLE_PROVIDER as provider,
 } from "@/FirebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 
 interface AuthContextType {
   user: User | null;
@@ -27,7 +27,7 @@ interface AuthContextType {
     email: string,
     password: string,
     confirmPassword: string,
-    name: string
+    name: string,
   ) => Promise<void>;
   signOutUser: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     email: string,
     password: string,
     confirmPassword: string,
-    name: string
+    name: string,
   ) => {
     // Validate email and password
     if (!email || !password || !confirmPassword) {
@@ -106,7 +106,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       if (userCredential.user && name) {
         await updateProfile(userCredential.user, { displayName: name });
@@ -158,6 +158,6 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
-  }  
+  }
   return context;
 };

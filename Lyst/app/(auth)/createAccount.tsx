@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   SafeAreaView,
@@ -21,14 +20,13 @@ export default function CreateAccount() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { createUser } = useAuth();
-  
 
   const handleSignUp = async () => {
     setLoading(true);
     try {
       await createUser(email, password, confirmPassword, name);
       router.replace("/(tabs)/Profile");
-    } catch (error:any) {
+    } catch (error: any) {
       console.log("Sign Up Error:", error);
       if (error.code === "auth/invalid-credentials") {
         Alert.alert("Invalid Email or Password");
@@ -39,7 +37,6 @@ export default function CreateAccount() {
       setLoading(false);
     }
   };
-
 
   return (
     <KeyboardAvoidingView className="flex-1 bg-white ">
@@ -103,7 +100,7 @@ export default function CreateAccount() {
               </Text>
             )}
           </TouchableOpacity>
-          
+
           <View className="flex-row justify-center items-center mt-4">
             <Text className="text-gray-600 text-base">
               Already have an account?{" "}
@@ -114,8 +111,6 @@ export default function CreateAccount() {
               </Text>
             </TouchableOpacity>
           </View>
-
-
         </View>
       </SafeAreaView>
     </KeyboardAvoidingView>

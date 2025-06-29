@@ -71,5 +71,4 @@ describe("GalleryScreen", () => {
     const { getByTestId } = renderWithProvider(<GalleryScreen />);
     expect(getByTestId("photo-grid")).toBeTruthy();
   });
-
 });

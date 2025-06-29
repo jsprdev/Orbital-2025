@@ -46,22 +46,22 @@ jest.mock("expo-router", () => ({
 // Mock expo-image-picker
 jest.mock("expo-image-picker", () => ({
   requestMediaLibraryPermissionsAsync: jest.fn(() =>
-    Promise.resolve({ status: "granted" })
+    Promise.resolve({ status: "granted" }),
   ),
   requestCameraPermissionsAsync: jest.fn(() =>
-    Promise.resolve({ status: "granted" })
+    Promise.resolve({ status: "granted" }),
   ),
   launchImageLibraryAsync: jest.fn(() =>
     Promise.resolve({
       canceled: false,
       assets: [{ uri: "test-image-uri" }],
-    })
+    }),
   ),
   launchCameraAsync: jest.fn(() =>
     Promise.resolve({
       canceled: false,
       assets: [{ uri: "camera-image-uri" }],
-    })
+    }),
   ),
 }));
 
@@ -117,7 +117,7 @@ describe("AddImageScreen", () => {
       createdAt: new Date(),
     });
     const { getByText, getByTestId, getByPlaceholderText } = renderWithProvider(
-      <AddImageScreen />
+      <AddImageScreen />,
     );
     await act(async () => {
       const pickImageButton = getByTestId("sample-image-button");
@@ -127,7 +127,7 @@ describe("AddImageScreen", () => {
       expect(getByTestId("image-carousel")).toBeTruthy();
     });
     const albumInput = getByPlaceholderText(
-      "Select existing or enter new album"
+      "Select existing or enter new album",
     );
     await act(async () => {
       fireEvent.changeText(albumInput, "New Album");
@@ -151,7 +151,7 @@ describe("AddImageScreen", () => {
       createdAt: new Date(),
     });
     const { getByText, getByTestId, getByPlaceholderText } = renderWithProvider(
-      <AddImageScreen />
+      <AddImageScreen />,
     );
     await act(async () => {
       const pickImageButton = getByTestId("sample-image-button");
@@ -159,7 +159,7 @@ describe("AddImageScreen", () => {
     });
     await waitFor(() => {
       const albumInput = getByPlaceholderText(
-        "Select existing or enter new album"
+        "Select existing or enter new album",
       );
       fireEvent.changeText(albumInput, "New Album");
       const uploadButton = getByText("Upload");
@@ -167,5 +167,4 @@ describe("AddImageScreen", () => {
       expect(mockUseGallery.addAlbum).toHaveBeenCalledWith("New Album");
     });
   });
-
 });

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import { router } from "expo-router";
 import PhotoCard from "./PhotoCard";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -61,7 +55,7 @@ const GalleryGrid = () => {
   });
 
   const nonEmptyAlbums = Object.entries(photosByAlbum).filter(
-    ([_, albumPhotos]) => albumPhotos.length > 0
+    ([_, albumPhotos]) => albumPhotos.length > 0,
   );
 
   if (nonEmptyAlbums.length === 0) {

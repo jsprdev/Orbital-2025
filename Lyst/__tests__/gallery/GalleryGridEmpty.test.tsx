@@ -2,6 +2,8 @@
 import React from "react";
 import { render } from "@testing-library/react-native";
 
+import GalleryGrid from "../../app/(gallery)/GalleryGrid";
+
 jest.mock("../../providers/GalleryProvider", () => ({
   useGallery: () => ({
     photos: [],
@@ -10,8 +12,6 @@ jest.mock("../../providers/GalleryProvider", () => ({
   }),
   GalleryProvider: ({ children }: { children: React.ReactNode }) => children,
 }));
-
-import GalleryGrid from "../../app/(gallery)/GalleryGrid";
 
 describe("GalleryGrid (empty state)", () => {
   it("shows no photos message when no photos exist", () => {

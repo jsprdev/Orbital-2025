@@ -1,7 +1,7 @@
 import { Image, Text } from "react-native";
 import { Tabs } from "expo-router";
 import { COLORS } from "@/constants/colors";
-import Fontisto from '@expo/vector-icons/Fontisto';
+import Fontisto from "@expo/vector-icons/Fontisto";
 
 const TabLayout = () => {
   return (
@@ -50,23 +50,26 @@ const TabLayout = () => {
         }}
       />
 
-<Tabs.Screen
+      <Tabs.Screen
         name="YourPlans"
         options={{
           title: "YourPlans",
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('../../assets/icons/save.png')}
+              source={require("../../assets/icons/save.png")}
               style={{
                 width: 24,
                 height: 24,
-                tintColor: focused ? COLORS.primary : COLORS.unfocused
+                tintColor: focused ? COLORS.primary : COLORS.unfocused,
               }}
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
-              style={{ fontSize: 12, color: focused ? COLORS.primary : COLORS.unfocused }}
+              style={{
+                fontSize: 12,
+                color: focused ? COLORS.primary : COLORS.unfocused,
+              }}
             >
               Your Plans
             </Text>
@@ -80,18 +83,21 @@ const TabLayout = () => {
           title: "Gallery",
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('../../assets/icons/gallery.png')}
+              source={require("../../assets/icons/gallery.png")}
               style={{
                 width: 24,
                 height: 24,
                 tintColor: focused ? COLORS.primary : COLORS.unfocused,
-                resizeMode: 'contain'
+                resizeMode: "contain",
               }}
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
-              style={{ fontSize: 12, color: focused ? COLORS.primary : COLORS.unfocused }}
+              style={{
+                fontSize: 12,
+                color: focused ? COLORS.primary : COLORS.unfocused,
+              }}
             >
               Gallery
             </Text>

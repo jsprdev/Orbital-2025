@@ -1,28 +1,31 @@
 import React, { useState, useEffect } from "react";
-import {
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-  Image,
-} from "react-native";
+import { TouchableOpacity, View, ActivityIndicator, Image } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { Photo } from "@/types/gallery.dto"
+import { Photo } from "@/types/gallery.dto";
 
 type Props = {
   photo: Photo;
   onDelete: (photoId: string) => void;
-  toggleDeleteIcons: Boolean;
+  toggleDeleteIcons: boolean;
 };
 
-export default function MansonryPhotoCard({ photo, onDelete, toggleDeleteIcons }: Props) {
+export default function MansonryPhotoCard({
+  photo,
+  onDelete,
+  toggleDeleteIcons,
+}: Props) {
   const [aspectRatio, setAspectRatio] = useState(1);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Image.getSize(photo.url, (w, h) => {
+    Image.getSize(
+      photo.url,
+      (w, h) => {
         setAspectRatio(w > 0 && h > 0 ? w / h : 1);
         setLoading(false);
-      }, () => setLoading(false));
+      },
+      () => setLoading(false),
+    );
   }, [photo.url]);
 
   return (
@@ -39,15 +42,14 @@ export default function MansonryPhotoCard({ photo, onDelete, toggleDeleteIcons }
           testID="image"
         />
       )}
-      { toggleDeleteIcons && (
+      {toggleDeleteIcons && (
         <TouchableOpacity
-        onPress={() => onDelete(photo.id)}
-        className="absolute top-2 right-2 bg-black/60 p-1.5 rounded-full"
-      >
-        <Feather name="trash" size={16} color="white" testID="trash-icon"/>
-      </TouchableOpacity>
+          onPress={() => onDelete(photo.id)}
+          className="absolute top-2 right-2 bg-black/60 p-1.5 rounded-full"
+        >
+          <Feather name="trash" size={16} color="white" testID="trash-icon" />
+        </TouchableOpacity>
       )}
-      
     </View>
   );
 }

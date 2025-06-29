@@ -1,5 +1,5 @@
 // This is the first screen users see when they open the app.
-import 'react-native-get-random-values';
+import "react-native-get-random-values";
 import { useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";
 import {
@@ -18,9 +18,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
 
-
 export default function Index() {
-
   const [email, setEmail] = useState("jake@gmail.com");
   const [password, setPassword] = useState("abcabc");
   const [loading, setLoading] = useState(false);
@@ -33,11 +31,11 @@ export default function Index() {
   const handleSignIn = async () => {
     setLoading(true);
     try {
-      console.log('Signing in..');
+      console.log("Signing in..");
       await signIn(email, password);
-      console.log('Sign in Successful')
+      console.log("Sign in Successful");
       router.replace("/(tabs)/Profile");
-    } catch (error:any) {
+    } catch (error: any) {
       if (error.code === "auth/invalid-credentials") {
         Alert.alert("Invalid Email or Password");
       } else {
@@ -66,7 +64,7 @@ export default function Index() {
   };
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       className="flex-1 bg-white"
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
@@ -81,8 +79,8 @@ export default function Index() {
               height: "100%",
             }}
           />
-          
-          <View 
+
+          <View
             className="absolute bottom-0 left-0 right-0 bg-white"
             style={{
               height: 20,
@@ -91,7 +89,7 @@ export default function Index() {
             }}
           />
         </View>
-        
+
         <View className="flex-1 bg-white">
           <View className="items-left px-7 pt-6 pb-8">
             <Text className="text-4xl font-bold text-pink-500 shadow-sm">

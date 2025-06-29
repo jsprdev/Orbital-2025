@@ -63,7 +63,7 @@ describe("AlbumDropdown", () => {
 
   it("renders all albums by their name", () => {
     const { getByPlaceholderText, getByText } = renderWithProvider(
-      <AlbumDropdown albumName="" setAlbumName={mockSetAlbumName} />
+      <AlbumDropdown albumName="" setAlbumName={mockSetAlbumName} />,
     );
 
     const input = getByPlaceholderText("Select existing or enter new album");
@@ -73,13 +73,13 @@ describe("AlbumDropdown", () => {
   });
 
   it("field is populated when an album is selected", () => {
-    const { getByPlaceholderText , getByText } = renderWithProvider(
-      <AlbumDropdown albumName="" setAlbumName={mockSetAlbumName} />
+    const { getByPlaceholderText, getByText } = renderWithProvider(
+      <AlbumDropdown albumName="" setAlbumName={mockSetAlbumName} />,
     );
 
     fireEvent.changeText(
       getByPlaceholderText("Select existing or enter new album"),
-      "Fo"
+      "Fo",
     );
 
     fireEvent.press(getByText("Food"));
@@ -88,7 +88,7 @@ describe("AlbumDropdown", () => {
 
   it("opens and close dropdown when albums icon is pressed", () => {
     const { getByText, queryByText, getByTestId } = renderWithProvider(
-      <AlbumDropdown albumName="" setAlbumName={mockSetAlbumName} />
+      <AlbumDropdown albumName="" setAlbumName={mockSetAlbumName} />,
     );
 
     expect(queryByText("Food")).toBeFalsy();
@@ -97,7 +97,6 @@ describe("AlbumDropdown", () => {
     expect(getByText("Food")).toBeTruthy();
     fireEvent.press(albumsIcon);
     expect(queryByText("Food")).toBeFalsy();
-
   });
 
   it("filters out empty albums", () => {
@@ -121,7 +120,7 @@ describe("AlbumDropdown", () => {
     }));
 
     const { queryByText } = renderWithProvider(
-      <AlbumDropdown albumName="" setAlbumName={mockSetAlbumName} />
+      <AlbumDropdown albumName="" setAlbumName={mockSetAlbumName} />,
     );
 
     // Empty album should not appear in dropdown

@@ -38,7 +38,7 @@ export default function AlbumDropdown({
   });
 
   const filteredAlbums = nonEmptyAlbums.filter((album) =>
-    album.name.toLowerCase().includes(albumName.toLowerCase())
+    album.name.toLowerCase().includes(albumName.toLowerCase()),
   );
 
   return (

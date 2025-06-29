@@ -18,7 +18,7 @@ describe("PhotoCard", () => {
 
   it("loads the image with correct source", () => {
     const { getByTestId } = render(
-      <PhotoCard photo={mockPhoto} onDelete={jest.fn()} />
+      <PhotoCard photo={mockPhoto} onDelete={jest.fn()} />,
     );
 
     const image = getByTestId("photo");

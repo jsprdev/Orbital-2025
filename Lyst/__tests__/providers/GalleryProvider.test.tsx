@@ -57,7 +57,7 @@ describe("GalleryProvider", () => {
         <GalleryProvider>
           <TestWrapper />
         </GalleryProvider>
-      </AuthProvider>
+      </AuthProvider>,
     );
 
     expect(galleryContext.photos.length).toBe(0);
@@ -92,7 +92,7 @@ describe("GalleryProvider", () => {
           <GalleryProvider>
             <TestWrapper />
           </GalleryProvider>
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       expect(mockGetPhotos).toHaveBeenCalledWith("mock-token");
@@ -117,7 +117,7 @@ describe("GalleryProvider", () => {
           <GalleryProvider>
             <TestWrapper />
           </GalleryProvider>
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await act(async () => {
@@ -148,7 +148,7 @@ describe("GalleryProvider", () => {
           <GalleryProvider>
             <TestWrapper />
           </GalleryProvider>
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       expect(mockGetAlbums).toHaveBeenCalledWith("mock-token");
@@ -172,7 +172,7 @@ describe("GalleryProvider", () => {
           <GalleryProvider>
             <TestWrapper />
           </GalleryProvider>
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await act(async () => {
@@ -202,7 +202,7 @@ describe("GalleryProvider", () => {
           <GalleryProvider>
             <TestWrapper />
           </GalleryProvider>
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await act(async () => {
@@ -233,7 +233,7 @@ describe("GalleryProvider", () => {
           <GalleryProvider>
             <TestWrapper />
           </GalleryProvider>
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await act(async () => {
@@ -268,7 +268,7 @@ describe("GalleryProvider", () => {
           <GalleryProvider>
             <TestWrapper />
           </GalleryProvider>
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await act(async () => {
@@ -297,7 +297,7 @@ describe("GalleryProvider", () => {
           <GalleryProvider>
             <TestWrapper />
           </GalleryProvider>
-        </AuthProvider>
+        </AuthProvider>,
       );
 
       await act(async () => {

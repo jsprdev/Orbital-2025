@@ -39,7 +39,7 @@ export default function ImageCarousel({
       contentContainerStyle={{ paddingHorizontal: ITEM_SPACING }}
       onScroll={Animated.event(
         [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-        { useNativeDriver: true }
+        { useNativeDriver: true },
       )}
       scrollEventThrottle={10}
       renderItem={({ item, index }) => {

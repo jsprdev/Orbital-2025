@@ -3,5 +3,5 @@ export interface Album {
   userId: string;
   name: string;
   createdAt: any;
-  coverPhotoUrl?: string; 
+  coverPhotoUrl?: string;
 }

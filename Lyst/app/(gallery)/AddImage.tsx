@@ -30,7 +30,7 @@ export default function AddImageScreen() {
       if (status !== "granted") {
         Alert.alert(
           "Permission needed",
-          "Please grant camera roll permissions to select images."
+          "Please grant camera roll permissions to select images.",
         );
         return;
       }
@@ -55,7 +55,7 @@ export default function AddImageScreen() {
       if (status !== "granted") {
         Alert.alert(
           "Permission needed",
-          "Please grant camera permissions to take photos."
+          "Please grant camera permissions to take photos.",
         );
         return;
       }
@@ -136,7 +136,6 @@ export default function AddImageScreen() {
                   setSelectedImage((prev) => prev.filter((_, i) => i !== index))
                 }
                 flag={albumName}
-                
               />
             </View>
           ) : (
@@ -184,7 +183,11 @@ export default function AddImageScreen() {
                 }`}
               >
                 {uploading || loading ? (
-                  <ActivityIndicator size="small" color="#fff" testID="loading-indicator"/>
+                  <ActivityIndicator
+                    size="small"
+                    color="#fff"
+                    testID="loading-indicator"
+                  />
                 ) : (
                   <Text
                     className={`font-semibold text-base ${

@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, TextInput, Image } from 'react-native';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  Image,
+} from "react-native";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
-export default function AddIdeaButton({ handlePress }: { handlePress: () => void }) {
-
+export default function AddIdeaButton({
+  handlePress,
+}: {
+  handlePress: () => void;
+}) {
   return (
     <View>
       <TouchableOpacity

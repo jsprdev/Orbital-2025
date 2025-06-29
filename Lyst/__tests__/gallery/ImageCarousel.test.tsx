@@ -12,7 +12,7 @@ describe("ImageCarousel", () => {
 
   it("renders all images", () => {
     const { getAllByTestId } = render(
-      <ImageCarousel images={images} onDelete={mockOnDelete} flag="" />
+      <ImageCarousel images={images} onDelete={mockOnDelete} flag="" />,
     );
 
     expect(getAllByTestId("carousel-image").length).toBe(3);
@@ -20,16 +20,20 @@ describe("ImageCarousel", () => {
 
   it("handles single image", () => {
     const { getAllByTestId } = render(
-      <ImageCarousel images={["single-image"]} onDelete={mockOnDelete} flag="" />
+      <ImageCarousel
+        images={["single-image"]}
+        onDelete={mockOnDelete}
+        flag=""
+      />,
     );
-    
+
     expect(getAllByTestId("carousel-image")).toHaveLength(1);
     expect(getAllByTestId("carousel-delete-button")).toHaveLength(1);
   });
 
   it("does not show cover page text when flag is empty", () => {
     const { queryByText } = render(
-      <ImageCarousel images={images} onDelete={mockOnDelete} flag="" />
+      <ImageCarousel images={images} onDelete={mockOnDelete} flag="" />,
     );
 
     expect(queryByText("Cover Page")).toBeFalsy();
@@ -37,7 +41,7 @@ describe("ImageCarousel", () => {
 
   it("shows cover page text for first image when flag is provided", () => {
     const { getByText } = render(
-      <ImageCarousel images={images} onDelete={mockOnDelete} flag="Food" />
+      <ImageCarousel images={images} onDelete={mockOnDelete} flag="Food" />,
     );
 
     expect(getByText("Cover Page")).toBeTruthy();
@@ -45,7 +49,7 @@ describe("ImageCarousel", () => {
 
   it("renders delete buttons for all images", () => {
     const { getAllByTestId } = render(
-      <ImageCarousel images={images} onDelete={mockOnDelete} flag="" />
+      <ImageCarousel images={images} onDelete={mockOnDelete} flag="" />,
     );
 
     const deleteButtons = getAllByTestId("carousel-delete-button");
@@ -54,7 +58,7 @@ describe("ImageCarousel", () => {
 
   it("calls onDelete with correct index", () => {
     const { getAllByTestId } = render(
-      <ImageCarousel images={images} onDelete={mockOnDelete} flag="" />
+      <ImageCarousel images={images} onDelete={mockOnDelete} flag="" />,
     );
 
     const deleteButtons = getAllByTestId("carousel-delete-button");
@@ -62,5 +66,4 @@ describe("ImageCarousel", () => {
 
     expect(mockOnDelete).toHaveBeenCalledWith(1);
   });
-
 });
