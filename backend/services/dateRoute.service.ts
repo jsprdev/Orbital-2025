@@ -43,7 +43,10 @@ Input cards:
 ${cardsJson}
 
 Instructions:
-For now, just output the JSON object with the following structure:
+1. All locations provided are places that the user wants to go, but please pick 3-4 locations from the provided cards that are a suitable combination to go together for a plan for a date
+2. Order them into an optimal visit sequence for a romantic date
+3. Consider factors like: - distance between each other - Romantic atmosphere - Logical flow (dinner after activities, dessert after dinner, etc.) - Distance and travel time between locations - Variety of experiences (activity, dining, entertainment, etc.)
+4. There should only be a maximum of one main course meal location in the route
 
 Output ONLY a JSON object matching this exact schema:
 {
@@ -55,7 +58,7 @@ Do not include any explanations, just the JSON object.`;
 
       console.log('Calling OpenAI API...');
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-nano", // DO NOT CHANGE I AM BROKE THIS IS THE CHEAPEST I GOT NO MONEY
+        model: "gpt-4o-mini", // DO NOT CHANGE I AM BROKE THIS IS THE CHEAPEST I GOT NO MONEY
         messages: [
           {
             role: "system",
@@ -67,7 +70,7 @@ Do not include any explanations, just the JSON object.`;
           }
         ],
         temperature: 0.7,
-        max_tokens: 1000,
+        max_tokens: 1000, // DO NOT CHANGE PLEASE
       });
 
       console.log('response received');
