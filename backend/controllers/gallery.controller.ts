@@ -9,10 +9,10 @@ const router = Router();
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
+    fileSize: 10 * 1024 * 1024, // can change limit here now its at 10MB limit
   },
   fileFilter: (req, file, cb) => {
-    // Accept only image files
+    // checking file type
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
     } else {
@@ -83,7 +83,7 @@ router.post("/", upload.array('photos'), async (req: any, res: Response) => {
     }
 });
 
-// Delete a photo
+// Delete photo
 router.delete("/:id", async (req: Request, res: Response) => {
     const photoId = req.params.id;
     if (!photoId) {

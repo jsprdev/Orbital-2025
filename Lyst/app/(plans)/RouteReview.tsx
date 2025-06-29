@@ -1,10 +1,23 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { router, useLocalSearchParams } from 'expo-router';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getWeatherForecast } from '@/utils/lyst.api';
+import * as Calendar from 'expo-calendar';
 import DraggableFlatList, { NestableDraggableFlatList, RenderItemParams } from 'react-native-draggable-flatlist';
+
+
+
+const addToCalendar = async () => {
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Please give epxo permission to edit your calendars');
+      return;
+    }
+   Calendar.createEventInCalendarAsync({});
+};
+
 
 export default function RouteReview() {
     const { routeData } = useLocalSearchParams();
@@ -17,7 +30,7 @@ export default function RouteReview() {
         const fetchWeather = async () => {
           try {
             const data = await getWeatherForecast("Singapore"); 
-            console.log("Weather API response:", data);
+            //console.log("Weather API response:", data);
             setWeatherForecastForNextWeek(data.forecast); 
           } catch (error) {
             console.error("failed to fetch weather forecast:", error);
@@ -51,6 +64,18 @@ export default function RouteReview() {
                     )}
                 />
 
+                {/* need to refine the ai prompt now but for now is abit scuffed so maybe we will leave it out */}
+                {/* 
+                <Text className="font-semibold text-gray-500">
+                    AI's notes
+                </Text>
+
+                <Text className="text-gray-500 mb-4">
+                    {initialRoute.explanation}
+                </Text> */}
+
+                {/* display weather for next 7 days */}
+
                 <View className="flex-col gap-y-1">
                     <Text className="font-semibold text-xl">
                         Weekly Weather Forecast
@@ -76,6 +101,12 @@ export default function RouteReview() {
                         <Text className="text-white text-center font-bold">
                             Back to Your Plans
                         </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity className="rounded-lg bg-pink-500 mt-4 mb-2" onPress={addToCalendar}>
+                    <Text className="text-white text-center font-bold p-4">
+                        Add to Calendar
+                    </Text> 
                 </TouchableOpacity>
 
 

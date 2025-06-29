@@ -1,4 +1,4 @@
-import { db, bucket, admin } from "../config/firebase-config.js";
+import { db, bucket, admin } from "../config/firebase-config";
 import { Photo } from "../../Lyst/types/gallery.dto.js"
 
 export class GalleryService {  

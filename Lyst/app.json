@@ -33,6 +33,13 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      "expo-web-browser",
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "Expo needs access to your calendar to let you create events."
+        }
       ]
     ],
     "experiments": {

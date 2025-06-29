@@ -1,4 +1,4 @@
-import { admin, db } from "../config/firebase-config.js";
+import { admin, db } from "../config/firebase-config";
 import { Album } from "../../Lyst/types/album.dto";
 
 export class AlbumsService {

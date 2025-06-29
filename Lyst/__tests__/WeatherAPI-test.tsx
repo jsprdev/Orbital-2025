@@ -1,4 +1,4 @@
-import { getWeatherForecast } from '@/utils/api';
+import { getWeatherForecast } from '@/utils/lyst.api';
 
 
 jest.mock('../FirebaseConfig', () => ({

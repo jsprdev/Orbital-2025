@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
+  Image,
 } from "react-native";
 import { router } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
@@ -36,7 +37,7 @@ export default function GalleryScreen() {
     <View className="flex-1 bg-white">
       <View className="flex-row justify-between items-center mb-4 mt-8 px-4 pt-12">
         <Text className="text-2xl font-bold" testID="gallery-header">
-          All Photos ▼
+          All Photos
         </Text>
 
         <View className="flex-row space-x-4">
@@ -44,7 +45,10 @@ export default function GalleryScreen() {
             onPress={() => router.push("/(gallery)/AddImage")}
             testID="add-icon"
           >
-            <Feather name="plus" color="hotpink" size={28} />
+            <Image
+              source={require('../../assets/icons/add.png')}  
+              className="w-6 h-6"            
+            />
           </TouchableOpacity>
         </View>
       </View>
