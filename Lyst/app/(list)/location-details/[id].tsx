@@ -2,7 +2,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { View, Text, Image, TouchableOpacity, Linking, ScrollView, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 import { Note } from "@/types";
-import { getNotes } from "@/utils/api";
+import { getNotes } from "@/utils/lyst.api";
 import { useAuth } from "@/providers/AuthProvider";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,6 +11,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function LocationDetails() {
     const { id } = useLocalSearchParams();
     const { token } = useAuth();
+    if (!token) {
+    throw Error("No token received, please Sign In again");
+  } 
     const [note, setNote] = useState<Note | null>(null);
     const [placeDetails, setPlaceDetails] = useState<any>(null);
 

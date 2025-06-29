@@ -1,11 +1,10 @@
 import { Request, Response, Router } from 'express';
-import { verifyToken } from '../middleware/verifyToken';
 import { NotesService } from '../services/notes.service';
 
 const notesServiceInstance = new NotesService();
 const router = Router();
 
-router.get("/", verifyToken, async (req: Request, res: Response): Promise<void> => {
+router.get("/", async (req: Request, res: Response): Promise<void> => {
     try {
         if (!req.user) {
             res.status(401).json({ error: 'User not authenticated' });
@@ -19,7 +18,7 @@ router.get("/", verifyToken, async (req: Request, res: Response): Promise<void> 
     }
 });
 
-router.post("/", verifyToken, async (req: Request, res: Response): Promise<void> => {
+router.post("/", async (req: Request, res: Response): Promise<void> => {
     try {
         if (!req.user) {
             res.status(401).json({ error: 'User not authenticated' });
@@ -35,7 +34,7 @@ router.post("/", verifyToken, async (req: Request, res: Response): Promise<void>
     }
 });
 
-router.delete("/:id", verifyToken, async (req: Request, res: Response) => {
+router.delete("/:id", async (req: Request, res: Response) => {
     const noteId = req.params.id;
     if (!noteId) {
         res.status(400).json({ error: 'Note ID is required' });

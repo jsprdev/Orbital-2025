@@ -14,8 +14,8 @@ import {
 } from "react-native";
 import AddIdeaButton from "./AddIdeaButton";
 import { Note, Priority } from "@/types";
-import { createNote } from "@/utils/api";
-import { useAuth } from "@/providers/AuthProvider"
+import { createNote } from "@/utils/lyst.api";
+import { useAuth } from "@/providers/AuthProvider";
 
 const { height } = Dimensions.get("window");
 const PREMADE_TAGS = ["Food", "Gifts", "Shopping", "Overseas"];
@@ -154,13 +154,12 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
         priority: priority,
         createdAt: new Date().toISOString(),
         userId: ''
-      } as Note, token);
+      } as Note, token!);
 
       // refresh page
       if (onSave) {
         onSave();
       }
-
     } catch (error) {
       console.error("Error adding note:", error);
     } finally {
@@ -260,7 +259,9 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
                 >
                   <Text
                     className={`text-sm ${
-                      selectedTags.includes(tag) ? "text-white" : "text-gray-700"
+                      selectedTags.includes(tag)
+                        ? "text-white"
+                        : "text-gray-700"
                     }`}
                   >
                     {tag}
@@ -268,27 +269,30 @@ export default function AddIdea({ onSave, availableTags = [], onAddTag }: { onSa
                 </TouchableOpacity>
               ))}
 
-                <TouchableOpacity onPress={() => setShowCustomTag(prev => !prev)} className="border border-gray-400 rounded-full px-3 py-1 m-1">
-                    <Text className="text-gray-700 text-sm">▼</Text>
-                </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setShowCustomTag((prev) => !prev)}
+                className="border border-gray-400 rounded-full px-3 py-1 m-1"
+              >
+                <Text className="text-gray-700 text-sm">▼</Text>
+              </TouchableOpacity>
             </View>
 
             {showCustomTag && (
-            <View className="flex-row items-center mb-4">
-              <TextInput
-                className="flex-1 border border-gray-300 rounded p-2 mr-2"
-                placeholder="Add custom tag"
-                value={customTag}
-                onChangeText={setCustomTag}
-                onSubmitEditing={() => addTag(customTag.trim())}
-              />
-              <TouchableOpacity
-                onPress={() => addTag(customTag.trim())}
-                className="bg-blue-600 rounded px-3 py-2"
-              >
-                <Text className="text-white font-semibold">Add</Text>
-              </TouchableOpacity>
-            </View>
+              <View className="flex-row items-center mb-4">
+                <TextInput
+                  className="flex-1 border border-gray-300 rounded p-2 mr-2"
+                  placeholder="Add custom tag"
+                  value={customTag}
+                  onChangeText={setCustomTag}
+                  onSubmitEditing={() => addTag(customTag.trim())}
+                />
+                <TouchableOpacity
+                  onPress={() => addTag(customTag.trim())}
+                  className="bg-blue-600 rounded px-3 py-2"
+                >
+                  <Text className="text-white font-semibold">Add</Text>
+                </TouchableOpacity>
+              </View>
             )}
             {/* Priority Selection */}
             <Text className="font-semibold mb-1">Priority</Text>

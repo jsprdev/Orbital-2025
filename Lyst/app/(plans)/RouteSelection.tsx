@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, ActivityIndicator, Alert, ScrollView } fr
 import React, { useState, useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useAuth } from '@/providers/AuthProvider'
-import { getNotes, generateDateRoute } from '@/utils/api'
+import { getNotes, generateDateRoute } from '@/utils/lyst.api'
 import { Note } from '@/types'
 import { router, usePathname } from 'expo-router'
 
@@ -11,7 +11,6 @@ export default function RouteSelection() {
   const { token } = useAuth();
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNotes, setSelectedNotes] = useState<Note[]>([]);
-  const [loading, setLoading] = useState(false);
   
   useEffect(() => {
     const fetchNotes = async () => {
@@ -64,8 +63,6 @@ export default function RouteSelection() {
         return;
       }
 
-      setLoading(true);
-
       // mapping the selected activities to the cards variable, to pass into the prompt
       const cards = selectedNotes.map(note => ({
         name: note.description,
@@ -80,7 +77,6 @@ export default function RouteSelection() {
       console.log("Sending cards to API:", cards);
       const result = await generateDateRoute(cards, token);
       console.log("Received date route result:", result);
-      setLoading(false);
 
       router.push({
         pathname: '/(plans)/RouteReview',
@@ -153,8 +149,6 @@ export default function RouteSelection() {
                   </Text>
                 
               </TouchableOpacity>
-
-              {loading && <ActivityIndicator size="large" color="#FF69B4" className="mt-4" />}
               
 
             </View>

@@ -22,25 +22,27 @@ const TabLayout = () => {
         headerShown: false,
       }}
     >
-
       <Tabs.Screen
         name="YourLyst"
         options={{
           title: "YourLyst",
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('../../assets/icons/heart.png')}
+              source={require("../../assets/icons/heart.png")}
               style={{
                 width: 24,
                 height: 24,
                 tintColor: focused ? COLORS.primary : COLORS.unfocused,
-                resizeMode: 'contain'
+                resizeMode: "contain",
               }}
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
-              style={{ fontSize: 12, color: focused ? COLORS.primary : COLORS.unfocused }}
+              style={{
+                fontSize: 12,
+                color: focused ? COLORS.primary : COLORS.unfocused,
+              }}
             >
               Your Lyst
             </Text>
@@ -103,27 +105,26 @@ const TabLayout = () => {
           title: "Profile",
           tabBarIcon: ({ focused }) => (
             <Image
-              source={require('../../assets/icons/profile.png')}
+              source={require("../../assets/icons/profile.png")}
               style={{
                 width: 24,
                 height: 24,
-                tintColor: focused ? COLORS.primary : COLORS.unfocused
+                tintColor: focused ? COLORS.primary : COLORS.unfocused,
               }}
             />
           ),
           tabBarLabel: ({ focused }) => (
             <Text
-              style={{ fontSize: 12, color: focused ? COLORS.primary : COLORS.unfocused }}
+              style={{
+                fontSize: 12,
+                color: focused ? COLORS.primary : COLORS.unfocused,
+              }}
             >
               Profile
             </Text>
           ),
         }}
       />
-
-      
-
-
     </Tabs>
   );
 };

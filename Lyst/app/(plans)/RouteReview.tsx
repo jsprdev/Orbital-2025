@@ -1,21 +1,10 @@
-import { View, Text, TouchableOpacity, Button, Alert } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { router, useLocalSearchParams } from 'expo-router';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getWeatherForecast } from '@/utils/api';
-import * as Calendar from 'expo-calendar';
+import { getWeatherForecast } from '@/utils/lyst.api';
 import DraggableFlatList, { NestableDraggableFlatList, RenderItemParams } from 'react-native-draggable-flatlist';
-
-
-const addToCalendar = async () => {
-    const { status } = await Calendar.requestCalendarPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Please give epxo permission to edit your calendars');
-      return;
-    }
-   Calendar.createEventInCalendarAsync({});
-};
 
 export default function RouteReview() {
     const { routeData } = useLocalSearchParams();
@@ -24,12 +13,11 @@ export default function RouteReview() {
     const [data, setData] = useState(initialRoute.selectedLocations);
     const [weatherForecastForNextWeek, setWeatherForecastForNextWeek] = useState([]);
 
-    console.log('initialRoute:', initialRoute);
     useEffect(() => {
         const fetchWeather = async () => {
           try {
             const data = await getWeatherForecast("Singapore"); 
-            // console.log("Weather API response:", data);
+            console.log("Weather API response:", data);
             setWeatherForecastForNextWeek(data.forecast); 
           } catch (error) {
             console.error("failed to fetch weather forecast:", error);
@@ -38,17 +26,12 @@ export default function RouteReview() {
         fetchWeather();
       }, []);
 
-      //
-    
-
-
   
     return (
         <SafeAreaView className="flex-1 bg-white px-6">
             
                 <Text className="text-2xl font-bold">Review Your Date Route</Text>
                 <Text className="text-lg text-gray-500 mb-3">Drag and drop to reorder</Text>
-                
                 
                 <DraggableFlatList
                     className="px-6 mt-4 mb-3"
@@ -68,17 +51,6 @@ export default function RouteReview() {
                     )}
                 />
 
-                {/* need to refine the ai prompt now but for now is abit scuffed so maybe we will leave it out */}
-                {/* 
-                <Text className="font-semibold text-gray-500">
-                    AI's notes
-                </Text>
-
-                <Text className="text-gray-500 mb-4">
-                    {initialRoute.explanation}
-                </Text> */}
-
-                {/* display weather for next 7 days */}
                 <View className="flex-col gap-y-1">
                     <Text className="font-semibold text-xl">
                         Weekly Weather Forecast
@@ -96,8 +68,6 @@ export default function RouteReview() {
                     );
                 })}</View>
 
-                
-
                 <TouchableOpacity className="bg-blue-500 p-4 rounded-lg mt-3 shadow-md"
                     onPress={() => {
                         // goes back to YourPlans
@@ -108,17 +78,9 @@ export default function RouteReview() {
                         </Text>
                 </TouchableOpacity>
 
-                
-                <TouchableOpacity className="rounded-lg bg-pink-500 mt-4 mb-2" onPress={addToCalendar}>
-                    <Text className="text-white text-center font-bold p-4">
-                        Add to Calendar
-                    </Text> 
-                </TouchableOpacity>
+
             
-
-
-                
-
+            
         </SafeAreaView>
       
     );
