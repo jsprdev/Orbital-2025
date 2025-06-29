@@ -100,7 +100,15 @@ export default function RouteSelection() {
   return (
     <SafeAreaView className="flex-1 bg-white">
 
-        {loading ? <Text className="font-semibold"> Generating... </Text> : (<View className="flex-1">
+        {loading ? 
+
+        <View className="flex-1 justify-center items-center">
+            <Text className="font-semibold text-lg"> Generating... </Text>
+        </View> 
+        
+        : 
+
+        (<View className="flex-1">
 
               <View className="px-4 mb-4">
                 <View className="flex-row justify-between items-center mb-4">
