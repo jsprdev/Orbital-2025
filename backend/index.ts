@@ -15,7 +15,7 @@ app.use(express.json());
 app.use('/api', Routes);
 
 app.listen(port, () => {
-    console.log(`Server is running at http://${host}:${port}`);
+    console.log(`Server is running at https://${host}:${port}`);
 });
 
 
