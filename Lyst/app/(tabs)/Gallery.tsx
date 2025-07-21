@@ -9,13 +9,22 @@ import {
   Image,
 } from "react-native";
 import { router } from "expo-router";
-import Feather from "@expo/vector-icons/Feather";
 import GalleryGrid from "../(gallery)/GalleryGrid";
 import { useGallery } from "@/providers/GalleryProvider";
+import { useLocalSearchParams } from "expo-router";
+import { useEffect } from "react";
 
 export default function GalleryScreen() {
   const { loading, fetchPhotos, fetchAlbums } = useGallery();
   const [refreshing, setRefreshing] = useState<boolean>(false);
+  const params = useLocalSearchParams();
+
+  useEffect(() => {
+    if (params.refresh === "true") {
+      fetchPhotos();
+      fetchAlbums();
+    }
+  }, [params.refresh]);
 
   const handleRefresh = async () => {
     setRefreshing(true);

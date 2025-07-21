@@ -89,7 +89,7 @@ export const GalleryProvider = ({
         // Don't delete albums with empty names or "Uncategorized" albums
         if (album && album.name && album.name.trim() !== "") {
           const remainingPhotosInAlbum = photos.filter(
-            (p) => p.albumId === albumId && p.id !== photoId,
+            (p) => p.albumId === albumId && p.id !== photoId
           );
           if (remainingPhotosInAlbum.length === 0) {
             // Album is empty, delete it

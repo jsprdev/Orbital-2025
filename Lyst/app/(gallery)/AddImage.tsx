@@ -30,7 +30,7 @@ export default function AddImageScreen() {
       if (status !== "granted") {
         Alert.alert(
           "Permission needed",
-          "Please grant camera roll permissions to select images.",
+          "Please grant camera roll permissions to select images."
         );
         return;
       }
@@ -55,7 +55,7 @@ export default function AddImageScreen() {
       if (status !== "granted") {
         Alert.alert(
           "Permission needed",
-          "Please grant camera permissions to take photos.",
+          "Please grant camera permissions to take photos."
         );
         return;
       }
@@ -80,10 +80,11 @@ export default function AddImageScreen() {
     }
     setUploading(true);
     try {
-      // Ensure album exists or create it
-      let album = albums.find((a) => a.name === albumName);
+      const safeAlbumName =
+        albumName.trim() === "" ? "Uncategorized" : albumName.trim();
+      let album = albums.find((a) => a.name === safeAlbumName);
       if (!album) {
-        album = await addAlbum(albumName);
+        album = await addAlbum(safeAlbumName);
       }
       if (!album || !album.id) {
         throw new Error("Album could not be found or created.");
@@ -92,7 +93,14 @@ export default function AddImageScreen() {
       await uploadPhoto(album.id!, selectedImage);
       await fetchAlbums(); // Refresh albums to ensure everything is in sync
       Alert.alert("Success", "Image uploaded successfully!", [
-        { text: "OK", onPress: () => router.back() },
+        {
+          text: "OK",
+          onPress: () =>
+            router.replace({
+              pathname: "/(tabs)/Gallery",
+              params: { refresh: "true" },
+            }),
+        },
       ]);
       setSelectedImage([]);
       setUploading(false);
