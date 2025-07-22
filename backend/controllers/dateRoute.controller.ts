@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
 import { DateRouteService } from '../services/dateRoute.service';
-import { verifyToken } from '../middleware/verifyToken';
 
 const router = Router();
 
@@ -11,7 +10,7 @@ interface LocationCard {
   [key: string]: any;
 }
 
-router.post('/generate', verifyToken, async (req: Request, res: Response): Promise<void> => {
+router.post('/generate', async (req: Request, res: Response): Promise<void> => {
   try {
     const { cards }: { cards: LocationCard[] } = req.body;
 

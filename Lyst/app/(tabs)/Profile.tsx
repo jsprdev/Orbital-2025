@@ -4,14 +4,19 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Alert,
+  Touchable,
+  TextInput
 } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { useAuth } from "@/providers/AuthProvider";
+import { generateCode, joinCode } from "@/utils/partner.api";
 
 const Profile = () => {
   const [showOptions, setShowOptions] = useState(false);
-  const { user, signOutUser } = useAuth();
+  const [generatedCode, setGeneratedCode] = useState<string>("");
+  const [inviteCode, setInviteCode] = useState<string>("");
+  const { user, signOutUser, token } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -40,6 +45,38 @@ const Profile = () => {
           <Text>Your Partner ▼</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          className="bg-blue-500 py-3 rounded-lg items-center mt-4"
+          onPress={async () => {
+            const code = await generateCode(token!);
+            setGeneratedCode(code);
+          }}
+        >
+          <Text className="text-white text-lg font-semibold">
+            {generatedCode
+              ? `Your Code: ${generatedCode}`
+              : "Generate Partner Code"}
+          </Text>
+        </TouchableOpacity>
+
+        <TextInput
+          placeholder="Enter Partner Code Here"
+          placeholderTextColor="#9CA3AF"
+          value={inviteCode}
+          onChangeText={setInviteCode}
+          className="h-12 border border-gray-300 rounded-lg px-4 mt-4 text-base"
+        />
+        <TouchableOpacity
+          className="bg-blue-500 py-3 rounded-lg items-center mb-8"
+          onPress={async () => {
+            if (inviteCode) {
+              const flag = await joinCode(token!, inviteCode);
+              console.log(flag)
+            }
+          }}
+        >
+          <Text>Partner Up!</Text>
+        </TouchableOpacity>
         {showOptions && (
           <View className="bg-white border p-4 mt-1 rounded-lg">
             <Text>Partner Functionality Coming Soon!</Text>

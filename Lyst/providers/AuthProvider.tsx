@@ -19,6 +19,8 @@ import {
   FIREBASE_GOOGLE_PROVIDER as provider,
 } from "@/FirebaseConfig";
 
+import { createAccount } from "@/utils/account.api";
+
 interface AuthContextType {
   user: User | null;
   token: string | null;
@@ -108,6 +110,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         email,
         password,
       );
+
+      // Create user object in firestore 
+      console.log("creating in firebase...");
+      createAccount(userCredential.user.uid, email, name);
+      
       if (userCredential.user && name) {
         await updateProfile(userCredential.user, { displayName: name });
       }

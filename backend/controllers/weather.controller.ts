@@ -1,5 +1,4 @@
 import { Request, Response, Router } from 'express';
-import { verifyToken } from '../middleware/verifyToken';
 import { WeatherService } from '../services/weather.service';
 
 const weatherService = new WeatherService();

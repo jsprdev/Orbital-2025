@@ -10,7 +10,6 @@ export const getPhotos = async (token: string) => {
     });
     return response.data.photos;
   } catch (error: any) {
-    console.error("Error fetching photos:", error);
     if (error.response) {
       console.error("Response status:", error.response.status);
       console.error("Response data:", error.response.data);
