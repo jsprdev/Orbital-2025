@@ -1,6 +1,28 @@
 import { db } from "../config/firebase-config";
 
 export class PartnerService {
+  private async getUserData(userId: string) {
+    const userRef = db.collection("users").doc(userId);
+    const userSnap = await userRef.get();
+    if (!userSnap.exists) {
+      throw new Error("User not found");
+    }
+    const userData = userSnap.data();
+    return userData;
+  }
+
+  async getPartnerDetails(userId: string) {
+    const userData = await this.getUserData(userId);
+  
+    // find partner
+    const partnerUserId = userData?.partnerId
+    const partnerData = await this.getUserData(partnerUserId);
+
+    // get partner fields 
+    const name = partnerData?.displayName; 
+    const anniversaryDate = partnerData?.anniversaryDate;
+    return { partnerUserId, name, anniversaryDate }; 
+  }
 
   async generateCode(userId: string) {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
@@ -12,6 +34,16 @@ export class PartnerService {
       inviteCodeExpiry : expiry 
     });
     return code;
+  }
+
+  async uploadAnniversaryDate(userId: string, date: Date) {
+    const userData = await this.getUserData(userId);
+    const partnerUserId = userData?.partnerId
+
+    await db.collection("users").doc(userId).update({ anniversaryDate: date });
+    await db.collection("users").doc(partnerUserId).update({ anniversaryDate: date });
+
+    return { success: true };
   }
 
   async joinCode(userId: string, code: string) {
@@ -64,6 +96,6 @@ export class PartnerService {
     await db.collection("users").doc(userId).update({ inviteCode: null, inviteCodeExpiry: null });
     await db.collection("users").doc(partnerUserId).update({ inviteCode: null, inviteCodeExpiry: null });
 
-    return { success: true, partnerId: partnerUserId };
+    return { success: true };
   }
 }

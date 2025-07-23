@@ -4,6 +4,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { AuthProvider } from "@/providers/AuthProvider";
 import { GalleryProvider } from "@/providers/GalleryProvider";
+import { PartnerProvider } from "@/providers/PartnerProvider";
 
 export default function RootLayout() {
   const router = useRouter();
@@ -11,14 +12,11 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
-        <GalleryProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="(auth)" />
-            <Stack.Screen name="(tabs)" />
-            <Stack.Screen name="(gallery)" />
-          </Stack>
-        </GalleryProvider>
+        <PartnerProvider>
+          <GalleryProvider>
+            <Stack screenOptions={{ headerShown: false }} />
+          </GalleryProvider>
+        </PartnerProvider>
       </AuthProvider>
     </GestureHandlerRootView>
   );

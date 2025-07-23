@@ -1,97 +1,65 @@
+import React, { useState, useEffect } from "react";
 import {
-  View,
   Text,
+  View,
   SafeAreaView,
-  TouchableOpacity,
   Alert,
-  Touchable,
-  TextInput
+  TouchableOpacity,
+  ScrollView
 } from "react-native";
-import React, { useState } from "react";
 import { router } from "expo-router";
 import { useAuth } from "@/providers/AuthProvider";
-import { generateCode, joinCode } from "@/utils/partner.api";
+import SingleProfile from "../(profile)/SingleProfile";
+import CoupleProfile from "../(profile)/CoupleProfiePage";
+import { getPartnerDetails } from "@/utils/partner.api";
+import AntDesign from "@expo/vector-icons/AntDesign";
 
 const Profile = () => {
-  const [showOptions, setShowOptions] = useState(false);
-  const [generatedCode, setGeneratedCode] = useState<string>("");
-  const [inviteCode, setInviteCode] = useState<string>("");
-  const { user, signOutUser, token } = useAuth();
+  const { signOutUser, token } = useAuth();
+  const [hasPartner, setHasPartner] = useState<boolean | null>(null);
 
-  const handleLogout = async () => {
-    try {
-      await signOutUser();
-      router.replace("/");
-    } catch (error) {
-      Alert.alert("error", "failed to log out");
-      console.error("Logout error:", error);
+  useEffect(() => {
+    async function fetchPairStatus() {
+      if (token) {
+        const temp = await getPartnerDetails(token);
+        if (temp.partnerUserId) {
+          setHasPartner(true);
+        } else {
+          setHasPartner(false);
+        }
+      }
     }
-  };
-
+    fetchPairStatus();
+  }, [token]);
+    
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="p-4 mt-8">
-        <View className="items-center py-8">
-          <View className="w-32 h-32 rounded-full bg-gray-200 mb-4" />
-          <Text className="text-2xl font-bold">
-            {user?.displayName}'s Profile
-          </Text>
+      <View className="ml-4 mr-4">
+        <View className="items-center mt-4">
+          <Text className="text-2xl font-bold mb-2">Profile</Text>
+          <TouchableOpacity
+            onPress={() => router.push("/(profile)/Settings")}
+            className="absolute right-2 pr-2"
+          >
+            <AntDesign name="setting" size={28} color="black" />
+          </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
-          onPress={() => setShowOptions(!showOptions)}
-          className="bg-gray-100 p-4 rounded-lg"
-        >
-          <Text>Your Partner ▼</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className="bg-blue-500 py-3 rounded-lg items-center mt-4"
-          onPress={async () => {
-            const code = await generateCode(token!);
-            setGeneratedCode(code);
-          }}
-        >
-          <Text className="text-white text-lg font-semibold">
-            {generatedCode
-              ? `Your Code: ${generatedCode}`
-              : "Generate Partner Code"}
-          </Text>
-        </TouchableOpacity>
-
-        <TextInput
-          placeholder="Enter Partner Code Here"
-          placeholderTextColor="#9CA3AF"
-          value={inviteCode}
-          onChangeText={setInviteCode}
-          className="h-12 border border-gray-300 rounded-lg px-4 mt-4 text-base"
-        />
-        <TouchableOpacity
-          className="bg-blue-500 py-3 rounded-lg items-center mb-8"
-          onPress={async () => {
-            if (inviteCode) {
-              const flag = await joinCode(token!, inviteCode);
-              console.log(flag)
-            }
-          }}
-        >
-          <Text>Partner Up!</Text>
-        </TouchableOpacity>
-        {showOptions && (
-          <View className="bg-white border p-4 mt-1 rounded-lg">
-            <Text>Partner Functionality Coming Soon!</Text>
-          </View>
-        )}
-
-        <TouchableOpacity
-          onPress={handleLogout}
-          className="bg-pink-500 py-3 rounded-lg items-center"
-        >
-          <Text className="text-white text-lg font-semibold">Logout</Text>
-        </TouchableOpacity>
+        <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
+          // Contents
+          {hasPartner === null ? (
+            <Text>Loading...</Text>
+          ) : hasPartner ? (
+            <CoupleProfile />
+          ) : (
+            <SingleProfile />
+          )}
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
 };
 
+
 export default Profile;
+

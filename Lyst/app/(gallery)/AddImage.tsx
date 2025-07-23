@@ -125,13 +125,13 @@ export default function AddImageScreen() {
 
           <Text className="text-2xl font-bold">Add Photo</Text>
 
-          <TouchableOpacity
-            onPress={takePhoto}
-            className="absolute right-4 mt-7 pr-8"
-            testID="camera-button"
-          >
-            <Feather name="camera" size={28} color="black" />
-          </TouchableOpacity>
+      <TouchableOpacity
+        onPress={takePhoto}
+        className="absolute right-4 mt-7 pr-8"
+        testID="camera-button"
+      >
+        <Feather name="camera" size={28} color="black" />
+      </TouchableOpacity>
         </View>
 
         {/* Image Selection */}

@@ -13,6 +13,8 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   createUserWithEmailAndPassword,
+  updatePassword,
+  updateEmail,
 } from "firebase/auth";
 import {
   FIREBASE_AUTH as auth,
@@ -20,6 +22,7 @@ import {
 } from "@/FirebaseConfig";
 
 import { createAccount } from "@/utils/account.api";
+import { Alert } from "react-native";
 
 interface AuthContextType {
   user: User | null;
@@ -33,6 +36,8 @@ interface AuthContextType {
   ) => Promise<void>;
   signOutUser: () => Promise<void>;
   forgotPassword: (email: string) => Promise<void>;
+  changeEmail: (newEmail: string) => void;
+  changePassword: (newPassword: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -152,9 +157,50 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw error;
     }
   };
+
+  // update particulars
+  const changeEmail = (newEmail: string) => {
+    if (!user) return;
+
+    Alert.alert(
+      "Confirm Password Change",
+      "Are you sure you want to change your password?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Change",
+          style: "destructive",
+          onPress: async () => {
+            await updateEmail(user, newEmail);
+          },
+        },
+      ]
+    );
+  };
+
+  const changePassword = (newPassword: string) => {
+    if (!user) return;
+    Alert.alert(
+      "Confirm Password Change",
+      "Are you sure you want to change your password?",
+      [
+        { text: "Cancel", style: "cancel"}, 
+        {
+          text: "Change",
+          style: "destructive",
+          onPress: async () => {
+             await updatePassword(user, newPassword);
+          }
+        }
+      ]
+    )
+  }
+
+  
+
   return (
     <AuthContext.Provider
-      value={{ user, token, signIn, createUser, signOutUser, forgotPassword }}
+      value={{ user, token, signIn, createUser, signOutUser, forgotPassword, changeEmail, changePassword}}
     >
       {children}
     </AuthContext.Provider>

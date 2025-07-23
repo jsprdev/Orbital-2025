@@ -1,7 +1,6 @@
 import { Image, Text } from "react-native";
 import { Tabs } from "expo-router";
 import { COLORS } from "@/constants/colors";
-import Fontisto from "@expo/vector-icons/Fontisto";
 
 const TabLayout = () => {
   return (

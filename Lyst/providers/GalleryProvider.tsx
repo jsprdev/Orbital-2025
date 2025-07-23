@@ -20,7 +20,7 @@ interface GalleryContextType {
 const GalleryContext = createContext<GalleryContextType | undefined>(undefined);
 
 export const GalleryProvider = ({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) => {
