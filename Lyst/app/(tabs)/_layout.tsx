@@ -105,6 +105,33 @@ const TabLayout = () => {
       />
 
       <Tabs.Screen
+        name="ExpenseTracker"
+        options={{
+          title: "ExpenseTracker",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../../assets/icons/piggy-bank.png")}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? COLORS.primary : COLORS.unfocused,
+              }}
+            />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <Text
+              style={{
+                fontSize: 12,
+                color: focused ? COLORS.primary : COLORS.unfocused,
+              }}
+            >
+              Expenses
+            </Text>
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="Profile"
         options={{
           title: "Profile",

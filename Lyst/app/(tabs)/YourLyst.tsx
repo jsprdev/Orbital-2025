@@ -8,6 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
 import { ScrollView } from "react-native-gesture-handler";
 import { getNotes } from "@/utils/lyst.api";
+import { usePartner } from "@/providers/PartnerProvider";
 
 const DEFAULT_TAGS = ["Food", "Gifts", "Shopping", "Overseas", "Others"];
 
@@ -23,21 +24,20 @@ export default function YourLyst() {
   const refreshPage = useCallback(() => {
     setRefresh((prev) => !prev);
   }, []);
-
+  
   const { user, token } = useAuth();
-  if (!token) {
-    throw Error("No token received, please Sign In again");
-  }
+  const { partnerUserId } = usePartner();
 
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
   const [availableTags, setAvailableTags] = useState(DEFAULT_TAGS);
 
   useEffect(() => {
+    if (!token) return;
     const fetchNotes = async () => {
       setLoading(true);
       try {
-        const fetchedNotes = await getNotes(token);
+        const fetchedNotes = await getNotes(token, partnerUserId);
         setNotes(fetchedNotes);
       } catch (error) {
         console.error("Error fetching notes:", error);

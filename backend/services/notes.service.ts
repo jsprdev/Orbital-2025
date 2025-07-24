@@ -3,13 +3,20 @@ import { Note } from "../../Lyst/types/note.dto";
 
 export class NotesService {
 
-  async getNotes(userId: string) {
+  async getNotes(userId: string, partnerId?: string) {
     const notesRef = db.collection('tasks');
     const snapshot = await notesRef.where('userId', '==', userId).get();
     const notes: Note[] = [];
     snapshot.forEach(doc => {
       notes.push({ ...doc.data(), id: doc.id } as Note);
     });
+
+    if (partnerId) {
+      const partnerSnapshot = await notesRef.where('userId', '==', partnerId).get();
+      partnerSnapshot.forEach(doc => {
+        notes.push({ ...doc.data(), id: doc.id } as Note);
+      });
+    }
     return notes;
   }
 

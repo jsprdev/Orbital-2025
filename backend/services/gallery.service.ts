@@ -14,7 +14,6 @@ export class GalleryService {
       id: doc.id,
       ...doc.data()
     })) as Photo[];
-    console.log("galleryService: photos", photos.map(p => p.id));
 
     if (partnerId) {
       const partnerSnapshot = await photosCollection
@@ -25,7 +24,6 @@ export class GalleryService {
         id: doc.id,
         ...doc.data()
       })) as Photo[];
-      console.log("galleryService: partnerPhotos", partnerPhotos.map(p => p.id));
       photos = [...photos, ...partnerPhotos];
     }
     return photos;

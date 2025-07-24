@@ -3,9 +3,11 @@ import { FIREBASE_AUTH as auth } from "@/FirebaseConfig";
 import { Note } from "@/types";
 
 // fetch notes
-export const getNotes = async (token: string) => {
+export const getNotes = async (token: string, partnerId?: string) => {
+
   try {
     const response = await axiosInstance.get("/api/notes", {
+      params: { partnerId },
       headers: {
         Authorization: `Bearer ${token}`,
       },

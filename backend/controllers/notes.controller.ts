@@ -10,7 +10,8 @@ router.get("/", async (req: Request, res: Response): Promise<void> => {
             res.status(401).json({ error: 'User not authenticated' });
             return;
         }
-        const notes = await notesServiceInstance.getNotes(req.user.user_id);
+        const partnerId = req.query.partnerId?.toString();
+        const notes = await notesServiceInstance.getNotes(req.user.user_id, partnerId);
         res.status(200).json({ notes });
     } catch (error) {
         console.error('Error fetching notes:', error);
