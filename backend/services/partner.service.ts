@@ -16,6 +16,10 @@ export class PartnerService {
   
     // find partner
     const partnerUserId = userData?.partnerId
+    if (!partnerUserId) {
+      // if ur single 
+      return { partnerUserId: null, name: null, anniversaryDate: null };
+    }
     const partnerData = await this.getUserData(partnerUserId);
 
     // get partner fields 
