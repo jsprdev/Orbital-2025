@@ -6,6 +6,7 @@ import {
   Alert,
   ActivityIndicator,
   ScrollView,
+  Switch
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
@@ -89,8 +90,8 @@ export default function AddImageScreen() {
       if (!album || !album.id) {
         throw new Error("Album could not be found or created.");
       }
-
-      await uploadPhoto(album.id!, selectedImage);
+      console.log("HERE", album.id, selectedImage);
+      await uploadPhoto(album.id, selectedImage);
       await fetchAlbums(); // Refresh albums to ensure everything is in sync
       Alert.alert("Success", "Image uploaded successfully!", [
         {
@@ -125,13 +126,13 @@ export default function AddImageScreen() {
 
           <Text className="text-2xl font-bold">Add Photo</Text>
 
-      <TouchableOpacity
-        onPress={takePhoto}
-        className="absolute right-4 mt-7 pr-8"
-        testID="camera-button"
-      >
-        <Feather name="camera" size={28} color="black" />
-      </TouchableOpacity>
+          <TouchableOpacity
+            onPress={takePhoto}
+            className="absolute right-4 mt-7 pr-8"
+            testID="camera-button"
+          >
+            <Feather name="camera" size={28} color="black" />
+          </TouchableOpacity>
         </View>
 
         {/* Image Selection */}
@@ -169,45 +170,48 @@ export default function AddImageScreen() {
               />
             </View>
 
-            <View className="flex-row items-center justify-end mt-6 space-x-4">
-              {selectedImage.length != 0 && (
-                <TouchableOpacity
-                  onPress={pickImage}
-                  className="px-4 py-3 bg-blue-500 rounded-xl mr-2"
-                  testID="add-more-image-button"
-                >
-                  <Text className="text-white font-semibold">
-                    Add More Photos
-                  </Text>
-                </TouchableOpacity>
-              )}
-              <TouchableOpacity
-                onPress={uploadImage}
-                disabled={selectedImage.length == 0 || uploading || loading}
-                className={`px-4 py-3 rounded-xl shadow-md ${
-                  selectedImage.length != 0 && !uploading && !loading
-                    ? "bg-red-500"
-                    : "bg-gray-300"
-                }`}
-              >
-                {uploading || loading ? (
-                  <ActivityIndicator
-                    size="small"
-                    color="#fff"
-                    testID="loading-indicator"
-                  />
-                ) : (
-                  <Text
-                    className={`font-semibold text-base ${
-                      selectedImage.length != 0 && !uploading && !loading
-                        ? "text-white"
-                        : "text-gray-500"
-                    }`}
+            <View className="flex-row items-center justify-end mt-5">
+            
+              <View className="flex-row items-center space-x-4">
+                {selectedImage.length != 0 && (
+                  <TouchableOpacity
+                    onPress={pickImage}
+                    className="px-4 py-3 bg-blue-500 rounded-xl mr-2"
+                    testID="add-more-image-button"
                   >
-                    Upload
-                  </Text>
+                    <Text className="text-white font-semibold">
+                      Add More Photos
+                    </Text>
+                  </TouchableOpacity>
                 )}
-              </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={uploadImage}
+                  disabled={selectedImage.length == 0 || uploading || loading}
+                  className={`px-4 py-3 rounded-xl shadow-md ${
+                    selectedImage.length != 0 && !uploading && !loading
+                      ? "bg-red-500"
+                      : "bg-gray-300"
+                  }`}
+                >
+                  {uploading || loading ? (
+                    <ActivityIndicator
+                      size="small"
+                      color="#fff"
+                      testID="loading-indicator"
+                    />
+                  ) : (
+                    <Text
+                      className={`font-semibold text-base ${
+                        selectedImage.length != 0 && !uploading && !loading
+                          ? "text-white"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      Upload
+                    </Text>
+                  )}
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>

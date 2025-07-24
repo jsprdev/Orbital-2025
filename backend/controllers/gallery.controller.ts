@@ -29,8 +29,9 @@ interface MulterRequest extends Request {
 // Get all photos for a user
 router.get("/", async (req: Request, res: Response) => {
     try {
-        console.log('GET /api/images - User ID:', req.user!.user_id);
-        const photos = await galleryServiceInstance.getPhotos(req.user!.user_id);
+        const partnerId = req.query.partnerId?.toString();
+        const photos = await galleryServiceInstance.getPhotos(req.user!.user_id, partnerId);
+
         res.status(200).json({ photos });
     } catch (error) {
         console.error('Error fetching photos:', error);
@@ -65,14 +66,15 @@ router.post("/", upload.array('photos'), async (req: any, res: Response) => {
     try {
         console.log('POST /api/images - User ID:', req.user!.user_id,);
         const files = req.files as Express.Multer.File[];
-        const albumId = req.body.albumName;
+        const { albumId } = req.body;
+        console.log("234: albumId:", albumId);
         
         const uploadedPhotos = await Promise.all(
             files.map(
                 file => galleryServiceInstance.uploadPhoto(
                     req.user!.user_id, 
                     file,
-                    albumId
+                    albumId,
                 )
             )
         );

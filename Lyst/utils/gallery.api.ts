@@ -1,9 +1,10 @@
 import axiosInstance from "./index";
 
 // GET requests
-export const getPhotos = async (token: string) => {
+export const getPhotos = async (token: string, partnerId?: string) => {
   try {
     const response = await axiosInstance.get("/api/images", {
+      params: { partnerId },
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -21,12 +22,13 @@ export const getPhotos = async (token: string) => {
 // POST - Upload a new photo
 export const uploadPhoto = async (
   token: string,
-  albumId: string,
+  albumId: string = "Uncategorized",
   imageUri: string[],
 ) => {
   try {
+    console.log("123:", albumId);
     const formData = new FormData();
-    formData.append("albumName", albumId);
+    formData.append("albumId", albumId);
     imageUri.forEach((uri, index) => {
       formData.append("photos", {
         uri,

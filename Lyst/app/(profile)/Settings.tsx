@@ -14,6 +14,7 @@ import { router } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
 import { useAuth } from "@/providers/AuthProvider";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { useGallery } from "@/providers/GalleryProvider";
 
 const Settings = () => {
   const { user, signOutUser, changeEmail, changePassword } = useAuth();
@@ -35,10 +36,10 @@ const Settings = () => {
 
   return (
     <SafeAreaView>
-      <View className="relative flex-row justify-center items-center p-4">
+      <View className="relative flex-row justify-center items-center p-4 pt-14">
         <TouchableOpacity
           onPress={() => router.back()}
-          className="absolute left-4 mt-7 pl-4"
+          className="absolute left-4 top-14 ml-2"
         >
           <Feather name="arrow-left" size={28} color="hotpink" />
         </TouchableOpacity>

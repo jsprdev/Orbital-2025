@@ -21,8 +21,7 @@ export default function GalleryScreen() {
 
   useEffect(() => {
     if (params.refresh === "true") {
-      fetchPhotos();
-      fetchAlbums();
+      handleRefresh();
     }
   }, [params.refresh]);
 

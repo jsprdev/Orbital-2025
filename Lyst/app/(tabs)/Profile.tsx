@@ -15,7 +15,7 @@ import { getPartnerDetails } from "@/utils/partner.api";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 const Profile = () => {
-  const { signOutUser, token } = useAuth();
+  const { token } = useAuth();
   const [hasPartner, setHasPartner] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const Profile = () => {
     
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="ml-4 mr-4">
+      <View className=" mb-4 mt-8 px-4 pt-4 ">
         <View className="items-center mt-4">
           <Text className="text-2xl font-bold mb-2">Profile</Text>
           <TouchableOpacity
@@ -46,7 +46,6 @@ const Profile = () => {
         </View>
 
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
-          // Contents
           {hasPartner === null ? (
             <Text>Loading...</Text>
           ) : hasPartner ? (

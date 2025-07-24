@@ -26,7 +26,10 @@ export const PartnerProvider = ({
 
   useEffect(() => {
     async function fetchPartner() {
-      if (!token) return;
+      if (!token) {
+        setPartnerUserId("");
+        return;
+      };
       try {
         const { partnerUserId, name, coupleAnniversaryDate } =
           await getPartnerDetails(token);

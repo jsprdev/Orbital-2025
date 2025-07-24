@@ -1,14 +1,18 @@
 import { admin, db } from "../config/firebase-config";
 import { Album } from "../../Lyst/types/album.dto";
+import { StringCheckGrader } from "openai/resources/graders/grader-models";
 
 export class AlbumsService {
 
-  async getAlbums(userId: string) {
-
+  async getAlbums(userId: string, partnerId?: string) {
     const albumsRef = db.collection('albums');
     const snapshot = await albumsRef.where('userId', '==', userId).get();
+    const partnerSnapshot = await albumsRef.where('userId', '==', partnerId).get();
     const albums: Album[] = [];
     snapshot.forEach(doc => {
+      albums.push({ ...doc.data(), id:doc.id } as Album);
+    });
+    partnerSnapshot.forEach(doc => {
       albums.push({ ...doc.data(), id:doc.id } as Album);
     });
     return albums; 
@@ -19,7 +23,7 @@ export class AlbumsService {
     const newAlbum = {
       userId: userId,
       name: albumName,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
     };
     
     const docRef = await albumRef.add(newAlbum)

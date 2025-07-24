@@ -11,7 +11,8 @@ router.get("/", async (req: Request, res: Response) => {
     }
 
     try {
-        const albums = await albumServiceInstance.getAlbums(req.user.user_id);
+        const partnerId = req.query.partnerId as string | undefined;
+        const albums = await albumServiceInstance.getAlbums(req.user.user_id, partnerId);
         res.status(200).json({ albums });
       } catch (error) {
         console.error('Error fetching albums:', error);
@@ -26,7 +27,7 @@ router.post("/", async (req: Request, res: Response) => {
     }
 
     try {
-        const { albumName } = req.body;
+        const { albumName, shared } = req.body;
         const userId = req.user.user_id;
         const addedAlbum = await albumServiceInstance.addToAndUpdateAlbum(albumName, userId);
         res.status(201).json({ addedAlbum });

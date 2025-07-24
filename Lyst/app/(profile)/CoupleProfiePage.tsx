@@ -24,7 +24,7 @@ const CoupleProfile = () => {
           className="w-36 h-36 rounded-full bg-gray-200 mb-2"
         />
         <Text className="text-3xl font-bold">
-          {user?.displayName} & {partnerName}
+          {`${user?.displayName} & ${partnerName}`}
         </Text>
         <Text className="text-xl font-light">Together since XXXX</Text>
       </View>
@@ -35,9 +35,7 @@ const CoupleProfile = () => {
         <Text className="text-2xl text-gray-600 font-bold">
           Next Plan: Picnic
         </Text>
-        <Text className="text-lg text-gray-400 font-bold">
-          23 July, Sat
-        </Text>
+        <Text className="text-lg text-gray-400 font-bold">23 July, Sat</Text>
       </View>
 
       <View className="bg-white p-4 rounded-lg border border-gray-200 ml-6 mr-8">

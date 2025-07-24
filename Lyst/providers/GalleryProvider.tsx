@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { getPhotos, uploadPhoto, deletePhoto } from "@/utils/gallery.api";
 import { getAlbums, addAlbum, deleteAlbum } from "@/utils/albums.api";
 import { useAuth } from "@/providers/AuthProvider";
+import { usePartner } from "./PartnerProvider";
 import { Photo } from "@/types/gallery.dto";
 import { Album } from "@/types/album.dto";
 
@@ -15,6 +16,7 @@ interface GalleryContextType {
   deletePhoto: (photoId: string) => Promise<void>;
   addAlbum: (albumName: string) => Promise<any>;
   deleteAlbum: (albumId: string) => Promise<void>;
+
 }
 
 const GalleryContext = createContext<GalleryContextType | undefined>(undefined);
@@ -25,42 +27,46 @@ export const GalleryProvider = ({
   children: React.ReactNode;
 }) => {
   const { token } = useAuth();
+  const { partnerUserId } = usePartner();
 
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [albums, setAlbums] = useState<Album[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchPhotos = async () => {
+
+
+  const fetchPhotos = useCallback(async () => {
     if (!token) return;
     setLoading(true);
     try {
-      const fetchedPhotos = await getPhotos(token);
+      const fetchedPhotos = await getPhotos(token, partnerUserId);
       setPhotos(fetchedPhotos);
-    } catch (error) {
-      console.error("Error fetching photos:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, partnerUserId]); // Dependencies that affect the function
 
-  const fetchAlbums = async () => {
+  const fetchAlbums = useCallback(async () => {
     if (!token) return;
     setLoading(true);
     try {
-      const fetchedAlbums = await getAlbums(token);
+      const fetchedAlbums = await getAlbums(token, partnerUserId);
       setAlbums(fetchedAlbums);
-    } catch (error) {
-      console.error("Error fetching albums:", error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [token, partnerUserId]);
 
-  const uploadPhotoHandler = async (albumName: string, imageUris: string[]) => {
+  useEffect(() => {
+    fetchPhotos();
+    fetchAlbums();
+  }, [fetchPhotos, fetchAlbums]);
+
+  const uploadPhotoHandler = async (albumId: string, imageUris: string[]) => {
     if (!token) throw new Error("No token available");
     setLoading(true);
     try {
-      const uploaded = await uploadPhoto(token, albumName, imageUris);
+      const uploaded = await uploadPhoto(token, albumId, imageUris);
       await fetchPhotos();
       await fetchAlbums();
       return uploaded;

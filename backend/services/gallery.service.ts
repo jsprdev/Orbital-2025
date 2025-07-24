@@ -3,16 +3,32 @@ import { Photo } from "../../Lyst/types/gallery.dto.js"
 
 export class GalleryService {  
 
-  async getPhotos(userId: string): Promise<Photo[]> {
+  async getPhotos(userId: string, partnerId?: string): Promise<Photo[]> {
     const photosCollection = db.collection('images');
     const snapshot = await photosCollection
       .where('userId', '==', userId)
       .get();
       
-    return snapshot.docs.map(doc => ({
+    
+    let photos = snapshot.docs.map(doc => ({  
       id: doc.id,
       ...doc.data()
     })) as Photo[];
+    console.log("galleryService: photos", photos.map(p => p.id));
+
+    if (partnerId) {
+      const partnerSnapshot = await photosCollection
+        .where('userId', '==', partnerId)
+        .get();
+      
+      const partnerPhotos = partnerSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Photo[];
+      console.log("galleryService: partnerPhotos", partnerPhotos.map(p => p.id));
+      photos = [...photos, ...partnerPhotos];
+    }
+    return photos;
   }
 
   async uploadPhoto(userId: string, file: Express.Multer.File, albumId: string): Promise<Photo> {
@@ -34,15 +50,15 @@ export class GalleryService {
 
       const [url] = await fileRef.getSignedUrl({
         action: 'read',
-        expires: '03-09-2491' // Far future date
+        expires: '03-09-2491'
       });
 
       const photoData = {
         url,
         userId,
         storagePath,
-        albumId,
-        createdAt: admin.firestore.FieldValue.serverTimestamp()
+        albumId: albumId ?? "", 
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
       };
 
       const docRef = await photosCollection.add(photoData);
@@ -53,7 +69,8 @@ export class GalleryService {
         userId: photoData.userId,
         storagePath: photoData.storagePath,
         albumName: albumId,
-        createdAt: admin.firestore.FieldValue.serverTimestamp()
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+
       } as Photo;
     } catch (error) {
       console.error('Error in uploadPhoto:', error);

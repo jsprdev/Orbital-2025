@@ -1,9 +1,10 @@
 import axiosInstance from "./index";
 
 // GET all the albums
-export const getAlbums = async (token: string) => {
+export const getAlbums = async (token: string, partnerId?: string) => {
   try {
     const response = await axiosInstance.get("/api/albums", {
+      params: { partnerId },
       headers: {
         Authorization: `Bearer ${token}`,
       },
