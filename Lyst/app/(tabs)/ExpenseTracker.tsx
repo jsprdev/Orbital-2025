@@ -97,10 +97,7 @@ export default function ExpenseTracker() {
   const [sections, setSections] = useState<SectionType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Debug: log when component renders and userId
-  console.log('ExpenseTracker render, userId:', userId);
-
-  // Fetch sections on mount
+  
   useEffect(() => {
     if (!userId) return;
     setLoading(true);
@@ -187,7 +184,7 @@ export default function ExpenseTracker() {
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView>
-        {/* Central graphic and title */}
+        
         <View className="py-4 mb-2.5 bg-white relative flex-col items-center px-4">
           <Image
             source={centralImage}

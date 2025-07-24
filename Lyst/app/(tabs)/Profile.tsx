@@ -46,7 +46,6 @@ const Profile = () => {
         </View>
 
         <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
-          // Contents
           {hasPartner === null ? (
             <Text>Loading...</Text>
           ) : hasPartner ? (
