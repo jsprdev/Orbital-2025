@@ -27,7 +27,7 @@ export default function LocationDetails() {
     if (!note?.place_id) return;
     const fetchDetails = async () => {
       const res = await fetch(
-        `https://${process.env.EXPO_PUBLIC_HOST}/api/places/details?placeId=${note.place_id}`,
+        `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places/details?placeId=${note.place_id}`,
         { headers: { Authorization: `Bearer ${token}` } },
       );
       const data = await res.json();
@@ -44,18 +44,7 @@ export default function LocationDetails() {
     fetchNote();
   }, [id]);
 
-  useEffect(() => {
-    if (!note?.place_id) return;
-    const fetchDetails = async () => {
-      const res = await fetch(
-        `https://${process.env.EXPO_PUBLIC_HOST}/api/places/details?placeId=${note.place_id}`,
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      const data = await res.json();
-      setPlaceDetails(data.result);
-    };
-    fetchDetails();
-  }, [note]);
+  
 
   if (!note) return <Text>Loading...</Text>;
 

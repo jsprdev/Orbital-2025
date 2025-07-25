@@ -121,15 +121,18 @@ export default function AddIdea({
     }
     setLoadingPlaces(true);
     try {
+      console.log("expopublichost", process.env.EXPO_PUBLIC_HOST)
       const res = await fetch(
-        `https://${process.env.EXPO_PUBLIC_HOST}/api/places?input=${encodeURIComponent(input)}`,
+        `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places?input=${encodeURIComponent(input)}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
       const data = await res.json();
+      console.log('Autocomplete response:', data);
       setPlaceSuggestions(data.predictions || []);
     } catch (e) {
+      console.error('Autocomplete error:', e);
       setPlaceSuggestions([]);
     } finally {
       setLoadingPlaces(false);
