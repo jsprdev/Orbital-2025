@@ -31,3 +31,12 @@ export type FilterState = {
   selectedTags: string[];
   priority: "low" | "medium" | "high" | null;
 };
+
+export type Gift = {
+  id: string;
+  userId: string;
+  name: string;
+  url: string;
+  price: string;
+  createdAt: string;
+};

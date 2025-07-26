@@ -10,6 +10,7 @@ import WeatherRouter from "./weather.controller";
 import PartnerRouter from "./partner.controller";
 import AccountRouter from "./account.controller";
 import ExpensesRouter from "./expenses.controller";
+import GiftsRouter from "./gifts.controller";
 
 const router = Router();
 
@@ -24,6 +25,7 @@ router.use("/images", verifyToken, GalleryRouter);
 router.use("/albums", verifyToken, AlbumsRouter);
 router.use("/weather", verifyToken, WeatherRouter);
 router.use("/expenses", verifyToken, ExpensesRouter);
+router.use("/gifts", verifyToken, GiftsRouter);
 
 
 export default router;

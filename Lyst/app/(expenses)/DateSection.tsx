@@ -31,6 +31,12 @@ export default function DateSection({ title, items, onAddItem, onChangeItem, onC
     onChangeItem(-1, { name: '', amount: '' }, newItems);
   };
 
+  const total = items.reduce((sum, item) => {
+    const cleaned = (item.amount || "").replace(/[^0-9.-]+/g, "");
+    const amt = parseFloat(cleaned);
+    return sum + (isNaN(amt) ? 0 : amt);
+  }, 0);
+
   return (
     <View className="mb-6 p-4 bg-gray-100 rounded-xl">
       <View className="flex-row items-center mb-2">
@@ -53,12 +59,15 @@ export default function DateSection({ title, items, onAddItem, onChangeItem, onC
           onDelete={() => onDeleteItem(idx)}
         />
       ))}
-      <TouchableOpacity
-        className="mt-2 bg-pink-500 py-2 px-4 rounded-lg items-center"
-        onPress={onAddItem}
-      >
-        <Text className="text-white font-semibold">+ Add Item</Text>
-      </TouchableOpacity>
+      <View className="flex-row items-center mt-2">
+        <TouchableOpacity
+          className="bg-pink-500 flex-1 mr-5 py-2 px-4 rounded-lg items-center"
+          onPress={onAddItem}
+        >
+          <Text className="text-white font-semibold">+ Add Item</Text>
+        </TouchableOpacity>
+        <Text className="ml-auto text-pink-600 font-bold text-base">${total.toFixed(2)}</Text>
+      </View>
     </View>
   );
 }

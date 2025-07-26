@@ -43,7 +43,7 @@ const TabLayout = () => {
                 color: focused ? COLORS.primary : COLORS.unfocused,
               }}
             >
-              Your Lyst
+              Lyst
             </Text>
           ),
         }}
@@ -70,7 +70,7 @@ const TabLayout = () => {
                 color: focused ? COLORS.primary : COLORS.unfocused,
               }}
             >
-              Your Plans
+              Plans
             </Text>
           ),
         }}
@@ -105,9 +105,9 @@ const TabLayout = () => {
       />
 
       <Tabs.Screen
-        name="ExpenseTracker"
+        name="YourExpenses"
         options={{
-          title: "ExpenseTracker",
+          title: "Your Expenses",
           tabBarIcon: ({ focused }) => (
             <Image
               source={require("../../assets/icons/piggy-bank.png")}
@@ -126,6 +126,33 @@ const TabLayout = () => {
               }}
             >
               Expenses
+            </Text>
+          ),
+        }}
+      />
+
+<Tabs.Screen
+        name="YourGifts"
+        options={{
+          title: "Your Gifts",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../../assets/icons/gift.png")}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? COLORS.primary : COLORS.unfocused,
+              }}
+            />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <Text
+              style={{
+                fontSize: 12,
+                color: focused ? COLORS.primary : COLORS.unfocused,
+              }}
+            >
+              Gifts
             </Text>
           ),
         }}

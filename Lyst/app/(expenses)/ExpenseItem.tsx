@@ -29,6 +29,7 @@ export default function ExpenseItem({ item, onChange, onDelete }: {
         keyboardType="numeric"
         value={item.amount}
         onChangeText={handleAmountChange}
+        maxLength={10}
       />
       <TouchableOpacity onPress={onDelete} className="p-1">
         <Feather name="trash-2" size={20} color="#6b7280" />

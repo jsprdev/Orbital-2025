@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import DateSection from "../(expenses)/DateSection";
 
 
-export default function ExpenseTracker() {
+export default function YourExpenses() {
   const { user, token } = useAuth();
   const [sections, setSections] = useState<SectionType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -110,13 +110,13 @@ export default function ExpenseTracker() {
             resizeMode="contain"
           />
           <Text className="text-5xl shadow-xl2 font-extrabold text-gray-700 text-center mt-3">
-            Expense Tracker
+            Your Expenses
           </Text>
           <TouchableOpacity
-            className="mt-4 bg-pink-500 py-3 px-6 rounded-lg items-center"
+            className="self-center p-20 py-2 rounded-xl items-center bg-pink-500 mt-4"
             onPress={addSection}
           >
-            <Text className="text-white text-lg font-semibold">+ Add Section (Date)</Text>
+            <Text className="text-white text-lg font-semibold">Add Expense</Text>
           </TouchableOpacity>
         </View>
 

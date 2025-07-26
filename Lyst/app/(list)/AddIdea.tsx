@@ -318,7 +318,7 @@ export default function AddIdea({
                 </TouchableOpacity>
               </View>
             )}
-            {/* Priority Selection */}
+            
             <Text className="font-semibold mb-1">Priority</Text>
             <View className="flex-row justify-between mb-4">
               {(["low", "medium", "high"] as Priority[]).map((level) => (
