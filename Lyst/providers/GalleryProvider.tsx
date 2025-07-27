@@ -44,7 +44,7 @@ export const GalleryProvider = ({
     } finally {
       setLoading(false);
     }
-  }, [token, partnerUserId]); // Dependencies that affect the function
+  }, [token, partnerUserId]); 
 
   const fetchAlbums = useCallback(async () => {
     if (!token) return;
@@ -174,7 +174,8 @@ export const GalleryProvider = ({
 
 export const useGallery = () => {
   const context = useContext(GalleryContext);
-  if (!context)
+  if (!context) {
     throw new Error("useGallery must be used within a GalleryProvider");
+  }
   return context;
 };

@@ -12,6 +12,7 @@ import AccountRouter from "./account.controller";
 import ExpensesRouter from "./expenses.controller";
 import GiftsRouter from "./gifts.controller";
 import DatePlansRouter from "./datePlans.controller";
+import CalendarRouter from "./calendar.controller";
 
 const router = Router();
 
@@ -28,6 +29,7 @@ router.use("/weather", WeatherRouter);
 router.use("/expenses", verifyToken, ExpensesRouter);
 router.use("/gifts", verifyToken, GiftsRouter);
 router.use("/date-plans", verifyToken, DatePlansRouter);
+router.use("/calendar", verifyToken, CalendarRouter);
 
 
 export default router;

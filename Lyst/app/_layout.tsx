@@ -5,6 +5,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { GalleryProvider } from "@/providers/GalleryProvider";
 import { PartnerProvider } from "@/providers/PartnerProvider";
+import { CalendarProvider } from "@/providers/CalendarProvider";
 
 export default function RootLayout() {
   const router = useRouter();
@@ -14,7 +15,9 @@ export default function RootLayout() {
       <AuthProvider>
         <PartnerProvider>
           <GalleryProvider>
-            <Stack screenOptions={{ headerShown: false }} />
+            <CalendarProvider>
+              <Stack screenOptions={{ headerShown: false }} />
+            </CalendarProvider>
           </GalleryProvider>
         </PartnerProvider>
       </AuthProvider>

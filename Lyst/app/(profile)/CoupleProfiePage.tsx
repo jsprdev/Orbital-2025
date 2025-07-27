@@ -103,7 +103,9 @@ const CoupleProfile = () => {
           <View className="bg-white rounded-xl w-[47%] p-6 mr-2 shadow-sm border border-gray-200">
             <Text className="text-gray-500 text-lg mb-1">Dates</Text>
             <Text className="text-gray-500 text-lg mb-1">Completed</Text>
-            <Text className="text-3xl font-bold mt-2">{completedPlansCount}</Text>
+            <Text className="text-3xl font-bold mt-2">
+              {completedPlansCount}
+            </Text>
           </View>
 
           {/* Photos */}
@@ -125,7 +127,14 @@ const CoupleProfile = () => {
           {/* Amount Spent */}
           <View className="bg-white rounded-xl w-[47%] p-6 ml-4  shadow-sm border border-gray-200">
             <Text className="text-gray-500 text-lg mb-1">Amount Spent</Text>
-            <Text className="font-bold text-3xl">${totalAmountSpent.toFixed(2)}</Text>
+            <Text
+              className="font-bold text-3xl"
+              adjustsFontSizeToFit
+              minimumFontScale={0.8}
+              numberOfLines={1}
+            >
+              ${totalAmountSpent.toFixed(2)}
+            </Text>
           </View>
         </View>
       </View>

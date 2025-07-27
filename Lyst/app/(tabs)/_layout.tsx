@@ -131,7 +131,7 @@ const TabLayout = () => {
         }}
       />
 
-<Tabs.Screen
+      <Tabs.Screen
         name="YourGifts"
         options={{
           title: "Your Gifts",
@@ -153,6 +153,33 @@ const TabLayout = () => {
               }}
             >
               Gifts
+            </Text>
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="Calendar"
+        options={{
+          title: "Calendar",
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../../assets/icons/calendar.png")}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? COLORS.primary : COLORS.unfocused,
+              }}
+            />
+          ),
+          tabBarLabel: ({ focused }) => (
+            <Text
+              style={{
+                fontSize: 12,
+                color: focused ? COLORS.primary : COLORS.unfocused,
+              }}
+            >
+              Calendar
             </Text>
           ),
         }}

@@ -18,7 +18,6 @@ import { createNote } from "@/utils/lyst.api";
 import { useAuth } from "@/providers/AuthProvider";
 
 const { height } = Dimensions.get("window");
-const PREMADE_TAGS = ["Food", "Gifts", "Shopping", "Overseas"];
 
 const priorityColor: Record<string, string> = {
   low: "bg-green-500",
