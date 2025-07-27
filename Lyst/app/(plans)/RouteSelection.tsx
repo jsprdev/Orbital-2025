@@ -102,7 +102,8 @@ export default function RouteSelection() {
     <SafeAreaView className="flex-1 bg-white">
       {loading ? (
         <View className="flex-1 justify-center items-center">
-          <Text className="font-semibold text-lg"> Generating... </Text>
+          <ActivityIndicator size="large" color="#ec489b" className="mb-4" />
+          <Text className="font-semibold text-lg text-gray-700">Generating your perfect date route...</Text>
         </View>
       ) : (
         <View className="flex-1">
@@ -148,12 +149,16 @@ export default function RouteSelection() {
 
             <TouchableOpacity
               onPress={handleGenerateRoute}
-              className="bg-pink-500 rounded-lg justify-center items-center py-3"
+              className={`rounded-lg justify-center items-center py-3 ${selectedNotes.length < 3 ? "bg-gray-300" : "bg-pink-500"}`}
+              disabled={selectedNotes.length < 3}
             >
-              <Text className="font-bold text-lg text-white">
+              <Text className={`font-bold text-lg ${selectedNotes.length < 3 ? "text-gray-400" : "text-white"}`}>
                 Generate Date Route
               </Text>
             </TouchableOpacity>
+            {selectedNotes.length < 3 && (
+              <Text className="text-xs text-gray-400 text-center mt-1">Select at least 3 ideas to generate a date route.</Text>
+            )}
           </View>
         </View>
       )}

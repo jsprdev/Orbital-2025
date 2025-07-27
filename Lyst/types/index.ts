@@ -40,3 +40,17 @@ export type Gift = {
   price: string;
   createdAt: string;
 };
+
+export type DatePlan = {
+  id: string;
+  userId: string;
+  title: string;
+  locations: Array<{
+    name: string;
+    address: string;
+    place_id?: string;
+    tags?: string[];
+  }>;
+  createdAt: string;
+  completed?: boolean;
+};

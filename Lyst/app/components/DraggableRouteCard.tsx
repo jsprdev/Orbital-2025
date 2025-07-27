@@ -87,8 +87,7 @@ const DraggableStop: React.FC<DraggableStopProps> = ({ location, index, onMove, 
 const DraggableRouteCard: React.FC<DraggableRouteCardProps> = ({ route, onRouteChange }) => {
   const [isDragging, setIsDragging] = useState(false);
 
-  // Debug logging
-  console.log("DraggableRouteCard received route:", route);
+
   console.log("Selected locations:", route.selectedLocations);
   console.log("Visit order:", route.visitOrder);
 
@@ -107,7 +106,7 @@ const DraggableRouteCard: React.FC<DraggableRouteCardProps> = ({ route, onRouteC
 
   return (
     <View className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg p-4">
-      {/* Debug info */}
+      
       <View className="bg-blue-50 p-2 rounded mb-3">
         <Text className="text-blue-800 text-xs">
           Debug: {route.selectedLocations.length} locations, {route.visitOrder.length} stops
@@ -140,7 +139,7 @@ const DraggableRouteCard: React.FC<DraggableRouteCardProps> = ({ route, onRouteC
       
       <View className="mt-4 p-3 bg-white rounded-lg border border-gray-200">
         <Text className="text-gray-600 text-center text-sm">
-          💡 Drag and drop the cards above to reorder your route
+          Drag and drop the cards above to reorder your route
         </Text>
       </View>
     </View>

@@ -1,4 +1,3 @@
-// Intercepts the requests and helps to validate that the token is valid
 
 import { Request, Response, NextFunction } from 'express';
 import { admin } from '../config/firebase-config';

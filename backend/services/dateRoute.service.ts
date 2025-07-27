@@ -49,15 +49,17 @@ Instructions:
 1. All locations provided are places that the user wants to go, but please pick 3-4 locations from the provided cards that are a suitable combination to go together for a plan for a date
 2. Order them into an optimal visit sequence for a romantic date
 3. Consider factors like: - distance between each other - Romantic atmosphere - Logical flow (dinner after activities, dessert after dinner, etc.) - Distance and travel time between locations - Variety of experiences (activity, dining, entertainment, etc.)
-4. There should only be a maximum of one main course meal location in the route
+4. There should only be a maximum of one main course meal location in the route, make your plan logical, select a mix of different activities where appropriate as well
+5. Consider a logical starting time for the date and thereon choose the locations
 
 Output ONLY a JSON object matching this exact schema:
 {
   "selectedLocations": [ /* the full card objects you chose */ ],
-  "visitOrder": [ /* array of 0-based indices into the original cards array, in visit order */ ]
+  "visitOrder": [ /* array of 0-based indices in visit order of the locations that you arranged */ ],
+  "explanation": [ /* a short explanation of why you chose these locations in combination together, and the reason for your route order*/ ]
 }
 
-Do not include any explanations, just the JSON object.`;
+Do not include any additional text, just the JSON object.`;
 
       console.log("Calling OpenAI API...");
       const completion = await openai.chat.completions.create({
@@ -74,7 +76,7 @@ Do not include any explanations, just the JSON object.`;
           },
         ],
         temperature: 0.7,
-        max_tokens: 1000, // DO NOT CHANGE PLEASE
+        max_tokens: 2000, // DO NOT CHANGE PLEASE
       });
 
       console.log("response received");

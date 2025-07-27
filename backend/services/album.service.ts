@@ -7,15 +7,20 @@ export class AlbumsService {
   async getAlbums(userId: string, partnerId?: string) {
     const albumsRef = db.collection('albums');
     const snapshot = await albumsRef.where('userId', '==', userId).get();
-    const partnerSnapshot = await albumsRef.where('userId', '==', partnerId).get();
+    
     const albums: Album[] = [];
     snapshot.forEach(doc => {
       albums.push({ ...doc.data(), id:doc.id } as Album);
     });
-    partnerSnapshot.forEach(doc => {
-      albums.push({ ...doc.data(), id:doc.id } as Album);
-    });
-    return albums; 
+
+    if (partnerId) {
+      const partnerSnapshot = await albumsRef.where('userId', '==', partnerId).get();
+      partnerSnapshot.forEach(doc => {
+        albums.push({ ...doc.data(), id:doc.id } as Album);
+        });
+      }
+      return albums; 
+    
   }
 
   async addToAndUpdateAlbum(albumName: string, userId: string) {

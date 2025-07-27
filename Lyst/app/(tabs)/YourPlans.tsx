@@ -1,10 +1,10 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AddIdea from "../(list)/AddIdea";
 import { ScrollView } from "react-native-gesture-handler";
 import { router } from "expo-router";
 import GeneratePlan from "../(plans)/GeneratePlan";
+import SavedPlans from "../(plans)/SavedPlans";
 
 export default function YourPlans() {
   return (
@@ -25,14 +25,11 @@ export default function YourPlans() {
           <GeneratePlan />
         </View>
 
-        {/* saving is not a core feature detailed in ms2 */}
-        <Text className="text-gray-500 text-lg font-bold text-center">
-          Saving Plans coming soon!
-        </Text>
-        <Text className="text-gray-500 text-sm text-center">
-          For now, generate a plan, and take a{" "}
-          <Text className="font-semibold">screenshot</Text> to save it!
-        </Text>
+        
+        <View className="px-4 mb-4">
+          <Text className="text-xl font-bold mb-3">Saved Plans</Text>
+          <SavedPlans />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

@@ -1,4 +1,4 @@
-// This is the first screen users see when they open the app.
+
 import "react-native-get-random-values";
 import { useRouter } from "expo-router";
 import React, { useState, useEffect } from "react";

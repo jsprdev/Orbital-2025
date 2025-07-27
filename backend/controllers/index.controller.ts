@@ -11,6 +11,7 @@ import PartnerRouter from "./partner.controller";
 import AccountRouter from "./account.controller";
 import ExpensesRouter from "./expenses.controller";
 import GiftsRouter from "./gifts.controller";
+import DatePlansRouter from "./datePlans.controller";
 
 const router = Router();
 
@@ -23,9 +24,10 @@ router.use("/date-route", verifyToken, DateRouteRouter);
 router.use("/notes", verifyToken, NotesRouter);
 router.use("/images", verifyToken, GalleryRouter);
 router.use("/albums", verifyToken, AlbumsRouter);
-router.use("/weather", verifyToken, WeatherRouter);
+router.use("/weather", WeatherRouter);
 router.use("/expenses", verifyToken, ExpensesRouter);
 router.use("/gifts", verifyToken, GiftsRouter);
+router.use("/date-plans", verifyToken, DatePlansRouter);
 
 
 export default router;
