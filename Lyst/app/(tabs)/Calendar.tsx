@@ -5,30 +5,31 @@ import {
   TouchableOpacity,
   FlatList,
   TextInput,
+  ScrollView,
   Modal,
   Dimensions,
   Animated,
   Pressable,
-  ScrollView,
 } from "react-native";
+import Feather from "@expo/vector-icons/AntDesign";
 import { router } from "expo-router";
 import { Calendar } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
 import { usePartner } from "@/providers/PartnerProvider";
-import { getNotes } from "@/utils/lyst.api";
 import { useCalendar } from "@/providers/CalendarProvider";
 import { Note } from "@/types";
 import { CalendarEvent } from "@/types/calendar.dto";
 import { formatTime, formatDate } from "@/utils/calendar.api";
-import { TimePicker } from "@/app/(calendar)/timePicker";
+import TimePicker from "@/app/(calendar)/TimePicker";
+import { useNotes } from "@/providers/NotesProvider";
 
 const CalendarScreen = () => {
   const { token } = useAuth();
+  const { notes, fetchNotes } = useNotes();
   const { partnerUserId } = usePartner();
   const { events, createEvent, fetchEvents } = useCalendar();
 
-  const [notes, setNotes] = useState<Note[]>([]);
   const [selectedDate, setSelectedDate] = useState<string>(
     new Date().toISOString()
   );
@@ -41,8 +42,7 @@ const CalendarScreen = () => {
   const loadNotes = useCallback(async () => {
     if (!token) return;
     try {
-      const fetchedNotes = await getNotes(token, partnerUserId);
-      setNotes(fetchedNotes);
+      await fetchNotes();
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
@@ -78,11 +78,31 @@ const CalendarScreen = () => {
     e.startTime.startsWith(selectedDate.split("T")[0])
   );
 
-  const markedDates = {
-    [selectedDate.split("T")[0]]: {
+  const getMarkedDates = () => {
+    const marked: Record<string, any> = {};
+
+    marked[selectedDate.split("T")[0]] = {
       selected: true,
       selectedColor: "#F6339A",
-    },
+      selectedTextColor: "white",
+    };
+
+    events.forEach((event) => {
+      const date = event.startTime.split("T")[0];
+      if (!marked[date]) {
+        marked[date] = {
+          dots: [
+            {
+              key: date,
+              color: "#F6339A",
+              selectedDotColor: "white",
+            },
+          ],
+        };
+      }
+    });
+
+    return marked;
   };
 
   const handleEventCardPress = (eventId: string) => {
@@ -122,11 +142,8 @@ const CalendarScreen = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-row justify-between items-center p-2 ml-2 mr-2">
         <Text className="text-2xl font-bold text-gray-700">Calendar</Text>
-        <TouchableOpacity
-          onPress={() => openDrawer()}
-          className="bg-pink-500 px-4 py-2 rounded-lg"
-        >
-          <Text className="text-white text-lg">＋</Text>
+        <TouchableOpacity onPress={() => openDrawer()}>
+          <Feather name="plus" size={24} color="#F6339A" />
         </TouchableOpacity>
       </View>
 
@@ -142,8 +159,9 @@ const CalendarScreen = () => {
             textDisabledColor: "#d1d5db",
             arrowColor: "#F6339A",
           }}
-          markedDates={markedDates}
+          markedDates={getMarkedDates()}
           onDayPress={(day) => setSelectedDate(day.dateString)}
+          markingType="multi-dot"
         />
       </View>
 
@@ -157,46 +175,50 @@ const CalendarScreen = () => {
         {eventsForSelectedDate.length === 0 ? (
           <Text className="text-gray-500">No events yet.</Text>
         ) : (
-          <FlatList
-            data={eventsForSelectedDate}
-            keyExtractor={(item) => item.id ?? ""}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                className="mb-2 p-4 bg-gray-100 rounded-lg flex-row justify-between items-center"
-                onPress={() => handleEventCardPress(item.id!)}
-              >
-                <View className="flex-1">
-                  <Text
-                    className="text-gray-800 font-bold"
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                  >
-                    {item.title}
-                  </Text>
-                  {item.location && (
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
+          >
+            <FlatList
+              data={eventsForSelectedDate}
+              keyExtractor={(item) => item.id ?? ""}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  className="mb-2 p-4 bg-gray-100 rounded-lg flex-row justify-between items-center"
+                  onPress={() => handleEventCardPress(item.id!)}
+                >
+                  <View className="flex-1">
                     <Text
-                      className="text-gray-600"
+                      className="text-gray-800 font-bold"
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.location}
+                      {item.title}
                     </Text>
-                  )}
-                </View>
+                    {item.location && (
+                      <Text
+                        className="text-gray-600"
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                      >
+                        {item.location}
+                      </Text>
+                    )}
+                  </View>
 
-                <View className="ml-4 items-end">
-                  <Text className="text-gray-700 font-medium">
-                    {formatTime(item.startTime)}
-                  </Text>
-                  {item.endTime && (
-                    <Text className="text-gray-500 text-sm">
-                      {formatTime(item.endTime)}
+                  <View className="ml-4 items-end">
+                    <Text className="text-gray-700 font-medium">
+                      {formatTime(item.startTime)}
                     </Text>
-                  )}
-                </View>
-              </TouchableOpacity>
-            )}
-          />
+                    {item.endTime && (
+                      <Text className="text-gray-500 text-sm">
+                        {formatTime(item.endTime)}
+                      </Text>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              )}
+            />
+          </ScrollView>
         )}
       </View>
 
@@ -218,58 +240,99 @@ const CalendarScreen = () => {
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
             padding: 20,
-            overflow: "hidden",
+            overflow: "hidden"
           }}
         >
           <View className="w-12 h-1 bg-gray-300 rounded-full self-center mb-4" />
 
           <Text className="text-xl font-bold mb-4">Add New Event</Text>
 
-          <Text className="font-semibold mb-1">Place</Text>
           <View className="mb-4">
-            <TextInput
-              placeholder="Title"
-              value={title}
-              onChangeText={setTitle}
-              className="border border-gray-300 rounded-lg p-2 mb-2"
-            />
-            <TextInput
-              placeholder="Location"
-              value={location}
-              onChangeText={setLocation}
-              className="border border-gray-300 rounded-lg p-2 mb-2"
-            />
+            {!selectedNote && (
+              <>
+                <TextInput
+                  placeholder="Title"
+                  value={title}
+                  onChangeText={setTitle}
+                  className="border border-gray-300 rounded-lg p-2 mb-2"
+                />
+                <TextInput
+                  placeholder="Location"
+                  value={location}
+                  onChangeText={setLocation}
+                  className="border border-gray-300 rounded-lg p-2 mb-4"
+                />
+              </>
+            )}
+
             <TimePicker
               date={selectedDate.split("T")[0]}
               onStartTimeChange={(time) => setStartTime(time)}
               onEndTimeChange={(time) => setEndTime(time)}
             />
 
-            <Text className="mt-4 mb-2 text-sm text-gray-600">
-              Or pick from a note:
-            </Text>
-            <FlatList
-              data={notes}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  className={`p-2 mr-2 border rounded-lg justify-center items-center ${
-                    selectedNote?.id === item.id
-                      ? "border-pink-500 bg-pink-100"
-                      : "border-gray-300"
-                  }`}
-                  onPress={() =>
-                    setSelectedNote(selectedNote?.id === item.id ? null : item)
-                  }
-                >
-                  <Text className="text-gray-800">{item.description}</Text>
-                </TouchableOpacity>
-              )}
-            />
+            {notes.length > 0 && (
+              <View className="mt-2">
+                <Text className="text-sm text-gray-600 mb-2">
+                  Or pick from your lyst:
+                </Text>
 
-            <View className="flex-row justify-between mt-6">
+                <View className="bg-white border border-gray-200 rounded-lg ">
+                  <ScrollView
+                    style={{ maxHeight: 200 }}
+                    nestedScrollEnabled={true}
+                  >
+                    {notes.map((item) => (
+                      <TouchableOpacity
+                        key={item.id}
+                        className={`py-3 px-3 flex-row items-center ${
+                          selectedNote?.id === item.id ? "bg-pink-50" : ""
+                        } ${
+                          item !== notes[notes.length - 1]
+                            ? "border-b border-gray-100"
+                            : ""
+                        }`}
+                        onPress={() => {
+                          if (selectedNote?.id === item.id) {
+                            setSelectedNote(null);
+                            setTitle("");
+                            setLocation("");
+                          } else {
+                            setSelectedNote(item);
+                            setTitle(item.description);
+                            setLocation(item.place || "");
+                          }
+                        }}
+                      >
+                        {/* Note */}
+                        <View className="flex-1">
+                          <Text
+                            className={`font-medium ${
+                              selectedNote?.id === item.id
+                                ? "text-pink-600"
+                                : "text-gray-800"
+                            }`}
+                            numberOfLines={1}
+                          >
+                            {item.description}
+                          </Text>
+                          {item.place && (
+                            <Text
+                              className="text-gray-500 text-xs mt-0.5"
+                              numberOfLines={1}
+                            >
+                              {item.place}
+                            </Text>
+                          )}
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                  </ScrollView>
+                </View>
+              </View>
+            )}
+
+            <View className="flex-row justify-between mt-8">
               <TouchableOpacity
                 className="bg-gray-200 px-4 py-2 rounded-lg"
                 onPress={() => {
@@ -293,8 +356,6 @@ const CalendarScreen = () => {
           </View>
         </Animated.View>
       </Modal>
-
-      
     </SafeAreaView>
   );
 };

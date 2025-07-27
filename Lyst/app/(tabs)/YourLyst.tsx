@@ -7,8 +7,7 @@ import { Priority, Note } from "@/types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
 import { ScrollView } from "react-native-gesture-handler";
-import { getNotes } from "@/utils/lyst.api";
-import { usePartner } from "@/providers/PartnerProvider";
+import { useNotes } from "@/providers/NotesProvider";
 
 const DEFAULT_TAGS = ["Food", "Gifts", "Shopping", "Overseas", "Others"];
 
@@ -19,34 +18,27 @@ export default function YourLyst() {
     priority: Priority | null;
   }>({ query: "", selectedTags: [], priority: null });
 
-  const [refresh, setRefresh] = useState(false);
-
-  const refreshPage = useCallback(() => {
-    setRefresh((prev) => !prev);
-  }, []);
-  
   const { user, token } = useAuth();
-  const { partnerUserId } = usePartner();
+  const { notes, fetchNotes } = useNotes();
 
-  const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
   const [availableTags, setAvailableTags] = useState(DEFAULT_TAGS);
 
-  useEffect(() => {
+  const refreshNotes = useCallback(async () => {
     if (!token) return;
-    const fetchNotes = async () => {
-      setLoading(true);
-      try {
-        const fetchedNotes = await getNotes(token, partnerUserId);
-        setNotes(fetchedNotes);
-      } catch (error) {
-        console.error("Error fetching notes:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchNotes();
-  }, [token, refresh]);
+    setLoading(true);
+    try {
+      await fetchNotes(); // Re-fetch instead of local state updates
+    } catch (error) {
+      console.error("Error fetching notes:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [token, fetchNotes]);
+
+  useEffect(() => {
+    refreshNotes();
+  }, [token]);
 
   useEffect(() => {
     const tagsInNotes = new Set(DEFAULT_TAGS);
@@ -83,7 +75,7 @@ export default function YourLyst() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, paddingBottom: 200 }}>
         {/* top graphic */}
         <View className="py-4 mb-2.5 bg-white border-b border-gray-200 relative flex-col items-center px-4">
           <Image
@@ -97,7 +89,7 @@ export default function YourLyst() {
           </Text>
           <View>
             <AddIdea
-              onSave={refreshPage}
+              onSave={refreshNotes}
               availableTags={availableTags}
               onAddTag={handleAddTag}
             />
@@ -109,13 +101,7 @@ export default function YourLyst() {
         </View>
 
         <View className="flex-1 px-4 py-2">
-          <Display
-            filters={filters}
-            notes={notes}
-            setNotes={setNotes}
-            loading={loading}
-            key={refresh.toString()}
-          />
+          <Display filters={filters} loading={loading} />
         </View>
       </ScrollView>
     </SafeAreaView>
