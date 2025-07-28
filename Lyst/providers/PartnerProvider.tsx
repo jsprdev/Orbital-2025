@@ -10,6 +10,7 @@ interface PartnerContextType {
   partnerUserId: string;
   anniversaryDate: Date | undefined;
   uploadAnniversaryDate: (date: Date) => Promise<void>;
+  fetchPartner: () => Promise<void>;
 }
 
 const PartnerContext = createContext<PartnerContextType | undefined>(undefined);
@@ -24,32 +25,41 @@ export const PartnerProvider = ({
   const [partnerUserId, setPartnerUserId] = useState<string>("");
   const [anniversaryDate, setAnniversaryDate] = useState<Date | undefined>();
 
-  useEffect(() => {
-    async function fetchPartner() {
-      if (!token) {
-        setPartnerUserId("");
-        return;
-      };
-      try {
-        const { partnerUserId, name, coupleAnniversaryDate } =
-          await getPartnerDetails(token);
-        setPartnerName(name);
-        setPartnerUserId(partnerUserId);
-        setAnniversaryDate(coupleAnniversaryDate);
-      } catch (error) {
-        console.error("Error fetching partner details", error);
-      }
+  const fetchPartner = async () => {
+    if (!token) {
+      setPartnerUserId("");
+      return;
     }
+    try {
+      const { partnerUserId, name, anniversaryDate } = await getPartnerDetails(token);
+
+      setPartnerName(name);
+      setPartnerUserId(partnerUserId);
+
+      let convertedDate: Date | undefined;
+      if (anniversaryDate._seconds) {
+        convertedDate = new Date(anniversaryDate._seconds * 1000);
+      }
+      setAnniversaryDate(convertedDate);
+    } catch (error) {
+      console.error("Error fetching partner details", error);
+    }
+  };
+
+  useEffect(() => {
     fetchPartner();
   }, [token]);
 
   const uploadAnniversaryDate = async (date: Date) => {
-    if (!token) return;
+    if (!token) {
+      return;
+    }
     try {
       await uploadCoupleAnniversaryDate(token, date);
-      setAnniversaryDate(date);
+      await fetchPartner();
     } catch (error: any) {
       console.error("Error uploading anniversary date", error);
+      throw error;
     }
   };
 
@@ -60,6 +70,7 @@ export const PartnerProvider = ({
         partnerUserId,
         anniversaryDate,
         uploadAnniversaryDate,
+        fetchPartner
       }}
     >
       {children}

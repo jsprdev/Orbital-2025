@@ -41,6 +41,10 @@ export class PartnerService {
   }
 
   async uploadAnniversaryDate(userId: string, date: Date) {
+    if (isNaN(date.getTime())) {
+      throw new Error("Invalid date");
+    }
+
     const userData = await this.getUserData(userId);
     const partnerUserId = userData?.partnerId
 

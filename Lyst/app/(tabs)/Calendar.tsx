@@ -10,6 +10,7 @@ import {
   Dimensions,
   Animated,
   Pressable,
+  Alert,
 } from "react-native";
 import Feather from "@expo/vector-icons/AntDesign";
 import { router } from "expo-router";
@@ -55,6 +56,10 @@ const CalendarScreen = () => {
 
   const handleCreateEvent = async () => {
     if (!token) return;
+    if (!title || !selectedNote) {
+      Alert.alert("Please enter a title or select a note.");
+      return;
+    }
     const newEvent: CalendarEvent = {
       title: title || selectedNote?.description || "Untitled",
       location: location || selectedNote?.place || "",

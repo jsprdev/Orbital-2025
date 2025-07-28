@@ -20,7 +20,7 @@ export const getPartnerDetails = async (token: string) => {
 export const uploadCoupleAnniversaryDate = async (token: string, date: Date) => {
   try {
     const response = await axiosInstance.post("/api/partner/anniversaryDate", 
-      { date },
+      { date: date.toISOString() },
       {
       headers: {
         Authorization: `Bearer ${token}`,

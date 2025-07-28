@@ -41,7 +41,7 @@ router.post("/anniversaryDate", async (req: Request, res: Response) => {
   }
   const { date } = req.body;
   try {
-    const result = await partnerServiceInstance.joinCode(req.user.uid, date);
+    const result = await partnerServiceInstance.uploadAnniversaryDate(req.user.uid, date);
     res.status(200).json(result)
   } catch (error) {
     console.error('Error joining code:', error);
