@@ -122,7 +122,7 @@ export default function AddIdea({
     try {
       console.log("expopublichost", process.env.EXPO_PUBLIC_HOST)
       const res = await fetch(
-        `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places?input=${encodeURIComponent(input)}`,
+        `https://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places?input=${encodeURIComponent(input)}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
