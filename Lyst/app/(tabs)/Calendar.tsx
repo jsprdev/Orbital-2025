@@ -175,50 +175,47 @@ const CalendarScreen = () => {
         {eventsForSelectedDate.length === 0 ? (
           <Text className="text-gray-500">No events yet.</Text>
         ) : (
-          <ScrollView
+          <FlatList
             contentContainerStyle={{ flexGrow: 1, paddingBottom: 100 }}
-          >
-            <FlatList
-              data={eventsForSelectedDate}
-              keyExtractor={(item) => item.id ?? ""}
-              renderItem={({ item }) => (
-                <TouchableOpacity
-                  className="mb-2 p-4 bg-gray-100 rounded-lg flex-row justify-between items-center"
-                  onPress={() => handleEventCardPress(item.id!)}
-                >
-                  <View className="flex-1">
+            data={eventsForSelectedDate}
+            keyExtractor={(item) => item.id ?? ""}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                className="mb-2 p-4 bg-gray-100 rounded-lg flex-row justify-between items-center"
+                onPress={() => handleEventCardPress(item.id!)}
+              >
+                <View className="flex-1">
+                  <Text
+                    className="text-gray-800 font-bold"
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
+                    {item.title}
+                  </Text>
+                  {item.location && (
                     <Text
-                      className="text-gray-800 font-bold"
+                      className="text-gray-600"
                       numberOfLines={1}
                       ellipsizeMode="tail"
                     >
-                      {item.title}
+                      {item.location}
                     </Text>
-                    {item.location && (
-                      <Text
-                        className="text-gray-600"
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                      >
-                        {item.location}
-                      </Text>
-                    )}
-                  </View>
+                  )}
+                </View>
 
-                  <View className="ml-4 items-end">
-                    <Text className="text-gray-700 font-medium">
-                      {formatTime(item.startTime)}
+                <View className="ml-4 items-end">
+                  <Text className="text-gray-700 font-medium">
+                    {formatTime(item.startTime)}
+                  </Text>
+                  {item.endTime && (
+                    <Text className="text-gray-500 text-sm">
+                      {formatTime(item.endTime)}
                     </Text>
-                    {item.endTime && (
-                      <Text className="text-gray-500 text-sm">
-                        {formatTime(item.endTime)}
-                      </Text>
-                    )}
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
-          </ScrollView>
+                  )}
+                </View>
+              </TouchableOpacity>
+            )}
+          />
         )}
       </View>
 
@@ -240,7 +237,7 @@ const CalendarScreen = () => {
             borderTopLeftRadius: 20,
             borderTopRightRadius: 20,
             padding: 20,
-            overflow: "hidden"
+            overflow: "hidden",
           }}
         >
           <View className="w-12 h-1 bg-gray-300 rounded-full self-center mb-4" />

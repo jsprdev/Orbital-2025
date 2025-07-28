@@ -16,6 +16,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 
 const Profile = () => {
   const { token } = useAuth();
+  
   const [hasPartner, setHasPartner] = useState<boolean | null>(null);
 
   useEffect(() => {

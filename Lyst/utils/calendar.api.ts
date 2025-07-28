@@ -46,6 +46,7 @@ export const deleteEvent = async (token: string, eventId: string) => {
   }
 };
 
+// converts ISO date string eg 2023-07-28T15:30:00Z to 3:30pm
 export const formatTime = (isoString: string) => {
   const date = new Date(isoString);
   return date.toLocaleTimeString([], { 
@@ -56,6 +57,8 @@ export const formatTime = (isoString: string) => {
     .toLowerCase();
 };
 
+
+// converts ISO date string eg 2023-07-28T15:30:00Z to 28 July
 export const formatDate = (date: string) => {
   const [year, month, day] = date.split("-");
   const monthNames = [
