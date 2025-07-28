@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Pressable } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import Reanimated, {
   useAnimatedStyle,
   FadeIn,

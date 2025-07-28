@@ -26,7 +26,6 @@ export const uploadPhoto = async (
   imageUri: string[],
 ) => {
   try {
-    console.log("123:", albumId);
     const formData = new FormData();
     formData.append("albumId", albumId);
     imageUri.forEach((uri, index) => {

@@ -7,6 +7,7 @@ import Card from "./card/card";
 import { getNotes, deleteNote } from "@/utils/lyst.api";
 import { useAuth } from "@/providers/AuthProvider";
 import { router } from "expo-router";
+import { useNotes } from "@/providers/NotesProvider";
 
 const priorityColor: Record<Priority, string> = {
   low: "text-green-500",
@@ -16,18 +17,13 @@ const priorityColor: Record<Priority, string> = {
 
 type DisplayProps = {
   filters: { query: string; selectedTags: string[]; priority: Priority | null };
-  notes: Note[];
-  setNotes: React.Dispatch<React.SetStateAction<Note[]>>;
   loading: boolean;
 };
 
-export default function Display({
-  filters,
-  notes,
-  setNotes,
-  loading,
-}: DisplayProps) {
+export default function Display({ filters, loading }: DisplayProps) {
   const { token } = useAuth();
+  const { notes, fetchNotes } = useNotes();
+
   const handlePress = (id: string) => {
     console.log("Card pressed:", id);
     router.push(`/(list)/location-details/${id}` as any);
@@ -37,9 +33,10 @@ export default function Display({
       console.error("No token available for deletion");
       return;
     }
-    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
     await deleteNote(id, token);
+    await fetchNotes();
   };
+  
   // filter notes
   function applyFilters(
     notes: Note[],
@@ -47,7 +44,7 @@ export default function Display({
       query: string;
       selectedTags: string[];
       priority: Priority | null;
-    },
+    }
   ) {
     return notes.filter((note) => {
       const matchesQuery = note.description
@@ -64,7 +61,7 @@ export default function Display({
   const filteredNotes = applyFilters(notes, filters);
   // display latest notes on top by default
   const sortedNotes = filteredNotes.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
   if (loading) {
     return <Text>Loading...</Text>;

@@ -14,11 +14,10 @@ import {
 } from "react-native";
 import AddIdeaButton from "./AddIdeaButton";
 import { Note, Priority } from "@/types";
-import { createNote } from "@/utils/lyst.api";
 import { useAuth } from "@/providers/AuthProvider";
+import { useNotes } from "@/providers/NotesProvider";
 
 const { height } = Dimensions.get("window");
-const PREMADE_TAGS = ["Food", "Gifts", "Shopping", "Overseas"];
 
 const priorityColor: Record<string, string> = {
   low: "bg-green-500",
@@ -39,7 +38,7 @@ export default function AddIdea({
 
   const [visible, setVisible] = useState(false);
   const { token } = useAuth();
-
+  const { createNote } = useNotes();
   // logs to see if api key loaded
   console.log(
     "Google Places API Key:",
@@ -165,8 +164,7 @@ export default function AddIdea({
           priority: priority,
           createdAt: new Date().toISOString(),
           userId: "",
-        } as Note,
-        token!,
+        } as Note
       );
 
       // refresh page
