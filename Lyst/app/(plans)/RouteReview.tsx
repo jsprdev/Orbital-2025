@@ -207,7 +207,7 @@ export default function RouteReview() {
             onPress={addToCalendar}
           >
             <Text className="text-white text-center font-bold p-4">
-              Add to Calendar
+              Add to Device Calendar
             </Text>
           </TouchableOpacity>
         </View>

@@ -9,10 +9,16 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "jest": {
     "preset": "jest-expo",
+    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
+    
+  "coverageDirectory": "coverage",
+  "coverageReporters": ["text", "lcov", "html"],
+  
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg)"
     ]
