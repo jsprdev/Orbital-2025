@@ -8,8 +8,8 @@ import {
   Image,
 } from "react-native";
 import React, { useState } from "react";
-import { router } from "expo-router";
 import { useAuth } from "@/providers/AuthProvider";
+import { usePartner } from "@/providers/PartnerProvider";
 import { generateCode, joinCode } from "@/utils/partner.api";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
@@ -17,6 +17,7 @@ const SingleProfile = () => {
   const [generatedCode, setGeneratedCode] = useState<string>("");
   const [inviteCode, setInviteCode] = useState<string>("");
   const { user, token } = useAuth();
+  const { fetchPartner }  = usePartner();
 
   return (
     <>
@@ -55,7 +56,7 @@ const SingleProfile = () => {
           onPress={async () => {
             if (inviteCode) {
               const flag = await joinCode(token!, inviteCode);
-              console.log(flag);
+              await fetchPartner();
             }
           }}
         >

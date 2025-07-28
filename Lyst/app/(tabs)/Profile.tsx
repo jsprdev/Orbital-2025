@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { router } from "expo-router";
 import { useAuth } from "@/providers/AuthProvider";
+import { usePartner } from "@/providers/PartnerProvider";
 import SingleProfile from "../(profile)/SingleProfile";
 import CoupleProfile from "../(profile)/CoupleProfiePage";
 import { getPartnerDetails } from "@/utils/partner.api";
@@ -16,7 +17,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 
 const Profile = () => {
   const { token } = useAuth();
-  
+  const { partnerUserId } = usePartner();
   const [hasPartner, setHasPartner] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -33,6 +34,14 @@ const Profile = () => {
     fetchPairStatus();
   }, [token]);
     
+  useEffect(() => {
+    if (partnerUserId) {
+      setHasPartner(true);
+    } else {
+      setHasPartner(false);
+    }
+  }, [partnerUserId]);
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className=" mb-4 mt-8 px-4 pt-4 ">
