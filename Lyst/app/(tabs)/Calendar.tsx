@@ -56,7 +56,7 @@ const CalendarScreen = () => {
 
   const handleCreateEvent = async () => {
     if (!token) return;
-    if (!title || !selectedNote) {
+    if (!title && !selectedNote) {
       Alert.alert("Please enter a title or select a note.");
       return;
     }
@@ -85,27 +85,25 @@ const CalendarScreen = () => {
 
   const getMarkedDates = () => {
     const marked: Record<string, any> = {};
+    const selectedDateStr = selectedDate.split("T")[0];
 
-    marked[selectedDate.split("T")[0]] = {
+    events.forEach((event) => {
+      const eventDate = new Date(event.startTime);
+      const dateStr = eventDate.toISOString().split("T")[0];
+
+      if (!marked[dateStr]) {
+        marked[dateStr] = {
+          dots: [{ color: "#F6339A" }],
+        };
+      }
+    });
+
+    marked[selectedDateStr] = {
+      ...marked[selectedDateStr],
       selected: true,
       selectedColor: "#F6339A",
       selectedTextColor: "white",
     };
-
-    events.forEach((event) => {
-      const date = event.startTime.split("T")[0];
-      if (!marked[date]) {
-        marked[date] = {
-          dots: [
-            {
-              key: date,
-              color: "#F6339A",
-              selectedDotColor: "white",
-            },
-          ],
-        };
-      }
-    });
 
     return marked;
   };
