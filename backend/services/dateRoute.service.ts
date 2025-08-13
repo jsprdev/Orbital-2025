@@ -25,19 +25,12 @@ export class DateRouteService {
     cards: LocationCard[]
   ): Promise<DateRouteResponse> {
     try {
-      // debug
-      console.log(
-        "OpenAI API Key loaded:",
-        process.env.OPENAI_API_KEY ? "YES" : "NO"
-      );
-
       if (!process.env.OPENAI_API_KEY) {
         throw new Error("OpenAI API key is not configured");
       }
 
       // turn into json format for ai to prompt
       const cardsJson = JSON.stringify(cards, null, 2);
-      console.log("Cards to process:", cards.length);
 
       // TESTING PROMPT FOR THE UI
       const prompt = `
@@ -61,7 +54,6 @@ Output ONLY a JSON object matching this exact schema:
 
 Do not include any additional text, just the JSON object.`;
 
-      console.log("Calling OpenAI API...");
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini", // DO NOT CHANGE I AM BROKE THIS IS THE CHEAPEST I GOT NO MONEY
         messages: [
@@ -79,14 +71,12 @@ Do not include any additional text, just the JSON object.`;
         max_tokens: 2000, // DO NOT CHANGE PLEASE
       });
 
-      console.log("response received");
       const responseContent = completion.choices[0]?.message?.content;
 
       if (!responseContent) {
         throw new Error("NO RESPONSE");
       }
 
-      console.log("parsing response...");
       // parse
       const parsedResponse = JSON.parse(responseContent) as DateRouteResponse;
 
@@ -94,7 +84,6 @@ Do not include any additional text, just the JSON object.`;
         throw new Error("Invalid response structure from OpenAI");
       }
 
-      console.log("ROUTE GENERATED SUCCESSFULLY");
       return parsedResponse;
     } catch (error) {
       throw new Error(

@@ -55,7 +55,6 @@ export const uploadPhoto = async (
 // DELETE - Delete a photo
 export const deletePhoto = async (token: string, photoId: string) => {
   try {
-    console.log("galleryAPI: Deleting photo:", photoId);
     const response = await axiosInstance.delete(`/api/images/${photoId}`, {
       headers: {
         Authorization: `Bearer ${token}`,

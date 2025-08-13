@@ -64,10 +64,8 @@ router.get("/:id", async (req: Request, res: Response) => {
 // Upload a new photo
 router.post("/", upload.array('photos'), async (req: any, res: Response) => {
     try {
-        console.log('POST /api/images - User ID:', req.user!.user_id,);
         const files = req.files as Express.Multer.File[];
         const { albumId } = req.body;
-        console.log("234: albumId:", albumId);
         
         const uploadedPhotos = await Promise.all(
             files.map(

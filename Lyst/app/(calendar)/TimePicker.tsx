@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -9,7 +9,7 @@ interface TimeRangePickerProps {
 }
 
 export default function TimePicker({
-  date,
+  date: dateString,
   onStartTimeChange,
   onEndTimeChange,
 }: TimeRangePickerProps) {
@@ -17,50 +17,65 @@ export default function TimePicker({
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  // Parse the incoming date string
-  const [selectedDate, setSelectedDate] = useState(new Date(date));
+  // Use useEffect to initialize dates when dateString changes
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(
-    new Date(new Date().setHours(startTime.getHours() + 1))
-  );
+  const [endTime, setEndTime] = useState(new Date());
+
+  useEffect(() => {
+    const initialDate = new Date(dateString);
+    setSelectedDate(initialDate);
+
+    // Initialize start and end times to the beginning and end of the day
+    const startOfDay = new Date(initialDate);
+    startOfDay.setHours(9, 0, 0, 0); // Set to 9:00 AM
+
+    const endOfDay = new Date(initialDate);
+    endOfDay.setHours(10, 0, 0, 0); // Set to 10:00 AM
+
+    setStartTime(startOfDay);
+    setEndTime(endOfDay);
+
+    // Notify parent components
+    onStartTimeChange(formatDateTime(startOfDay));
+    onEndTimeChange(formatDateTime(endOfDay));
+  }, [dateString]);
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
     setShowDatePicker(false);
     if (selectedDate) {
       setSelectedDate(selectedDate);
-      // Update both time fields with the new date
-      const dateStr = selectedDate.toISOString().split("T")[0];
-      onStartTimeChange(`${dateStr}T${formatTime(startTime)}`);
-      onEndTimeChange(`${dateStr}T${formatTime(endTime)}`);
+
+      // Preserve the time
+      const newStartTime = new Date(selectedDate);
+      newStartTime.setHours(startTime.getHours(), startTime.getMinutes());
+
+      const newEndTime = new Date(selectedDate);
+      newEndTime.setHours(endTime.getHours(), endTime.getMinutes());
+
+      setStartTime(newStartTime);
+      setEndTime(newEndTime);
+
+      onStartTimeChange(formatDateTime(newStartTime));
+      onEndTimeChange(formatDateTime(newEndTime));
     }
   };
 
   const handleTimeChange = (type: "start" | "end", selectedTime?: Date) => {
     if (!selectedTime) return;
 
-    const dateStr = selectedDate.toISOString().split("T")[0];
-
     if (type === "start") {
       setStartTime(selectedTime);
-      const newEndTime = new Date(
-        selectedTime.setHours(selectedTime.getHours() + 1)
-      );
-      setEndTime(newEndTime);
-      onStartTimeChange(`${dateStr}T${formatTime(selectedTime)}`);
-      onEndTimeChange(`${dateStr}T${formatTime(newEndTime)}`);
-      setShowStartPicker(false);
+      onStartTimeChange(formatDateTime(selectedTime));
     } else {
       setEndTime(selectedTime);
-      onEndTimeChange(`${dateStr}T${formatTime(selectedTime)}`);
-      setShowEndPicker(false);
+      onEndTimeChange(formatDateTime(selectedTime));
     }
   };
 
-  const formatTime = (date: Date) => {
-    return `${date.getHours().toString().padStart(2, "0")}:${date
-      .getMinutes()
-      .toString()
-      .padStart(2, "0")}:00`;
+  const formatDateTime = (date: Date) => {
+    const isoString = date.toISOString();
+    return isoString.slice(0, 19).replace("T", " ");
   };
 
   const formatDisplayDate = (date: Date) => {

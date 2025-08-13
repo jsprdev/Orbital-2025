@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { onAuthStateChanged } from "firebase/auth";
-import { FIREBASE_AUTH as auth } from "@/FirebaseConfig";
+import React from "react";
+import { View, Text } from "react-native";
 import { Priority, Note } from "@/types";
 import Card from "./card/card";
-import { getNotes, deleteNote } from "@/utils/lyst.api";
+import { deleteNote } from "@/utils/lyst.api";
 import { useAuth } from "@/providers/AuthProvider";
 import { router } from "expo-router";
 import { useNotes } from "@/providers/NotesProvider";
@@ -25,7 +23,6 @@ export default function Display({ filters, loading }: DisplayProps) {
   const { notes, fetchNotes } = useNotes();
 
   const handlePress = (id: string) => {
-    console.log("Card pressed:", id);
     router.push(`/(list)/location-details/${id}` as any);
   };
   const handleDelete = async (id: string) => {

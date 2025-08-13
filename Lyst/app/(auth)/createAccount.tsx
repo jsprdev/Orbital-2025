@@ -27,7 +27,6 @@ export default function CreateAccount() {
       await createUser(email, password, confirmPassword, name);
       router.replace("/(tabs)/Profile");
     } catch (error: any) {
-      console.log("Sign Up Error:", error);
       if (error.code === "auth/invalid-credentials") {
         Alert.alert("Invalid Email or Password");
       } else {

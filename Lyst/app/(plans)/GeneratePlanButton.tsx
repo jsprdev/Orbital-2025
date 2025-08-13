@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  Image,
+  TouchableOpacity
 } from "react-native";
 
 export default function GeneratePlanButton({

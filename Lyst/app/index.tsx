@@ -1,9 +1,8 @@
 
 import "react-native-get-random-values";
 import { useRouter } from "expo-router";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -11,9 +10,7 @@ import {
   KeyboardAvoidingView,
   Alert,
   Image,
-  Platform,
-  ScrollView,
-  Keyboard,
+  Platform
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
@@ -31,9 +28,7 @@ export default function Index() {
   const handleSignIn = async () => {
     setLoading(true);
     try {
-      console.log("Signing in..");
       await signIn(email, password);
-      console.log("Sign in Successful");
       router.replace("/(tabs)/Profile");
     } catch (error: any) {
       if (error.code === "auth/invalid-credentials") {

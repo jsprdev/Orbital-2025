@@ -6,7 +6,6 @@ const router = Router();
 
 
 router.get('/forecast', async (req: Request, res: Response) => {
-  console.log("I AM BEING CALLED")
   try {
     const { location } = req.query;
     if (!location) {

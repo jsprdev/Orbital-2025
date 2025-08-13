@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   Alert,
-  ScrollView,
   SafeAreaView,
 } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";

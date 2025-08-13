@@ -1,9 +1,9 @@
 import React, { useCallback, useState, useEffect } from "react";
-import { Image, Text, View, TouchableOpacity } from "react-native";
+import { Image, Text, View } from "react-native";
 import AddIdea from "../(list)/AddIdea";
 import SearchBar from "../(list)/SearchBar";
 import Display from "../(list)/Display";
-import { Priority, Note } from "@/types";
+import { Priority } from "@/types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
 import { ScrollView } from "react-native-gesture-handler";
@@ -67,10 +67,6 @@ export default function YourLyst() {
     priority: Priority | null;
   }) => {
     setFilters(filter);
-
-    console.log("Query:", filter.query);
-    console.log("Tags:", filter.selectedTags);
-    console.log("Priority:", filter.priority);
   };
 
   return (

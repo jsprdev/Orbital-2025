@@ -11,7 +11,6 @@ export class WeatherService {
       days: 7,
     };
     const response = await axios.get(url, { params });
-    console.log(response.data);
     return response.data;
   }
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, Image, TouchableOpacity, TextInput, FlatList, Alert } from "react-native";
+import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import { useAuth } from "@/providers/AuthProvider";
@@ -16,7 +16,7 @@ import DateSection from "../(expenses)/DateSection";
 
 
 export default function YourExpenses() {
-  const { user, token } = useAuth();
+  const { token } = useAuth();
   const [sections, setSections] = useState<SectionType[]>([]);
   const [loading, setLoading] = useState(true);
 

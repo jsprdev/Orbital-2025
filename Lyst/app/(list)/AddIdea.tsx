@@ -39,12 +39,6 @@ export default function AddIdea({
   const [visible, setVisible] = useState(false);
   const { token } = useAuth();
   const { createNote } = useNotes();
-  // logs to see if api key loaded
-  console.log(
-    "Google Places API Key:",
-    process.env.EXPO_PUBLIC_GOOGLE_PLACES_API_KEY ? "Loaded" : "NOT LOADED",
-  );
-
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [place_id, setPlaceId] = useState(""); // different naming here cos google api lmao
@@ -120,15 +114,13 @@ export default function AddIdea({
     }
     setLoadingPlaces(true);
     try {
-      console.log("expopublichost", process.env.EXPO_PUBLIC_HOST)
       const res = await fetch(
-        `https://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places?input=${encodeURIComponent(input)}`,
+        `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places?input=${encodeURIComponent(input)}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
       const data = await res.json();
-      console.log('Autocomplete response:', data);
       setPlaceSuggestions(data.predictions || []);
     } catch (e) {
       console.error('Autocomplete error:', e);

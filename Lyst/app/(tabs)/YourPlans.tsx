@@ -1,8 +1,7 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
-import { router } from "expo-router";
 import GeneratePlan from "../(plans)/GeneratePlan";
 import SavedPlans from "../(plans)/SavedPlans";
 

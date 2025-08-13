@@ -5,8 +5,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  ScrollView,
-  Switch
+  ScrollView
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
@@ -90,7 +89,6 @@ export default function AddImageScreen() {
       if (!album || !album.id) {
         throw new Error("Album could not be found or created.");
       }
-      console.log("HERE", album.id, selectedImage);
       await uploadPhoto(album.id, selectedImage);
       await fetchAlbums(); // Refresh albums to ensure everything is in sync
       Alert.alert("Success", "Image uploaded successfully!", [
