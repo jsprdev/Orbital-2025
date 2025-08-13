@@ -19,6 +19,7 @@ export const getPartnerDetails = async (token: string) => {
 
 export const uploadCoupleAnniversaryDate = async (token: string, date: Date) => {
   try {
+    console.log("2");
     const response = await axiosInstance.post("/api/partner/anniversaryDate", 
       { date: date.toISOString() },
       {

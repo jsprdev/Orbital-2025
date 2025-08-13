@@ -55,6 +55,7 @@ export const PartnerProvider = ({
       return;
     }
     try {
+      console.log("1");
       await uploadCoupleAnniversaryDate(token, date);
       await fetchPartner();
     } catch (error: any) {
