@@ -42,7 +42,7 @@ export default function AddIdea({
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
   const [place_id, setPlaceId] = useState(""); // different naming here cos google api lmao
-  const [about, setAbout] = useState("");
+  const [about] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [showCustomTag, setShowCustomTag] = useState(false);
   const [customTag, setCustomTag] = useState("");

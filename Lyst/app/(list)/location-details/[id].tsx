@@ -33,7 +33,7 @@ export default function LocationDetails() {
       setPlaceDetails(data.result);
     };
     fetchDetails();
-  }, [note]);
+  }, [note, token]);
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -41,7 +41,7 @@ export default function LocationDetails() {
       setNote(notes.find((n: Note) => n.id === id));
     };
     fetchNote();
-  }, [id]);
+  }, [id, token]);
 
   if (!note) return <Text>Loading...</Text>;
 

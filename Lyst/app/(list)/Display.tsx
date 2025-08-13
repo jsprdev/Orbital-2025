@@ -7,12 +7,6 @@ import { useAuth } from "@/providers/AuthProvider";
 import { router } from "expo-router";
 import { useNotes } from "@/providers/NotesProvider";
 
-const priorityColor: Record<Priority, string> = {
-  low: "text-green-500",
-  medium: "text-yellow-500",
-  high: "text-red-500",
-};
-
 type DisplayProps = {
   filters: { query: string; selectedTags: string[]; priority: Priority | null };
   loading: boolean;

@@ -113,7 +113,7 @@ const CoupleProfile = () => {
       };
 
       fetchStats();
-    }, [token])
+    }, [fetchEvents, token])
   );
 
   const getDaysSinceAnniversary = (

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView } from "react-native-gesture-handler";
 import { useAuth } from "@/providers/AuthProvider";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {

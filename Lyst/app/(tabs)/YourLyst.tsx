@@ -38,7 +38,7 @@ export default function YourLyst() {
 
   useEffect(() => {
     refreshNotes();
-  }, [token]);
+  }, [token, refreshNotes]);
 
   useEffect(() => {
     const tagsInNotes = new Set(DEFAULT_TAGS);

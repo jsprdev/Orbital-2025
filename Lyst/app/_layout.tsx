@@ -1,4 +1,4 @@
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import "./global.css";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -9,8 +9,6 @@ import { PartnerProvider } from "@/providers/PartnerProvider";
 import { CalendarProvider } from "@/providers/CalendarProvider";
 
 export default function RootLayout() {
-  const router = useRouter();
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>

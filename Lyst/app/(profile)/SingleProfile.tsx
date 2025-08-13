@@ -53,7 +53,7 @@ const SingleProfile = () => {
           className="bg-blue-500 h-14 p-3 w-16 rounded-lg rounded-tl-none rounded-bl-none justify-center items-center"
           onPress={async () => {
             if (inviteCode) {
-              const flag = await joinCode(token!, inviteCode);
+              await joinCode(token!, inviteCode);
               await fetchPartner();
             }
           }}

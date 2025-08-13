@@ -17,7 +17,6 @@ import { router } from "expo-router";
 import { Calendar } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
-import { usePartner } from "@/providers/PartnerProvider";
 import { useCalendar } from "@/providers/CalendarProvider";
 import { Note } from "@/types";
 import { CalendarEvent } from "@/types/calendar.dto";
@@ -28,7 +27,6 @@ import { useNotes } from "@/providers/NotesProvider";
 const CalendarScreen = () => {
   const { token } = useAuth();
   const { notes, fetchNotes } = useNotes();
-  const { partnerUserId } = usePartner();
   const { events, createEvent, fetchEvents } = useCalendar();
 
   const [selectedDate, setSelectedDate] = useState<string>(
@@ -47,7 +45,7 @@ const CalendarScreen = () => {
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
-  }, [token, partnerUserId]);
+  }, [token, fetchNotes]);
 
   useEffect(() => {
     fetchEvents();

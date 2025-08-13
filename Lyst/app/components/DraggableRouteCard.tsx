@@ -84,7 +84,7 @@ const DraggableStop: React.FC<DraggableStopProps> = ({ location, index, onMove, 
 };
 
 const DraggableRouteCard: React.FC<DraggableRouteCardProps> = ({ route, onRouteChange }) => {
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging] = useState(false);
   const moveStop = (fromIndex: number, toIndex: number) => {
     const newVisitOrder = [...route.visitOrder];
     const [movedItem] = newVisitOrder.splice(fromIndex, 1);

@@ -130,14 +130,14 @@ export default function RouteReview() {
             className="flex-row items-center justify-between bg-gray-50 p-3 rounded-lg"
             onPress={() => setShowAINotes(!showAINotes)}
           >
-            <Text className="font-semibold text-gray-700">AI's Notes</Text>
-            <Feather 
-              name={showAINotes ? "chevron-up" : "chevron-down"} 
-              size={20} 
-              color="#6b7280" 
+            <Text className="font-semibold text-gray-700">AI&apos;s Notes</Text>
+            <Feather
+              name={showAINotes ? "chevron-up" : "chevron-down"}
+              size={20}
+              color="#6b7280"
             />
           </TouchableOpacity>
-          
+
           {showAINotes && (
             <View className="mt-2 p-3 bg-white border border-gray-200 rounded-lg">
               <Text className="text-gray-600 leading-5">

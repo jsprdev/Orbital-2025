@@ -18,7 +18,6 @@ import { useAuth } from "@/providers/AuthProvider";
 export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const { signIn, forgotPassword } = useAuth();
@@ -26,7 +25,6 @@ export default function Index() {
   const insets = useSafeAreaInsets();
 
   const handleSignIn = async () => {
-    setLoading(true);
     try {
       await signIn(email, password);
       router.replace("/(tabs)/Profile");
@@ -36,8 +34,6 @@ export default function Index() {
       } else {
         Alert.alert("Sign In Error", error.message);
       }
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -125,7 +121,7 @@ export default function Index() {
 
             <View className="flex-row justify-center items-center mt-4">
               <Text className="text-gray-600 text-base">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
               </Text>
               <TouchableOpacity onPress={signUpPage}>
                 <Text className="text-primary font-semibold text-base">

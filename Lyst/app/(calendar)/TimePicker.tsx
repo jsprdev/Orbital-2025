@@ -36,7 +36,7 @@ export default function TimePicker({
 
     onStartTimeChange(formatDateTime(start));
     onEndTimeChange(formatDateTime(end));
-  }, [dateString]);
+  }, [dateString, onStartTimeChange, onEndTimeChange]);
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || new Date();
