@@ -36,11 +36,11 @@ export default function TimePicker({
 
     onStartTimeChange(formatDateTime(start));
     onEndTimeChange(formatDateTime(end));
-  }, [dateString, onStartTimeChange, onEndTimeChange]);
+  }, [dateString]);
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || new Date();
-    setShowDatePicker(Platform.OS === "ios"); 
+    setShowDatePicker(Platform.OS === "ios");
 
     const newStart = new Date(currentDate);
     newStart.setHours(startTime.getHours(), startTime.getMinutes());
@@ -102,7 +102,7 @@ export default function TimePicker({
       <View className="mb-4">
         <Text className="text-gray-700 mb-1">Date</Text>
         <TouchableOpacity
-          onPress={() => setShowDatePicker(true)}
+          onPress={() => setShowDatePicker(!showDatePicker)}
           className="border border-gray-300 p-2 rounded-lg"
         >
           <Text>{formatDisplayDate(selectedDate)}</Text>
@@ -112,16 +112,17 @@ export default function TimePicker({
             value={selectedDate}
             mode="date"
             display={Platform.OS === "ios" ? "spinner" : "default"}
+            textColor="black"
             onChange={handleDateChange}
           />
         )}
       </View>
 
       <View className="flex-row justify-between">
-        <View className="flex-1 mr-2">
+        <View className="flex-1 mr-2 w-1/2 ml-2">
           <Text className="text-gray-700 mb-1">Start Time</Text>
           <TouchableOpacity
-            onPress={() => setShowStartPicker(true)}
+            onPress={() => setShowStartPicker(!showStartPicker)}
             className="border border-gray-300 p-2 rounded-lg"
           >
             <Text>
@@ -131,12 +132,13 @@ export default function TimePicker({
               })}
             </Text>
           </TouchableOpacity>
-          {(showStartPicker || Platform.OS === "ios") && (
+          {showStartPicker && (
             <DateTimePicker
               value={startTime}
               mode="time"
-              display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(_, time) => handleTimeChange("start", time)}
+              themeVariant="dark"
+              textColor="black"
             />
           )}
         </View>
@@ -144,7 +146,7 @@ export default function TimePicker({
         <View className="flex-1 ml-2">
           <Text className="text-gray-700 mb-1">End Time</Text>
           <TouchableOpacity
-            onPress={() => setShowEndPicker(true)}
+            onPress={() => setShowEndPicker(!showEndPicker)}
             className="border border-gray-300 p-2 rounded-lg"
           >
             <Text>
@@ -154,11 +156,10 @@ export default function TimePicker({
               })}
             </Text>
           </TouchableOpacity>
-          {(showEndPicker || Platform.OS === "ios") && (
+          {showEndPicker && (
             <DateTimePicker
               value={endTime}
               mode="time"
-              display={Platform.OS === "ios" ? "spinner" : "default"}
               minimumDate={startTime}
               onChange={(_, time) => handleTimeChange("end", time)}
             />
