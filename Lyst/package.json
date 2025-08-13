@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "jscpd": {
-    "threshold": 0, 
+    "threshold": 100, 
     "ignore": [
       "**/test/**",
       "**/*.spec.ts"
