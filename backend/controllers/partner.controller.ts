@@ -35,13 +35,12 @@ router.get("/generate", async (req: Request, res: Response) => {
 });
 
 router.post("/anniversaryDate", async (req: Request, res: Response) => {
-  console.log("3");
+
   if (!req.user) {
     res.status(401).json({ error: 'User not authenticated' });
     return; 
   }
   const { date } = req.body;
-  console.log("4 Date: ", date);
   try {
     const dateObject = new Date(date);
     const result = await partnerServiceInstance.uploadAnniversaryDate(req.user.uid, dateObject);
