@@ -4,6 +4,8 @@ node_modules/
 # BACKEND FILES #
 backend/dist/
 backend/node_modules/
+backend/.env
+backend/config/serviceAccount.json
 
 # SECRETS # 
 backend/.env

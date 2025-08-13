@@ -9,6 +9,7 @@
     "noEmit": true,
   },
   "include": [
+    
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
