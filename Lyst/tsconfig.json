@@ -6,7 +6,7 @@
     "paths": {
       "@/*": ["./*"]
     },
-    "noEmit": true,
+    "noEmit": true
   },
   "include": [
     "**/*.ts",
