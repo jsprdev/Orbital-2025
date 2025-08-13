@@ -17,7 +17,6 @@ export default function TimePicker({
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  // Use useEffect to initialize dates when dateString changes
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
@@ -26,56 +25,68 @@ export default function TimePicker({
     const initialDate = new Date(dateString);
     setSelectedDate(initialDate);
 
-    // Initialize start and end times to the beginning and end of the day
-    const startOfDay = new Date(initialDate);
-    startOfDay.setHours(9, 0, 0, 0); // Set to 9:00 AM
+    const start = new Date(initialDate);
+    start.setHours(9, 0, 0, 0);
 
-    const endOfDay = new Date(initialDate);
-    endOfDay.setHours(10, 0, 0, 0); // Set to 10:00 AM
+    const end = new Date(initialDate);
+    end.setHours(10, 0, 0, 0);
 
-    setStartTime(startOfDay);
-    setEndTime(endOfDay);
+    setStartTime(start);
+    setEndTime(end);
 
-    // Notify parent components
-    onStartTimeChange(formatDateTime(startOfDay));
-    onEndTimeChange(formatDateTime(endOfDay));
+    onStartTimeChange(formatDateTime(start));
+    onEndTimeChange(formatDateTime(end));
   }, [dateString]);
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      setSelectedDate(selectedDate);
+    const currentDate = selectedDate || new Date();
+    setShowDatePicker(Platform.OS === "ios"); 
 
-      // Preserve the time
-      const newStartTime = new Date(selectedDate);
-      newStartTime.setHours(startTime.getHours(), startTime.getMinutes());
+    const newStart = new Date(currentDate);
+    newStart.setHours(startTime.getHours(), startTime.getMinutes());
 
-      const newEndTime = new Date(selectedDate);
-      newEndTime.setHours(endTime.getHours(), endTime.getMinutes());
+    const newEnd = new Date(currentDate);
+    newEnd.setHours(endTime.getHours(), endTime.getMinutes());
 
-      setStartTime(newStartTime);
-      setEndTime(newEndTime);
+    setSelectedDate(currentDate);
+    setStartTime(newStart);
+    setEndTime(newEnd);
 
-      onStartTimeChange(formatDateTime(newStartTime));
-      onEndTimeChange(formatDateTime(newEndTime));
-    }
+    onStartTimeChange(formatDateTime(newStart));
+    onEndTimeChange(formatDateTime(newEnd));
   };
 
   const handleTimeChange = (type: "start" | "end", selectedTime?: Date) => {
     if (!selectedTime) return;
 
     if (type === "start") {
-      setStartTime(selectedTime);
-      onStartTimeChange(formatDateTime(selectedTime));
+      const newStart = selectedTime;
+      setStartTime(newStart);
+      onStartTimeChange(formatDateTime(newStart));
+
+      // ensure correct end time
+      if (newStart >= endTime) {
+        const newEnd = new Date(newStart);
+        newEnd.setHours(newStart.getHours() + 1);
+        setEndTime(newEnd);
+        onEndTimeChange(formatDateTime(newEnd));
+      }
     } else {
-      setEndTime(selectedTime);
-      onEndTimeChange(formatDateTime(selectedTime));
+      const newEnd =
+        selectedTime < startTime
+          ? new Date(startTime.getTime() + 3600000) // +1 hour if time is invalid
+          : selectedTime;
+
+      setEndTime(newEnd);
+      onEndTimeChange(formatDateTime(newEnd));
     }
+
+    setShowStartPicker(false);
+    setShowEndPicker(false);
   };
 
   const formatDateTime = (date: Date) => {
-    const isoString = date.toISOString();
-    return isoString.slice(0, 19).replace("T", " ");
+    return date.toISOString().slice(0, 19).replace("T", " ");
   };
 
   const formatDisplayDate = (date: Date) => {
@@ -88,11 +99,10 @@ export default function TimePicker({
 
   return (
     <View className="flex-col mb-4">
-      {/* Date Picker Row */}
       <View className="mb-4">
         <Text className="text-gray-700 mb-1">Date</Text>
         <TouchableOpacity
-          onPress={() => setShowDatePicker((prev) => !prev)}
+          onPress={() => setShowDatePicker(true)}
           className="border border-gray-300 p-2 rounded-lg"
         >
           <Text>{formatDisplayDate(selectedDate)}</Text>
@@ -101,17 +111,17 @@ export default function TimePicker({
           <DateTimePicker
             value={selectedDate}
             mode="date"
+            display={Platform.OS === "ios" ? "spinner" : "default"}
             onChange={handleDateChange}
           />
         )}
       </View>
 
-      {/* Time Pickers Row */}
       <View className="flex-row justify-between">
         <View className="flex-1 mr-2">
           <Text className="text-gray-700 mb-1">Start Time</Text>
           <TouchableOpacity
-            onPress={() => setShowStartPicker((prev) => !prev)}
+            onPress={() => setShowStartPicker(true)}
             className="border border-gray-300 p-2 rounded-lg"
           >
             <Text>
@@ -121,10 +131,11 @@ export default function TimePicker({
               })}
             </Text>
           </TouchableOpacity>
-          {showStartPicker && (
+          {(showStartPicker || Platform.OS === "ios") && (
             <DateTimePicker
               value={startTime}
               mode="time"
+              display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={(_, time) => handleTimeChange("start", time)}
             />
           )}
@@ -133,7 +144,7 @@ export default function TimePicker({
         <View className="flex-1 ml-2">
           <Text className="text-gray-700 mb-1">End Time</Text>
           <TouchableOpacity
-            onPress={() => setShowEndPicker((prev) => !prev)}
+            onPress={() => setShowEndPicker(true)}
             className="border border-gray-300 p-2 rounded-lg"
           >
             <Text>
@@ -143,10 +154,11 @@ export default function TimePicker({
               })}
             </Text>
           </TouchableOpacity>
-          {showEndPicker && (
+          {(showEndPicker || Platform.OS === "ios") && (
             <DateTimePicker
               value={endTime}
               mode="time"
+              display={Platform.OS === "ios" ? "spinner" : "default"}
               minimumDate={startTime}
               onChange={(_, time) => handleTimeChange("end", time)}
             />
