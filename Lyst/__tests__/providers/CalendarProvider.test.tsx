@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Button } from "react-native";
-import { render, act } from "@testing-library/react-native";
+import { render, act, fireEvent } from "@testing-library/react-native";
 import { CalendarProvider, useCalendar } from "@/providers/CalendarProvider";
 import { getEvents, createEvent, deleteEvent } from "@/utils/calendar.api";
 
@@ -27,7 +27,7 @@ const TestComponent = () => {
             endTime: "2023-01-01",
             location: "Test",
             userId: "1",
-            createdAt: new Date().toISOString(),
+            createdAt: new Date(),
           })
         }
         title="Add"
