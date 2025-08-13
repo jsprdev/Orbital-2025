@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, Text, Image, TouchableOpacity, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-gesture-handler";
 import { useAuth } from "@/providers/AuthProvider";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {
   getExpenseSections,
   createExpenseSection,
@@ -11,7 +12,6 @@ import {
   SectionType,
   ExpenseItemType,
 } from "@/utils/expenses.api";
-import { useEffect } from "react";
 import DateSection from "../(expenses)/DateSection";
 
 
@@ -19,6 +19,7 @@ export default function YourExpenses() {
   const { token } = useAuth();
   const [sections, setSections] = useState<SectionType[]>([]);
   const [loading, setLoading] = useState(true);
+  const scrollRef = useRef<KeyboardAwareScrollView>(null);
 
   useEffect(() => {
     if (!token) return;
@@ -101,7 +102,15 @@ export default function YourExpenses() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <ScrollView>
+       <KeyboardAwareScrollView
+        ref={scrollRef}
+        enableOnAndroid={true}
+        extraScrollHeight={100}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ paddingBottom: 50 }}
+        enableAutomaticScroll={true}
+        extraHeight={150}
+      >
         
         <View className="py-4 mb-2.5 bg-white relative flex-col items-center px-4">
           <Image
@@ -140,7 +149,7 @@ export default function YourExpenses() {
             ))
           )}
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 } 
