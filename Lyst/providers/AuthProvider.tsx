@@ -117,7 +117,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       );
 
       // Create user object in firestore 
-      console.log("creating in firebase...");
       createAccount(userCredential.user.uid, email, name);
       
       if (userCredential.user && name) {
@@ -131,7 +130,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Function to sign out the user
   const signOutUser = async () => {
-    console.log("Signing out user:", user?.email);
     try {
       await signOut(auth);
     } catch (error) {

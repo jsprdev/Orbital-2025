@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
@@ -9,7 +9,7 @@ interface TimeRangePickerProps {
 }
 
 export default function TimePicker({
-  date,
+  date: dateString,
   onStartTimeChange,
   onEndTimeChange,
 }: TimeRangePickerProps) {
@@ -17,50 +17,76 @@ export default function TimePicker({
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-  // Parse the incoming date string
-  const [selectedDate, setSelectedDate] = useState(new Date(date));
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(
-    new Date(new Date().setHours(startTime.getHours() + 1))
-  );
+  const [endTime, setEndTime] = useState(new Date());
+
+  useEffect(() => {
+    const initialDate = new Date(dateString);
+    setSelectedDate(initialDate);
+
+    const start = new Date(initialDate);
+    start.setHours(9, 0, 0, 0);
+
+    const end = new Date(initialDate);
+    end.setHours(10, 0, 0, 0);
+
+    setStartTime(start);
+    setEndTime(end);
+
+    onStartTimeChange(formatDateTime(start));
+    onEndTimeChange(formatDateTime(end));
+  }, [dateString]);
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      setSelectedDate(selectedDate);
-      // Update both time fields with the new date
-      const dateStr = selectedDate.toISOString().split("T")[0];
-      onStartTimeChange(`${dateStr}T${formatTime(startTime)}`);
-      onEndTimeChange(`${dateStr}T${formatTime(endTime)}`);
-    }
+    const currentDate = selectedDate || new Date();
+    setShowDatePicker(Platform.OS === "ios");
+
+    const newStart = new Date(currentDate);
+    newStart.setHours(startTime.getHours(), startTime.getMinutes());
+
+    const newEnd = new Date(currentDate);
+    newEnd.setHours(endTime.getHours(), endTime.getMinutes());
+
+    setSelectedDate(currentDate);
+    setStartTime(newStart);
+    setEndTime(newEnd);
+
+    onStartTimeChange(formatDateTime(newStart));
+    onEndTimeChange(formatDateTime(newEnd));
   };
 
   const handleTimeChange = (type: "start" | "end", selectedTime?: Date) => {
     if (!selectedTime) return;
 
-    const dateStr = selectedDate.toISOString().split("T")[0];
-
     if (type === "start") {
-      setStartTime(selectedTime);
-      const newEndTime = new Date(
-        selectedTime.setHours(selectedTime.getHours() + 1)
-      );
-      setEndTime(newEndTime);
-      onStartTimeChange(`${dateStr}T${formatTime(selectedTime)}`);
-      onEndTimeChange(`${dateStr}T${formatTime(newEndTime)}`);
-      setShowStartPicker(false);
+      const newStart = selectedTime;
+      setStartTime(newStart);
+      onStartTimeChange(formatDateTime(newStart));
+
+      // ensure correct end time
+      if (newStart >= endTime) {
+        const newEnd = new Date(newStart);
+        newEnd.setHours(newStart.getHours() + 1);
+        setEndTime(newEnd);
+        onEndTimeChange(formatDateTime(newEnd));
+      }
     } else {
-      setEndTime(selectedTime);
-      onEndTimeChange(`${dateStr}T${formatTime(selectedTime)}`);
-      setShowEndPicker(false);
+      const newEnd =
+        selectedTime < startTime
+          ? new Date(startTime.getTime() + 3600000) // +1 hour if time is invalid
+          : selectedTime;
+
+      setEndTime(newEnd);
+      onEndTimeChange(formatDateTime(newEnd));
     }
+
+    setShowStartPicker(false);
+    setShowEndPicker(false);
   };
 
-  const formatTime = (date: Date) => {
-    return `${date.getHours().toString().padStart(2, "0")}:${date
-      .getMinutes()
-      .toString()
-      .padStart(2, "0")}:00`;
+  const formatDateTime = (date: Date) => {
+    return date.toISOString().slice(0, 19).replace("T", " ");
   };
 
   const formatDisplayDate = (date: Date) => {
@@ -73,11 +99,10 @@ export default function TimePicker({
 
   return (
     <View className="flex-col mb-4">
-      {/* Date Picker Row */}
       <View className="mb-4">
         <Text className="text-gray-700 mb-1">Date</Text>
         <TouchableOpacity
-          onPress={() => setShowDatePicker((prev) => !prev)}
+          onPress={() => setShowDatePicker(!showDatePicker)}
           className="border border-gray-300 p-2 rounded-lg"
         >
           <Text>{formatDisplayDate(selectedDate)}</Text>
@@ -86,17 +111,18 @@ export default function TimePicker({
           <DateTimePicker
             value={selectedDate}
             mode="date"
+            display={Platform.OS === "ios" ? "spinner" : "default"}
+            textColor="black"
             onChange={handleDateChange}
           />
         )}
       </View>
 
-      {/* Time Pickers Row */}
       <View className="flex-row justify-between">
-        <View className="flex-1 mr-2">
+        <View className="flex-1 mr-2 w-1/2 ml-2">
           <Text className="text-gray-700 mb-1">Start Time</Text>
           <TouchableOpacity
-            onPress={() => setShowStartPicker((prev) => !prev)}
+            onPress={() => setShowStartPicker(!showStartPicker)}
             className="border border-gray-300 p-2 rounded-lg"
           >
             <Text>
@@ -111,6 +137,8 @@ export default function TimePicker({
               value={startTime}
               mode="time"
               onChange={(_, time) => handleTimeChange("start", time)}
+              themeVariant="dark"
+              textColor="black"
             />
           )}
         </View>
@@ -118,7 +146,7 @@ export default function TimePicker({
         <View className="flex-1 ml-2">
           <Text className="text-gray-700 mb-1">End Time</Text>
           <TouchableOpacity
-            onPress={() => setShowEndPicker((prev) => !prev)}
+            onPress={() => setShowEndPicker(!showEndPicker)}
             className="border border-gray-300 p-2 rounded-lg"
           >
             <Text>

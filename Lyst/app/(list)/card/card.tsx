@@ -23,7 +23,7 @@ const priorityColor: Record<string, string> = {
 };
 
 export default function Card({ note, onPress, onDelete }: Props) {
-  const swipeRight = (progress: any, drag: any) => {
+  const useSwipeRight = (progress: any, drag: any) => {
     const styleAnimation = useAnimatedStyle(() => ({
       transform: [{ translateX: drag.value + 60 }],
     }));
@@ -40,7 +40,7 @@ export default function Card({ note, onPress, onDelete }: Props) {
     );
   };
 
-  const { id, description, priority, place, tags = [] } = note;
+  const { description, priority, place, tags = [] } = note;
 
   return (
     <Reanimated.View
@@ -52,7 +52,7 @@ export default function Card({ note, onPress, onDelete }: Props) {
         key={note.id}
         friction={2}
         rightThreshold={40}
-        renderRightActions={swipeRight}
+        renderRightActions={useSwipeRight}
         overshootRight={false}
         containerStyle={{
           paddingBottom: 12,

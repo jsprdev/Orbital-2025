@@ -35,13 +35,15 @@ router.get("/generate", async (req: Request, res: Response) => {
 });
 
 router.post("/anniversaryDate", async (req: Request, res: Response) => {
+
   if (!req.user) {
     res.status(401).json({ error: 'User not authenticated' });
     return; 
   }
   const { date } = req.body;
   try {
-    const result = await partnerServiceInstance.joinCode(req.user.uid, date);
+    const dateObject = new Date(date);
+    const result = await partnerServiceInstance.uploadAnniversaryDate(req.user.uid, dateObject);
     res.status(200).json(result)
   } catch (error) {
     console.error('Error joining code:', error);

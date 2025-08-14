@@ -10,13 +10,13 @@ import {
   Dimensions,
   Animated,
   Pressable,
+  Alert,
 } from "react-native";
 import Feather from "@expo/vector-icons/AntDesign";
 import { router } from "expo-router";
 import { Calendar } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
-import { usePartner } from "@/providers/PartnerProvider";
 import { useCalendar } from "@/providers/CalendarProvider";
 import { Note } from "@/types";
 import { CalendarEvent } from "@/types/calendar.dto";
@@ -27,7 +27,6 @@ import { useNotes } from "@/providers/NotesProvider";
 const CalendarScreen = () => {
   const { token } = useAuth();
   const { notes, fetchNotes } = useNotes();
-  const { partnerUserId } = usePartner();
   const { events, createEvent, fetchEvents } = useCalendar();
 
   const [selectedDate, setSelectedDate] = useState<string>(
@@ -46,7 +45,7 @@ const CalendarScreen = () => {
     } catch (error) {
       console.error("Error fetching notes:", error);
     }
-  }, [token, partnerUserId]);
+  }, [token, fetchNotes]);
 
   useEffect(() => {
     fetchEvents();
@@ -55,6 +54,10 @@ const CalendarScreen = () => {
 
   const handleCreateEvent = async () => {
     if (!token) return;
+    if (!title && !selectedNote) {
+      Alert.alert("Please enter a title or select a note.");
+      return;
+    }
     const newEvent: CalendarEvent = {
       title: title || selectedNote?.description || "Untitled",
       location: location || selectedNote?.place || "",
@@ -80,27 +83,25 @@ const CalendarScreen = () => {
 
   const getMarkedDates = () => {
     const marked: Record<string, any> = {};
+    const selectedDateStr = selectedDate.split("T")[0];
 
-    marked[selectedDate.split("T")[0]] = {
+    events.forEach((event) => {
+      const eventDate = new Date(event.startTime);
+      const dateStr = eventDate.toISOString().split("T")[0];
+
+      if (!marked[dateStr]) {
+        marked[dateStr] = {
+          dots: [{ color: "#F6339A" }],
+        };
+      }
+    });
+
+    marked[selectedDateStr] = {
+      ...marked[selectedDateStr],
       selected: true,
       selectedColor: "#F6339A",
       selectedTextColor: "white",
     };
-
-    events.forEach((event) => {
-      const date = event.startTime.split("T")[0];
-      if (!marked[date]) {
-        marked[date] = {
-          dots: [
-            {
-              key: date,
-              color: "#F6339A",
-              selectedDotColor: "white",
-            },
-          ],
-        };
-      }
-    });
 
     return marked;
   };

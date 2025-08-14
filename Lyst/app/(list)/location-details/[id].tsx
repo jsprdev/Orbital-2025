@@ -12,7 +12,6 @@ import React, { useEffect, useState } from "react";
 import { Note } from "@/types";
 import { getNotes } from "@/utils/lyst.api";
 import { useAuth } from "@/providers/AuthProvider";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LocationDetails() {
   const { id } = useLocalSearchParams();
@@ -27,14 +26,14 @@ export default function LocationDetails() {
     if (!note?.place_id) return;
     const fetchDetails = async () => {
       const res = await fetch(
-        `https://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places/details?placeId=${note.place_id}`,
+        `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places/details?placeId=${note.place_id}`,
         { headers: { Authorization: `Bearer ${token}` } },
       );
       const data = await res.json();
       setPlaceDetails(data.result);
     };
     fetchDetails();
-  }, [note]);
+  }, [note, token]);
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -42,15 +41,9 @@ export default function LocationDetails() {
       setNote(notes.find((n: Note) => n.id === id));
     };
     fetchNote();
-  }, [id]);
-
-  
+  }, [id, token]);
 
   if (!note) return <Text>Loading...</Text>;
-
-  // console.log(placeDetails)
-  // SHOW ALL AVAILABLE KEYS IN THE JSON
-  // console.log(Object.keys(placeDetails));
 
   return (
     <>

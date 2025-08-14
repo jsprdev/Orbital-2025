@@ -53,8 +53,6 @@ export const deleteNote = async (noteId: string, token: string) => {
 
 // generate date route
 export const generateDateRoute = async (cards: any, token: string) => {
-  console.log("Token being sent:", token);
-  console.log("1");
   try {
     const response = await axiosInstance.post(
       "/api/date-route/generate",
@@ -65,7 +63,6 @@ export const generateDateRoute = async (cards: any, token: string) => {
         },
       },
     );
-    console.log("2");
     return response.data.data;
   } catch (error) {
     console.error("Error generating date route:", error);
@@ -77,7 +74,7 @@ export const generateDateRoute = async (cards: any, token: string) => {
 export const getWeatherForecast = async (location = "Singapore") => {
   try {
     const response = await fetch(
-      `https://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/weather/forecast?location=${encodeURIComponent(location)}`,
+      `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/weather/forecast?location=${encodeURIComponent(location)}`,
     );
     const data = await response.json();
     return data;

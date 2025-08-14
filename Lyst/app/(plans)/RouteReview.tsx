@@ -8,7 +8,6 @@ import { createDatePlan } from "@/utils/datePlans.api";
 import { useAuth } from "@/providers/AuthProvider";
 import * as Calendar from "expo-calendar";
 import DraggableFlatList, {
-  NestableDraggableFlatList,
   RenderItemParams,
 } from "react-native-draggable-flatlist";
 import SavePlanModal from "./SavePlanModal";
@@ -31,7 +30,6 @@ export default function RouteReview() {
   
   const getOrderedLocations = () => {
     if (!initialRoute.selectedLocations || !initialRoute.visitOrder) {
-      console.log("Missing data, returning original locations");
       return initialRoute.selectedLocations || [];
     }
     
@@ -50,9 +48,7 @@ export default function RouteReview() {
     const fetchWeather = async () => {
       try {
         const data = await getWeatherForecast("Singapore");
-        //console.log("Weather API response:", data);
         setWeatherForecastForNextWeek(data.forecast);
-        console.log(weatherForecastForNextWeek)
       } catch (error) {
         console.error("failed to fetch weather forecast:", error);
         setWeatherForecastForNextWeek([]);
@@ -134,14 +130,14 @@ export default function RouteReview() {
             className="flex-row items-center justify-between bg-gray-50 p-3 rounded-lg"
             onPress={() => setShowAINotes(!showAINotes)}
           >
-            <Text className="font-semibold text-gray-700">AI's Notes</Text>
-            <Feather 
-              name={showAINotes ? "chevron-up" : "chevron-down"} 
-              size={20} 
-              color="#6b7280" 
+            <Text className="font-semibold text-gray-700">AI&apos;s Notes</Text>
+            <Feather
+              name={showAINotes ? "chevron-up" : "chevron-down"}
+              size={20}
+              color="#6b7280"
             />
           </TouchableOpacity>
-          
+
           {showAINotes && (
             <View className="mt-2 p-3 bg-white border border-gray-200 rounded-lg">
               <Text className="text-gray-600 leading-5">

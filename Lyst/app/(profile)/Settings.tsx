@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   SafeAreaView,
-  ScrollView,
   Image,
   Alert,
   Modal,
@@ -14,7 +13,6 @@ import { router } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
 import { useAuth } from "@/providers/AuthProvider";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useGallery } from "@/providers/GalleryProvider";
 
 const Settings = () => {
   const { user, signOutUser, changeEmail, changePassword } = useAuth();

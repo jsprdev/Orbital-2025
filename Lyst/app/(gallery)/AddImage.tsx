@@ -5,8 +5,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
-  ScrollView,
-  Switch
+  ScrollView
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
@@ -20,9 +19,6 @@ export default function AddImageScreen() {
   const [uploading, setUploading] = useState(false);
   const [albumName, setAlbumName] = useState<string>("");
   const { albums, uploadPhoto, addAlbum, loading, fetchAlbums } = useGallery();
-
-  // Get album names for dropdown
-  const allAlbumsName = albums.map((album) => album.name);
 
   const pickImage = async () => {
     try {
@@ -90,7 +86,6 @@ export default function AddImageScreen() {
       if (!album || !album.id) {
         throw new Error("Album could not be found or created.");
       }
-      console.log("HERE", album.id, selectedImage);
       await uploadPhoto(album.id, selectedImage);
       await fetchAlbums(); // Refresh albums to ensure everything is in sync
       Alert.alert("Success", "Image uploaded successfully!", [
@@ -137,7 +132,7 @@ export default function AddImageScreen() {
 
         {/* Image Selection */}
         <View className="p-4">
-          {selectedImage.length != 0 ? (
+          {selectedImage.length !== 0 ? (
             <View className="items-center" testID="image-carousel">
               <ImageCarousel
                 images={selectedImage}
@@ -173,7 +168,7 @@ export default function AddImageScreen() {
             <View className="flex-row items-center justify-end mt-5">
             
               <View className="flex-row items-center space-x-4">
-                {selectedImage.length != 0 && (
+                {selectedImage.length !== 0 && (
                   <TouchableOpacity
                     onPress={pickImage}
                     className="px-4 py-3 bg-blue-500 rounded-xl mr-2"
@@ -186,9 +181,9 @@ export default function AddImageScreen() {
                 )}
                 <TouchableOpacity
                   onPress={uploadImage}
-                  disabled={selectedImage.length == 0 || uploading || loading}
+                  disabled={selectedImage.length === 0 || uploading || loading}
                   className={`px-4 py-3 rounded-xl shadow-md ${
-                    selectedImage.length != 0 && !uploading && !loading
+                    selectedImage.length !== 0 && !uploading && !loading
                       ? "bg-red-500"
                       : "bg-gray-300"
                   }`}
@@ -202,7 +197,7 @@ export default function AddImageScreen() {
                   ) : (
                     <Text
                       className={`font-semibold text-base ${
-                        selectedImage.length != 0 && !uploading && !loading
+                        selectedImage.length !== 0 && !uploading && !loading
                           ? "text-white"
                           : "text-gray-500"
                       }`}

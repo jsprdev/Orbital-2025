@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -19,19 +19,20 @@ export default function GalleryScreen() {
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const params = useLocalSearchParams();
 
+   const handleRefresh = useCallback(async () => {
+     setRefreshing(true);
+     await fetchPhotos();
+     await fetchAlbums();
+     setRefreshing(false);
+   }, [fetchPhotos, fetchAlbums]);
+
   useEffect(() => {
     if (params.refresh === "true") {
       handleRefresh();
     }
-  }, [params.refresh]);
+  }, [params.refresh, handleRefresh]);
 
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    await fetchPhotos();
-    await fetchAlbums();
-    setRefreshing(false);
-  };
-
+ 
   if (loading) {
     return (
       <View className="flex-1 bg-white justify-center items-center">

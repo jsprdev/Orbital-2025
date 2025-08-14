@@ -1,9 +1,8 @@
 
 import "react-native-get-random-values";
 import { useRouter } from "expo-router";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
-  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -11,9 +10,7 @@ import {
   KeyboardAvoidingView,
   Alert,
   Image,
-  Platform,
-  ScrollView,
-  Keyboard,
+  Platform
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
@@ -21,7 +18,6 @@ import { useAuth } from "@/providers/AuthProvider";
 export default function Index() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const { signIn, forgotPassword } = useAuth();
@@ -29,11 +25,8 @@ export default function Index() {
   const insets = useSafeAreaInsets();
 
   const handleSignIn = async () => {
-    setLoading(true);
     try {
-      console.log("Signing in..");
       await signIn(email, password);
-      console.log("Sign in Successful");
       router.replace("/(tabs)/Profile");
     } catch (error: any) {
       if (error.code === "auth/invalid-credentials") {
@@ -41,8 +34,6 @@ export default function Index() {
       } else {
         Alert.alert("Sign In Error", error.message);
       }
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -130,7 +121,7 @@ export default function Index() {
 
             <View className="flex-row justify-center items-center mt-4">
               <Text className="text-gray-600 text-base">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
               </Text>
               <TouchableOpacity onPress={signUpPage}>
                 <Text className="text-primary font-semibold text-base">

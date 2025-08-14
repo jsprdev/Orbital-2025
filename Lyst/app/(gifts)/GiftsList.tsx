@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View, Text, ScrollView, Linking, RefreshControl, TouchableOpacity } from "react-native";
 import { getGifts, deleteGift } from "@/utils/gifts.api";
 import { useAuth } from "@/providers/AuthProvider";
@@ -10,22 +10,22 @@ export default function GiftsList() {
   const [gifts, setGifts] = useState<Gift[]>([]);
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchGifts = async () => {
+  const fetchGifts = useCallback(async () => {
     if (!token) return;
     setRefreshing(true);
     try {
       const data = await getGifts(token);
       setGifts(data);
     } catch (e) {
-      // handle error
+      console.error("Error fetching gifts:", e);
     } finally {
       setRefreshing(false);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchGifts();
-  }, [token]);
+  }, [token, fetchGifts]);
 
   const handleDelete = async (id: string) => {
     if (!token) return;

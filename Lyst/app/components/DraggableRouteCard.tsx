@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import { View, Text } from 'react-native';
+import { PanGestureHandler, } from 'react-native-gesture-handler';
 import { Note } from '@/types';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   useAnimatedGestureHandler,
-  runOnJS,
   withSpring,
 } from 'react-native-reanimated';
 
@@ -85,12 +84,7 @@ const DraggableStop: React.FC<DraggableStopProps> = ({ location, index, onMove, 
 };
 
 const DraggableRouteCard: React.FC<DraggableRouteCardProps> = ({ route, onRouteChange }) => {
-  const [isDragging, setIsDragging] = useState(false);
-
-
-  console.log("Selected locations:", route.selectedLocations);
-  console.log("Visit order:", route.visitOrder);
-
+  const [isDragging] = useState(false);
   const moveStop = (fromIndex: number, toIndex: number) => {
     const newVisitOrder = [...route.visitOrder];
     const [movedItem] = newVisitOrder.splice(fromIndex, 1);
@@ -115,7 +109,6 @@ const DraggableRouteCard: React.FC<DraggableRouteCardProps> = ({ route, onRouteC
 
       {route.visitOrder.map((locationIndex, stepIndex) => {
         const location = route.selectedLocations[locationIndex];
-        console.log(`Rendering stop ${stepIndex}:`, location);
         
         if (!location) {
           console.warn(`No location found for index ${locationIndex}`);

@@ -82,7 +82,6 @@ export class GalleryService {
     const doc = await docRef.get();
 
     if (!doc.exists) {
-      console.log('Photo not found:', photoId);
       return false;
     }
 
@@ -112,7 +111,6 @@ export class GalleryService {
     const doc = await docRef.get();
 
     if (!doc.exists) {
-      console.log('Photo not found:', photoId);
       return null;
     }
 

@@ -11,7 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/providers/AuthProvider";
 import { getNotes, generateDateRoute } from "@/utils/lyst.api";
 import { Note } from "@/types";
-import { router, usePathname } from "expo-router";
+import { router } from "expo-router";
 
 export default function RouteSelection() {
   const { token } = useAuth();
@@ -79,10 +79,8 @@ export default function RouteSelection() {
         id: note.id,
       }));
 
-      console.log("Sending cards to API:", cards);
       const result = await generateDateRoute(cards, token);
       setLoading(false);
-      console.log("Received date route result:", result);
 
       router.push({
         pathname: "/(plans)/RouteReview",

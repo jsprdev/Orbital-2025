@@ -1,14 +1,13 @@
 import {
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
   Alert,
   TextInput,
   Image,
+  Modal,
 } from "react-native";
 import React, { useState, useEffect, useCallback } from "react";
-import { router } from "expo-router";
 import { useAuth } from "@/providers/AuthProvider";
 import { usePartner } from "@/providers/PartnerProvider";
 import { useGallery } from "@/providers/GalleryProvider";
@@ -20,7 +19,8 @@ import { formatDate, formatTime } from "@/utils/calendar.api";
 
 const CoupleProfile = () => {
   const { user, token } = useAuth();
-  const { partnerName } = usePartner();
+  const { partnerName, anniversaryDate, uploadAnniversaryDate, fetchPartner } =
+    usePartner();
   const { photos } = useGallery();
   const { events, fetchEvents } = useCalendar();
   const [completedPlansCount, setCompletedPlansCount] = useState(0);
@@ -33,6 +33,9 @@ const CoupleProfile = () => {
     minutes: string;
   } | null>(null);
   const [nextEventTitle, setNextEventTitle] = useState<string>("");
+
+  const [showModal, setShowModal] = useState(false);
+  const [anniversaryInput, setAnniversaryInput] = useState("");
 
   // Calculate next event
   useEffect(() => {
@@ -110,8 +113,52 @@ const CoupleProfile = () => {
       };
 
       fetchStats();
-    }, [token])
+    }, [fetchEvents, token])
   );
+
+  const getDaysSinceAnniversary = (
+    anniversaryDate: Date | undefined
+  ): number | null => {
+    if (!anniversaryDate) return null;
+
+    const today = new Date();
+    const timeDiff = today.getTime() - anniversaryDate.getTime();
+    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+    return daysDiff;
+  };
+
+  const handleAnniversary = () => {
+    setShowModal(true);
+  };
+
+  const handleSaveAnniversary = async () => {
+    const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(anniversaryInput);
+    if (!isValidDate) {
+      Alert.alert("Invalid Date", "Please use YYYY-MM-DD format.");
+      return;
+    }
+
+    const date = new Date(anniversaryInput);
+    if (isNaN(date.getTime())) {
+      Alert.alert("Invalid Date", "Please enter a valid date.");
+      return;
+    }
+
+    try {
+      await uploadAnniversaryDate(date);
+      // Wait a moment for the backend to process
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      await fetchPartner();
+
+      Alert.alert("Success", "Anniversary date updated!");
+      setAnniversaryInput("");
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error uploading anniversary date:", error);
+      Alert.alert("Error", "Failed to update anniversary date.");
+    }
+  };
 
   return (
     <View>
@@ -123,7 +170,15 @@ const CoupleProfile = () => {
         <Text className="text-3xl font-bold">
           {`${user?.displayName} & ${partnerName}`}
         </Text>
-        <Text className="text-xl font-light">Together since XXXX</Text>
+        {anniversaryDate && (
+          <Text className="text-xl font-light">
+            Together for{" "}
+            <Text className="font-bold">
+              {getDaysSinceAnniversary(anniversaryDate)}
+            </Text>{" "}
+            days
+          </Text>
+        )}
       </View>
 
       <View className="border-b border-gray-200 mb-6 ml-6 mr-8"></View>
@@ -151,21 +206,15 @@ const CoupleProfile = () => {
             <View className="flex-row justify-between">
               <View className="items-center">
                 <Text className="text-gray-500 text-sm">Days</Text>
-                <Text className="text-2xl font-bold">
-                  {nextDate?.days}
-                </Text>
+                <Text className="text-2xl font-bold">{nextDate?.days}</Text>
               </View>
               <View className="items-center">
                 <Text className="text-gray-500 text-sm">Hours</Text>
-                <Text className="text-2xl font-bold">
-                  {nextDate?.hours}
-                </Text>
+                <Text className="text-2xl font-bold">{nextDate?.hours}</Text>
               </View>
               <View className="items-center">
                 <Text className="text-gray-500 text-sm">Minutes</Text>
-                <Text className="text-2xl font-bold">
-                  {nextDate?.minutes}
-                </Text>
+                <Text className="text-2xl font-bold">{nextDate?.minutes}</Text>
               </View>
             </View>
           </View>
@@ -196,11 +245,76 @@ const CoupleProfile = () => {
 
         <View className="flex-row justify-between mt-8">
           {/* Anniversary */}
-          <View className="bg-white rounded-xl w-[47%] p-6 mr-2  shadow-sm border border-gray-200">
+          <TouchableOpacity
+            className="bg-white rounded-xl w-[47%] p-6 mr-2  shadow-sm border border-gray-200"
+            onPress={handleAnniversary}
+          >
             <Text className="text-gray-500 text-lg mb-1">Anniversary</Text>
-            <Text className="font-bold text-3xl">Oct 12,</Text>
-            <Text className="font-bold text-3xl">2021</Text>
-          </View>
+            {anniversaryDate ? (
+              <>
+                <Text className="font-bold text-3xl">
+                  {new Date(anniversaryDate).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                  })}
+                  ,
+                </Text>
+                <Text className="font-bold text-3xl">
+                  {new Date(anniversaryDate).getFullYear()}
+                </Text>
+              </>
+            ) : (
+              <>
+                <Text className="text-gray-500 text-m ">
+                  Click here to enter your anniversary
+                </Text>
+              </>
+            )}
+          </TouchableOpacity>
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showModal}
+            onRequestClose={() => setShowModal(false)}
+          >
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "rgba(0,0,0,0.4)",
+              }}
+            >
+              <View className="bg-white w-80 rounded-xl p-6 shadow-md">
+                <Text className="text-xl font-bold mb-4 text-center">
+                  Set Anniversary Date
+                </Text>
+                <TextInput
+                  placeholder="YYYY-MM-DD"
+                  value={anniversaryInput}
+                  onChangeText={setAnniversaryInput}
+                  className="border border-gray-300 rounded-lg px-4 py-2 mb-4 text-lg"
+                  keyboardType="numeric"
+                  maxLength={10}
+                />
+                <View className="flex-row justify-between">
+                  <TouchableOpacity
+                    onPress={() => setShowModal(false)}
+                    className="bg-gray-200 px-4 py-2 rounded-lg"
+                  >
+                    <Text className="text-gray-700 font-medium">Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={handleSaveAnniversary}
+                    className="bg-pink-500 px-4 py-2 rounded-lg"
+                  >
+                    <Text className="text-white font-medium">Save</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
 
           {/* Amount Spent */}
           <View className="bg-white rounded-xl w-[47%] p-6 ml-4  shadow-sm border border-gray-200">

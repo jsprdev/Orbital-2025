@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity, RefreshControl } from "react-native";
 import { useAuth } from "@/providers/AuthProvider";
 import { getDatePlans, deleteDatePlan, updateDatePlanStatus } from "@/utils/datePlans.api";
@@ -11,7 +11,7 @@ export default function SavedPlans() {
   const [refreshing, setRefreshing] = useState(false);
   const [showCompleted, setShowCompleted] = useState(false);
 
-  const fetchPlans = async () => {
+  const fetchPlans = useCallback(async () => {
     if (!token) return;
     setRefreshing(true);
     try {
@@ -22,11 +22,11 @@ export default function SavedPlans() {
     } finally {
       setRefreshing(false);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchPlans();
-  }, [token]);
+  }, [fetchPlans, token]);
 
   const handleDelete = async (id: string) => {
     if (!token) return;

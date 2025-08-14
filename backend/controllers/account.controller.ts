@@ -6,7 +6,6 @@ const router = Router();
 
 router.post("/", async (req: Request, res: Response): Promise<void> => {
   const { userId, email, displayName} = req.body;
-  console.log(userId, email, displayName)
   if (!userId || !displayName || !email) {
     res.status(400).json({ error: "Missing required fields" });
     return;

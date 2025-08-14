@@ -13,7 +13,6 @@ router.get('/', async (req: Request, res: Response) => {
   }
   try {
     const data = await placesServiceInstance.autocomplete(input);
-    console.log('Google Places API response:', data);
     res.json(data);
   } catch (error) {
     console.error('Error fetching places:', error);

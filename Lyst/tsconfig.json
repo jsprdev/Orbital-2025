@@ -5,7 +5,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "noEmit": true
   },
   "include": [
     "**/*.ts",
@@ -14,10 +15,16 @@
     "expo-env.d.ts",
     "app/_layout.tsx",
     "nativewind-env.d.ts",
-    "types/**/*.d.ts",
+    "types/**/*.ts", 
+    "Lyst/**/*.ts",
     "Orbital-2025/Lyst/assets",
     "utils/*.ts",
     "types/note.dto.ts",
+    "__tests__/**/*.ts?(x)",
     "__tests__/gallery/ImageCarousel.test.jsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
   ]
 }

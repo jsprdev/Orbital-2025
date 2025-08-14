@@ -65,7 +65,7 @@ export default function ImageCarousel({
           >
             <View
               className={`relative ${
-                index === 0 && flag.trim() != ""
+                index === 0 && flag.trim() !== ""
                   ? "p-1 border-2 rounded-xl"
                   : ""
               }`}
@@ -76,7 +76,7 @@ export default function ImageCarousel({
                 resizeMode="cover"
                 testID="carousel-image"
               />
-              {index === 0 && flag.trim() != "" && (
+              {index === 0 && flag.trim() !== "" && (
                 <Text className="absolute left-1/2 -translate-x-1/2 font-semibold mt-2 bg-white p-1 rounded-lg ">
                   Cover Page
                 </Text>
