@@ -115,7 +115,7 @@ export default function AddIdea({
     setLoadingPlaces(true);
     try {
       const res = await fetch(
-        `http://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places?input=${encodeURIComponent(input)}`,
+        `https://${process.env.EXPO_PUBLIC_HOST}:${process.env.EXPO_PUBLIC_PORT}/api/places?input=${encodeURIComponent(input)}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         },

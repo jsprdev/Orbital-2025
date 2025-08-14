@@ -4,7 +4,7 @@ const WEATHER_API_KEY = process.env.WEATHER_API_KEY;
 
 export class WeatherService {
   async getWeeklyForecast(location: string) {
-    const url = `http://api.weatherapi.com/v1/forecast.json`;
+    const url = `https://api.weatherapi.com/v1/forecast.json`;
     const params = {
       key: WEATHER_API_KEY,
       q: location,
