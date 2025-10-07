@@ -1,14 +1,15 @@
 import admin, { ServiceAccount } from 'firebase-admin';
-import serviceAccount from './serviceAccount.json';
 
-if (!process.env.FIREBASE_STORAGE_BUCKET) {
-  throw new Error('FIREBASE_STORAGE_BUCKET environment variable is not set');
-}
+// Use environment variables for Render deployment
+const serviceAccount: ServiceAccount = {
+  projectId: process.env.FIREBASE_PROJECT_ID || 'lyst-4a45d',
+  privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n') || '',
+  clientEmail: process.env.FIREBASE_CLIENT_EMAIL || '',
+};
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as ServiceAccount),
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-
+  credential: admin.credential.cert(serviceAccount),
+  storageBucket: 'lyst-4a45d.firebasestorage.app',
 });
 
 const db = admin.firestore();
