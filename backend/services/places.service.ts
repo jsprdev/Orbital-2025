@@ -8,7 +8,7 @@ export class PlacesService {
 
     async getPlaceDetails(placeId: string) {
         const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-        const url = `http://maps.googleapis.com/maps/api/place/details/json`;
+        const url = `https://maps.googleapis.com/maps/api/place/details/json`;
         const params = {
           place_id: placeId,
           key: apiKey,
@@ -21,7 +21,7 @@ export class PlacesService {
   
     async autocomplete(input: string) {
         const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-        const url = `http://maps.googleapis.com/maps/api/place/autocomplete/json`;
+        const url = `https://maps.googleapis.com/maps/api/place/autocomplete/json`;
         const params = {
         input,
         key: apiKey,
